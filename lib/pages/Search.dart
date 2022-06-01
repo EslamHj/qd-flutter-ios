@@ -1,4 +1,4 @@
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dropdown_search/dropdown_search.dart' ;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -18,7 +18,8 @@ class search extends StatefulWidget {
 }
 
 class _searchState extends State<search> {
-  DateTime _selecteDate = DateTime.now();
+
+  var _selecteDate = DateTime.now();
   DateTime _selecteDate2 = DateTime.now();
   final _Storage = GetStorage();
 
@@ -160,44 +161,167 @@ class _searchState extends State<search> {
 
                 Row(
                   children: [
-                    Expanded(
-                      child: MyInput(
-                         title: "من تاريخ",
-                        hint: DateFormat.yMd().format(_selecteDate),
-                        widget: IconButton(
-                            icon: Icon(
-                              Icons.calendar_today_rounded,
-                              color: Get.isDarkMode
-                                  ? Themes.dark_white
-                                  : Themes.light.primaryColor,
-                            ),
-                            onPressed: () {
+                              /////////////////////// من تاريخ ///////////////////////////
 
-                              _getDateFromUser();
-                             
-                            }),
-                      ),
+
+                      Expanded(
+                      child:   Container(
+      margin: EdgeInsets.only(top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "من تاريخ",
+            style:GoogleFonts.cairo( textStyle:  TextStyle(
+              fontSize:  14,
+              fontWeight: FontWeight.w600,
+              color: Get.isDarkMode ?Themes.dark_white : Themes.light.primaryColor
+
+
+            )
+            ),
+          ),
+
+
+          Container(
+            height: 42,
+           
+            margin: EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.only(right: 14),
+             decoration: BoxDecoration(
+                color: Get.isDarkMode ?  Themes.dark_primary : Themes.light_white,
+               border: Border.all(
+                 color: Themes.dark_white,
+                 width: 1
+               ),
+               borderRadius: BorderRadius.circular(5)
+             ),
+             child: Row(
+               children:[
+                  Expanded(
+                 child: TextFormField(
+                    readOnly: true,
+                   autofocus: false,
+                   cursorColor: Get.isDarkMode ?Themes.dark_white : Themes.light.primaryColor,
+                   style:  GoogleFonts.cairo( textStyle:TextStyle( fontSize: 14 ,  fontWeight: FontWeight.w400,height: 1.4 ,
+                    color: Get.isDarkMode ? Themes.dark_white :Themes.light_black)),
+                   decoration: InputDecoration(
+                     icon: GestureDetector(
+                      onTap: () {
+                         _getDateFromUser(context);
+                      },
+                       child: Icon( Icons.calendar_today_rounded,
+                                color: Get.isDarkMode
+                                    ? Themes.dark_white
+                                    : Themes.light.primaryColor,),
+                     ),
+                     hintText: DateFormat('yyyy-MM-dd').format(_selecteDate),
+                     hintStyle:TextStyle(fontSize: 14 , fontWeight: FontWeight.w400 ,  color: Get.isDarkMode ? Themes.dark_white :Themes.light_black),
+                     focusedBorder: UnderlineInputBorder(
+                       borderSide: BorderSide(
+                         color: Colors.white,
+                         width: 0,
+                       )
+                     ),
+                     enabledBorder: UnderlineInputBorder(
+                       borderSide: BorderSide(
+                         color: Colors.white,
+                         width: 0,
+                       )
+                     ),  
+                   ),
+                 )
+               ),
+
+               ] 
+             ),
+          )
+        ],),
+    )
                     ),
+
+                    
+                  
                     SizedBox(
                       width: 12,
                     ),
-                    Expanded(
-                      child:MyInput(
-                        title: "الى تاريخ",
-                        hint: DateFormat.yMd().format(_selecteDate),
-                        widget: IconButton(
-                            icon: Icon(
-                              Icons.calendar_today_rounded,
-                              color: Get.isDarkMode
-                                  ? Themes.dark_white
-                                  : Themes.light.primaryColor,
-                            ),
-                            onPressed: () {
-                                _getDateFromUser();
-                            }
-                      ),
-                    ),
 
+                              /////////////////////// الى تاريخ ///////////////////////////
+
+                    Expanded(
+                      child:   Container(
+      margin: EdgeInsets.only(top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "الى تاريخ",
+            style:GoogleFonts.cairo( textStyle:  TextStyle(
+              fontSize:  14,
+              fontWeight: FontWeight.w600,
+              color: Get.isDarkMode ?Themes.dark_white : Themes.light.primaryColor
+
+
+            )
+            ),
+          ),
+
+
+          Container(
+            height: 42,
+           
+            margin: EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.only(right: 14),
+             decoration: BoxDecoration(
+                color: Get.isDarkMode ?  Themes.dark_primary : Themes.light_white,
+               border: Border.all(
+                 color: Themes.dark_white,
+                 width: 1
+               ),
+               borderRadius: BorderRadius.circular(5)
+             ),
+             child: Row(
+               children:[
+                  Expanded(
+                 child: TextFormField(
+                    readOnly: true,
+                   autofocus: false,
+                   cursorColor: Get.isDarkMode ?Themes.dark_white : Themes.light.primaryColor,
+                   style:  GoogleFonts.cairo( textStyle:TextStyle( fontSize: 14 ,  fontWeight: FontWeight.w400,height: 1.4 ,
+                    color: Get.isDarkMode ? Themes.dark_white :Themes.light_black)),
+                   decoration: InputDecoration(
+                     icon: GestureDetector(
+                      onTap: () {
+                         _getDateFromUser(context);
+                      },
+                       child: Icon( Icons.calendar_today_rounded,
+                                color: Get.isDarkMode
+                                    ? Themes.dark_white
+                                    : Themes.light.primaryColor,),
+                     ),
+                     hintText: DateFormat('yyyy-MM-dd').format(_selecteDate),
+                     hintStyle:TextStyle(fontSize: 14 , fontWeight: FontWeight.w400 ,  color: Get.isDarkMode ? Themes.dark_white :Themes.light_black),
+                     focusedBorder: UnderlineInputBorder(
+                       borderSide: BorderSide(
+                         color: Colors.white,
+                         width: 0,
+                       )
+                     ),
+                     enabledBorder: UnderlineInputBorder(
+                       borderSide: BorderSide(
+                         color: Colors.white,
+                         width: 0,
+                       )
+                     ),  
+                   ),
+                 )
+               ),
+
+               ] 
+             ),
+          )
+        ],),
+    )
                     )
 
                   ],
@@ -250,22 +374,40 @@ class _searchState extends State<search> {
     );
   }
 
-  _getDateFromUser() async {
-    DateTime? _pickerDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2121));
-
-    if (_pickerDate != null) {
-      setState(() {
-        _selecteDate = _pickerDate;
-      });
-    } else {
-      print("it's null or something is wrong");
+Future<void> _getDateFromUser(BuildContext context) async {
+DateTime? picked = await showDatePicker(
+      context: context,
+    builder: (BuildContext context, Widget ?child) {
+      return Theme(
+        data: ThemeData(
+          primarySwatch: Colors.grey,
+          splashColor: Color.fromARGB(255, 90, 66, 66),
+          textTheme: TextTheme(
+            subtitle1: TextStyle(color: Colors.white),
+            button: TextStyle(color: Colors.black),
+          ),
+          colorScheme: ColorScheme.light(
+              primary: Color(0xFF6F35A5),
+              onSecondary: Colors.black,
+              onPrimary: Colors.white,
+              surface: Colors.black,
+              onSurface: Colors.black,
+              secondary: Colors.black),
+              dialogBackgroundColor: Colors.white,
+        ),
+        child: child ??Text(""),
+      );
     }
-  }
-
+    initialDate: _selecteDate,
+    firstDate: DateTime(1960, 8),
+    lastDate: DateTime.now());
+if (picked != null && picked != _selecteDate)
+  setState(() {
+    _selecteDate = picked;
+     
+  });}
 }
+
+
 
 

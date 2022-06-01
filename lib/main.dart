@@ -8,6 +8,8 @@ import 'package:pro_delivery/pages/Delivery_Prices.dart';
 import 'package:pro_delivery/pages/Details_Movements.dart';
 import 'package:pro_delivery/pages/Details_Order.dart';
 import 'package:pro_delivery/pages/Login.dart';
+import 'package:pro_delivery/pages/Order.dart';
+import 'package:pro_delivery/pages/Search.dart';
 import 'package:pro_delivery/pages/home.dart';
 import 'package:pro_delivery/pages/homePages.dart';
 import 'coponents/darkmode_service.dart';
@@ -73,7 +75,7 @@ class _MyAppState extends State<MyApp> {
         "details_order": (context) => details_order(),
         "details_movements": (context) => details_movements(),
       },
-      home: login(),
+      home: homePagess(),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:pro_delivery/pages/Branches.dart';
+
 import 'package:http/http.dart' as http;
 
 class deliveryPrices extends StatefulWidget {
@@ -21,6 +22,9 @@ class _deliveryPricesState extends State<deliveryPrices> {
   List dlyPrices = [];
   bool visible_ = false;
   var idBranche = "";
+  String token = "" ;
+    final _Storage = GetStorage();
+
 
   @override
   void initState() {
@@ -31,6 +35,8 @@ class _deliveryPricesState extends State<deliveryPrices> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     idBranche = ModalRoute.of(context)!.settings.arguments as String;
+        token = _Storage.read("token");
+
     delivery_Prices();
   }
 
@@ -190,12 +196,15 @@ class _deliveryPricesState extends State<deliveryPrices> {
       visible_ = true;
       var urlDeliveryPrices =
           Uri.parse(api().url + api().deliveryPrices + idBranche);
-      var response = await http.get(urlDeliveryPrices
-          // headers: {
-          //   "Authorization": "Bearer $token",
-          // },
+          print(urlDeliveryPrices);
+      var response = await http.get(urlDeliveryPrices,
+          headers: {
+            "Authorization": "Bearer $token",
+          },
           );
       var responsebody = jsonDecode(response.body);
+                print(responsebody);
+
 
       if (response.statusCode == 200) {
         setState(() {

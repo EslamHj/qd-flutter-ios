@@ -306,17 +306,22 @@ class _loginState extends State<login> {
             emailController.text +
             "/" +
             passController.text));
+          var responsebody = jsonDecode(response.body);
 
         if (response.statusCode == 200) {
           setState(() {
             visible_ = false;
           });
+
+          _Storage.write("name", responsebody["data"]["user"]["name"]);
+          _Storage.write("code", responsebody["data"]["user"]["code"]);
+          _Storage.write("token", responsebody["data"]["token"]);
+
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => homePagess()),
           );
         } else {
-          var responsebody = jsonDecode(response.body);
 
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: Color.fromARGB(255, 118, 82, 153),
@@ -350,44 +355,37 @@ class _loginState extends State<login> {
         });
       }
     } on FormatException {
+      setState(() {
+        visible_ = false;
+      });
 
-        setState(() {
-            visible_ = false;
-          });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          content: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Text(
+              "خطأ في البيانات",
+              style: GoogleFonts.cairo(
+                  textStyle:
+                      TextStyle(fontSize: 14, color: Themes.light_white)),
+            ),
+          )));
+    } on SocketException {
+      setState(() {
+        visible_ = false;
+      });
 
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
-            content: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Text(
-                "خطأ في البيانات",
-                style: GoogleFonts.cairo(
-                    textStyle:
-                        TextStyle(fontSize: 14, color: Themes.light_white)),
-              ),
-            )));
-
-    }
-    
-    on SocketException {
-
-       setState(() {
-            visible_ = false;
-          });
-
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
-            content: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Text(
-                "خطأ في الاتصال بالانترنت",
-                style: GoogleFonts.cairo(
-                    textStyle:
-                        TextStyle(fontSize: 14, color: Themes.light_white)),
-              ),
-            )));
-
-    }
-    catch (ex) {}
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          content: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Text(
+              "خطأ في الاتصال بالانترنت",
+              style: GoogleFonts.cairo(
+                  textStyle:
+                      TextStyle(fontSize: 14, color: Themes.light_white)),
+            ),
+          )));
+    } catch (ex) {}
   }
 }
