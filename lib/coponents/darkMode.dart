@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
 const Color _kprimaryColor = Color(0xFF6F35A5);
-
+// const Color _kprimaryColor = Color.fromARGB(255, 96, 55, 134);
 class Themes {
   //dark color
   static final dark_white = Colors.white;

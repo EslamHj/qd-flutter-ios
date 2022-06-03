@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:pro_delivery/coponents/MyButton.dart';
 import 'package:pro_delivery/coponents/MyInputField.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:pro_delivery/pages/Branches.dart';
+import 'package:pro_delivery/pages/homePages.dart';
 import 'dart:ui' as ui;
 
 import '../coponents/darkMode.dart';
@@ -26,8 +28,16 @@ class _addOrderState extends State<addOrder> {
   int _selectedRemind = 5;
   List<int> remindlist = [5, 10, 15, 20];
   final _Storage = GetStorage();
-
+  bool hintV = false;
   var _color = false;
+  List branche = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    branche = ModalRoute.of(context)!.settings.arguments as List;
+    print(branche);
+  }
 
   @override
   void initState() {
@@ -44,7 +54,7 @@ class _addOrderState extends State<addOrder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: _appBar(),
+        appBar: _appBar(),
         body: Directionality(
             textDirection: ui.TextDirection.rtl,
             child: Container(
@@ -69,7 +79,7 @@ class _addOrderState extends State<addOrder> {
                       Expanded(
                         child: MyInput(
                           title: "رقم المستلم",
-                          hint: "",
+                          hint: hintV == false ? "" : "يجب الملء",
                         ),
                       ),
                       SizedBox(
@@ -125,10 +135,10 @@ class _addOrderState extends State<addOrder> {
                     ],
                   ),
 
-                   MyInput(
-                          title: "عنوان المستلم",
-                          hint: "",
-                        ),
+                  MyInput(
+                    title: "عنوان المستلم",
+                    hint: "",
+                  ),
 
                   // MyInput(
                   //   title: "Date",
@@ -179,7 +189,126 @@ class _addOrderState extends State<addOrder> {
                   //   ],
                   // ),
 
-/////// ------------ DropdownSearch ------------ ////////
+/////// ------------ DropdownSearch branch ------------ ////////
+
+                  Container(
+                    margin: EdgeInsets.only(top: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "المكتب",
+                          style: GoogleFonts.cairo(
+                            textStyle: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Get.isDarkMode
+                                    ? Themes.dark_white
+                                    : Themes.light.primaryColor),
+                          ),
+                        ),
+                        Container(
+                          height: 52,
+                          margin: EdgeInsets.only(top: 8.0),
+                          padding: EdgeInsets.only(right: 14),
+                          decoration: BoxDecoration(
+                              color: Get.isDarkMode
+                                  ? Themes.dark_primary
+                                  : Colors.grey[300],
+                              border: Border.all(
+                                  color: Get.isDarkMode
+                                      ? Themes.dark_white
+                                      : Themes.light.primaryColor,
+                                  width: 1.0),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Row(children: [
+                            Expanded(
+                              child: DropdownSearch<String>(
+
+                               
+                                emptyBuilder: (context, searchEntry) => Center(
+                                    child: Text('لايوجد',
+                                        style: TextStyle(
+                                            color: Themes.light.primaryColor))),
+
+                                // autoFocusSearchBox: true,
+
+                                searchBoxDecoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                    color: Themes.light.primaryColor,
+                                    width: 2,
+                                  )),
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                    color: Themes.light.primaryColor,
+                                    width: 2,
+                                  )),
+                                  hintTextDirection: ui.TextDirection.rtl,
+                                ),
+                                searchBoxStyle: GoogleFonts.cairo(
+                                    textStyle: TextStyle(
+                                        // decorationColor: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400,
+                                        color: _color
+                                            ? Themes.dark_white
+                                            : Themes.light_black)),
+
+                                dropdownSearchTextAlignVertical:
+                                    TextAlignVertical.bottom,
+                                dropdownSearchTextAlign: TextAlign.right,
+
+                                dropdownSearchBaseStyle:
+                                    TextStyle(fontFamily: 'MeQuran2'),
+                                showSearchBox: true,
+                                mode: Mode.DIALOG,
+                                dropdownSearchDecoration: InputDecoration(
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black),
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: 0,
+                                  )),
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: 0,
+                                  )),
+                                ),
+
+                                // mode: Mode.DIALOG,
+                                //to show search box
+                                // showSearchBox: true,
+                                showSelectedItem: true,
+                                //list of dropdown items
+                                //  dropdownBuilder: _style,
+                                dropdownBuilder: _customDropDownAddress,
+                                popupItemBuilder: _style1,
+                                items: [
+                                  "زناتة",
+                                  "مصراتة",
+                                  "بنغازي",
+                                  "مصراتة",
+                                  "سبها"
+                                ],
+                                // label: "Country",
+                                onChanged: print,
+
+                                //show selected item
+                                selectedItem: "زتاتة",
+                              ),
+                            ),
+                          ]),
+                        )
+                      ],
+                    ),
+                  ),
+
+/////// ------------ DropdownSearch city ------------ ////////
 
                   Container(
                     margin: EdgeInsets.only(top: 16),
@@ -204,17 +333,19 @@ class _addOrderState extends State<addOrder> {
                           decoration: BoxDecoration(
                               color: Get.isDarkMode
                                   ? Themes.dark_primary
-                                  : Themes.light_white,
+                                  : Colors.grey[300],
                               border: Border.all(
-                                  color: Themes.dark_white, width: 1.0),
+                                  color: Get.isDarkMode
+                                      ? Themes.dark_white
+                                      : Themes.light.primaryColor,
+                                  width: 1.0),
                               borderRadius: BorderRadius.circular(5)),
                           child: Row(children: [
                             Expanded(
                               child: DropdownSearch<String>(
                                 // autoFocusSearchBox: true,
-                                                               
-                                searchBoxStyle:
-                                 GoogleFonts.cairo(
+
+                                searchBoxStyle: GoogleFonts.cairo(
                                     textStyle: TextStyle(
 
                                         // decorationColor: Colors.white,
@@ -257,14 +388,7 @@ class _addOrderState extends State<addOrder> {
                                 //  dropdownBuilder: _style,
                                 dropdownBuilder: _customDropDownAddress,
                                 popupItemBuilder: _style1,
-                                items: [
-                                  "طرابلس",
-                                  "بنغازي",
-                                  "يفرن",
-                                  "نالوت",
-                                  "مصراتة",
-                                  "سبها"
-                                ],
+                                items: [],
                                 // label: "Country",
                                 onChanged: print,
 
@@ -277,12 +401,35 @@ class _addOrderState extends State<addOrder> {
                       ],
                     ),
                   ),
+
                   MyInput(title: "ملاحظة", hint: ""),
                   SizedBox(
                     height: 30,
                   ),
 
-                  myButton(label: "حفظ",color: Themes.light.primaryColor , onTap: () => null),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        hintV = true;
+                        print("hhhh");
+                      });
+                    },
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Themes.light.primaryColor,
+                      ),
+                      child: Text(
+                        "حفظ",
+                        style: GoogleFonts.cairo(
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
 
                   SizedBox(
                     height: 30,
@@ -307,6 +454,8 @@ class _addOrderState extends State<addOrder> {
 
   Widget _style1(BuildContext context, String? item, bool isSelected) {
     return Directionality(
+
+      
       textDirection: ui.TextDirection.rtl,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -330,23 +479,18 @@ class _addOrderState extends State<addOrder> {
   _appBar() {
     return AppBar(
       backgroundColor: Themes.light.primaryColor,
-      leading: GestureDetector(
-        onTap: () {
-          Get.back();
-        },
-        child: Icon(
-          Icons.arrow_back_ios,
-          size: 25,
-        ),
-      ),
-      actions: [
-        // Icon(
-        //   Icons.person,
-        //   size: 20,
-        // ),
-        SizedBox(
-          width: 20,
-        )
+      actions: <Widget>[
+        Container(
+            margin: EdgeInsets.all(5),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Image.asset(
+                'assets/qd.png',
+                height: 50,
+                width: 47,
+                fit: BoxFit.cover,
+              ),
+            )),
       ],
     );
   }

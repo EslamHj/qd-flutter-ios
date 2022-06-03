@@ -46,9 +46,9 @@ class MyInput extends StatelessWidget {
             margin: EdgeInsets.only(top: 8.0),
             padding: EdgeInsets.only(right: 14),
              decoration: BoxDecoration(
-                color: Get.isDarkMode ?  Themes.dark_primary : Themes.light_white,
+                color: Get.isDarkMode ?  Themes.dark_primary : Colors.grey[300],
                border: Border.all(
-                 color: Themes.dark_white,
+                 color:  Get.isDarkMode ?  Themes.dark_white : Themes.light.primaryColor,
                  width: 1
                ),
                borderRadius: BorderRadius.circular(5)
@@ -66,7 +66,7 @@ class MyInput extends StatelessWidget {
                     color: Get.isDarkMode ? Themes.dark_white :Themes.light_black)),
                    decoration: InputDecoration(
                      hintText: hint,
-                     hintStyle:TextStyle(fontSize: 14 , fontWeight: FontWeight.w400 , color: Colors.black),
+                     hintStyle:TextStyle(fontSize: 14 , fontWeight: FontWeight.w400 , color: Color.fromARGB(255, 206, 47, 35)),
                      focusedBorder: UnderlineInputBorder(
                        borderSide: BorderSide(
                          color: Colors.white,

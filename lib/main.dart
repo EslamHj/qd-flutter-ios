@@ -71,6 +71,7 @@ class _MyAppState extends State<MyApp> {
       // themeMode: dark_value == "false" ?ThemeMode.light : ThemeMode.dark,
 
       routes: {
+        "addOrder": (context) => addOrder(),
         "deliveryPrices": (context) => deliveryPrices(),
         "details_order": (context) => details_order(),
         "details_movements": (context) => details_movements(),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/Api.dart';
+import 'package:pro_delivery/coponents/Maps.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pro_delivery/pages/Delivery_Prices.dart';
@@ -46,13 +47,7 @@ class _branchesState extends State<branches> {
           child: ListView.builder(
               itemCount: branche.length,
               itemBuilder: (context, i) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, 'deliveryPrices',
-                        arguments: branche[i]['id']);
-                  },
-                  child: _cardBranch(context, i),
-                );
+                return _cardBranch(context, i);
               }),
         ),
         SizedBox(
@@ -113,7 +108,7 @@ class _branchesState extends State<branches> {
     return Stack(
       children: [
         Container(
-          height: 70,
+          height: 115,
           margin: EdgeInsets.fromLTRB(20, 0, 20, 12),
           width: _width - 40,
           decoration: BoxDecoration(
@@ -126,8 +121,8 @@ class _branchesState extends State<branches> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,7 +130,7 @@ class _branchesState extends State<branches> {
                   children: [
                     Container(
                       width: _width / 2,
-                      padding: EdgeInsets.only(top: 8),
+                      padding: EdgeInsets.only(bottom: 8),
                       child: Text(
                         branche[index]["name"],
                         maxLines: 1,
@@ -149,16 +144,85 @@ class _branchesState extends State<branches> {
                                     : Themes.light.primaryColor)),
                       ),
                     ),
-                    Container(
-                      width: 20,
-                      padding: EdgeInsets.only(left: 15),
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.remove_red_eye,
-                            color: Themes.light.primaryColor,
-                          )),
+                    Column(
+                      children: [
+                        Text(
+                          branche[index]["phone"].toString(),
+                          style: GoogleFonts.cairo(
+                              textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Get.isDarkMode
+                                      ? Themes.dark_white
+                                      : Themes.light.primaryColor)),
+                        ),
+                        Text(
+                          branche[index]["phone2"].toString(),
+                          style: GoogleFonts.cairo(
+                              textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Get.isDarkMode
+                                      ? Themes.dark_white
+                                      : Themes.light.primaryColor)),
+                        ),
+                      ],
                     )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                        child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, 'deliveryPrices',
+                            arguments: branche[index]['id']);
+                      },
+                      child: Container(
+                        width: _width / 2 - 30,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: Themes.light.primaryColor,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "اسعار التوصيل",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.cairo(
+                              textStyle: TextStyle(
+                            color: Themes.light_white,
+                          )),
+                        ),
+                      ),
+                    )),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Expanded(
+                        child: GestureDetector(
+                      onTap: () {
+                        // MapUrl.openMap(47.628293269721, -122.34263420105);
+                        MapUrl.openMap("V66J", "992");
+                      },
+                      child: Container(
+                        width: _width / 2 - 30,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: Themes.light.primaryColor,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          "الموقع",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.cairo(
+                              textStyle: TextStyle(
+                            color: Themes.light_white,
+                          )),
+                        ),
+                      ),
+                    )),
                   ],
                 ),
               ],

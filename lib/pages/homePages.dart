@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/circular_reveal_clipper.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:pro_delivery/pages/AddOrder.dart';
 import 'package:pro_delivery/pages/Branches.dart';
@@ -13,7 +17,7 @@ import 'package:pro_delivery/pages/Setting.dart';
 import 'package:pro_delivery/pages/TabsOrder.dart';
 import 'package:pro_delivery/pages/Wallet.dart';
 import 'package:pro_delivery/pages/home.dart';
-
+import 'package:http/http.dart' as http;
 import '../coponents/darkmode_service.dart';
 
 class homePagess extends StatefulWidget {
@@ -41,6 +45,17 @@ class _homePagessState extends State<homePagess> {
 
   final _Storage = GetStorage();
   var _color = true;
+    List  branche = [];
+  bool visible_ = false;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    Branches();
+  }
+
   //   @override
   // void initState()  {
   //   super.initState();
@@ -70,8 +85,11 @@ class _homePagessState extends State<homePagess> {
                   color: _color == true ? Colors.white : Colors.white),
               onPressed: () {
                 setState(() {
-                  currenScreen = addOrder();
-                  currentTab = 4;
+
+                    Navigator.pushNamed(context, 'addOrder',
+                            arguments: branche);
+                  // currenScreen = addOrder();
+                  // currentTab = 4;
                 });
               },
             ),
@@ -271,4 +289,46 @@ class _homePagessState extends State<homePagess> {
       ],
     );
   }
+
+
+    ///////////////////////////api Branches ///////////////////////////////////////////////
+
+  Future<void> Branches() async {
+    try {
+      // visible_ = true;
+      var urlBranches = Uri.parse(api().url + api().Branches);
+      var response = await http.get(urlBranches
+          // headers: {
+          //   "Authorization": "Bearer $token",
+          // },
+          );
+      var responsebody = jsonDecode(response.body);
+      setState(() {
+        branche = responsebody['data'];
+      });
+
+      if (response.statusCode == 200) {
+        // visible_ = false;
+      }
+    } on SocketException {
+      setState(() {
+        // visible_ = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          content: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Text(
+              "خطأ في الاتصال بالانترنت",
+              style: GoogleFonts.cairo(
+                  textStyle:
+                      TextStyle(fontSize: 14, color: Themes.light_white)),
+            ),
+          )));
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
 }

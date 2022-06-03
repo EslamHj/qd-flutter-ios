@@ -20,6 +20,7 @@ class order extends StatefulWidget {
 class _orderState extends State<order> {
   final _Storage = GetStorage();
   var _color = true;
+  bool net = false;
   List orderJson = [];
   bool visible_ = false;
   String code = "";
@@ -35,39 +36,98 @@ class _orderState extends State<order> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-       
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Visibility(
-              visible: visible_,
-              child: Container(
-                margin: EdgeInsets.only(top: 25),
-                child: Center(
-                    child: CircularProgressIndicator(
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(Themes.light.primaryColor),
-                )),
-              )),
-        ),
-        Expanded(
-          child: RefreshIndicator(
-            color: Themes.light.primaryColor,
-            onRefresh: order,
-            child: ListView.builder(
-                itemCount: orderJson.length,
-                itemBuilder: (context, i) {
-                  return GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, 'details_order');
-                      },
-                      child: _cardOrder(context, i));
-                }),
-          ),
-        ),
-      ],
-    ));
+        body: net == true
+            ? Container(
+                margin: EdgeInsets.only(top: 60),
+                child: Column(
+                  children: [
+                    Visibility(
+                        visible: visible_,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 25),
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Themes.light.primaryColor),
+                          )),
+                        )),
+                    Center(
+                      child: Image.asset(
+                        'assets/net.png',
+                        width: 200,
+                      ),
+                    ),
+
+                    Text(
+                      "خطأ في الاتصال بالانترنت",
+                      style: GoogleFonts.cairo(
+                          textStyle: TextStyle(
+                              fontSize: 16,
+                              color: Themes.light.primaryColor,
+                              fontWeight: FontWeight.bold)),
+                    ),
+
+                    // GestureDetector(
+                    //   onTap: () {
+                    //   order();
+                    //   net =false ;
+                    //   visible_ =true ;
+                    //   },
+                    //   child: Icon(
+                    //     Icons.refresh,
+                    //     size: 40,
+                    //     color: Themes.light.primaryColor,
+                    //   ),
+                    // )
+
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            order();
+                            // net = false;
+                            visible_ = true;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.refresh,
+                          size: 40,
+                          color: Themes.light.primaryColor,
+                        ))
+                  ],
+                ),
+              )
+            : Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Visibility(
+                        visible: visible_,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 25),
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Themes.light.primaryColor),
+                          )),
+                        )),
+                  ),
+                  Expanded(
+                    child: RefreshIndicator(
+                      color: Themes.light.primaryColor,
+                      onRefresh: order,
+                      child: ListView.builder(
+                          itemCount: orderJson.length,
+                          itemBuilder: (context, i) {
+                            return GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, 'details_order');
+                                },
+                                child: _cardOrder(context, i));
+                          }),
+                    ),
+                  ),
+                ],
+              ));
   }
 
   _cardOrder(context, index) {
@@ -184,8 +244,8 @@ class _orderState extends State<order> {
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: _color == true
-                                    ? Themes.dark_white
-                                    : Themes.light.primaryColor),
+                                  ? Themes.dark_white
+                                  : Themes.light.primaryColor),
                         ),
                       ),
                       Container(
@@ -249,23 +309,36 @@ class _orderState extends State<order> {
 
       if (response.statusCode == 200) {
         visible_ = false;
+        net = false;
       }
     } on SocketException {
       setState(() {
         visible_ = false;
+        net = true;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
-          content: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Text(
-              "خطأ في الاتصال بالانترنت",
-              style: GoogleFonts.cairo(
-                  textStyle:
-                      TextStyle(fontSize: 14, color: Themes.light_white)),
-            ),
-          )));
+//       Center(
+//     child: CircleAvatar(
+//         radius: 40,
+//         backgroundImage: AssetImage('assets/net.png'),
+//     ),
+// );
+
+      // Image.asset(
+      //         'assets/net.png',
+      //       );
+
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     backgroundColor: Color.fromARGB(255, 118, 82, 153),
+      //     content: Directionality(
+      //       textDirection: TextDirection.rtl,
+      //       child: Text(
+      //         "خطأ في الاتصال بالانترنت",
+      //         style: GoogleFonts.cairo(
+      //             textStyle:
+      //                 TextStyle(fontSize: 14, color: Themes.light_white)),
+      //       ),
+      //     )));
     } catch (ex) {}
   }
 }
