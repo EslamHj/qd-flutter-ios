@@ -30,13 +30,17 @@ class _addOrderState extends State<addOrder> {
   final _Storage = GetStorage();
   bool hintV = false;
   var _color = false;
-  List branche = [];
+  List<dynamic> branche = [];
+  List<dynamic> dlyPrices = [];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    branche = ModalRoute.of(context)!.settings.arguments as List;
-    print(branche);
+    // branche = ModalRoute.of(context)!.settings.arguments as List ;
+        dlyPrices = ModalRoute.of(context)!.settings.arguments as List ;
+        print(dlyPrices);
+
+    // print(branche[1]);
   }
 
   @override
@@ -44,12 +48,6 @@ class _addOrderState extends State<addOrder> {
     super.initState();
     _color = _Storage.read("isDarkMode");
   }
-  // List city = [
-  //   {'name': 'طرابلس', 'value': '1'},
-  //   {'name': 'بنغازي', 'value': '2'},
-  //   {'name': 'يفرن', 'value': '3'},
-  //   {'name': 'نالوت', 'value': '4'}
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -224,8 +222,6 @@ class _addOrderState extends State<addOrder> {
                           child: Row(children: [
                             Expanded(
                               child: DropdownSearch<String>(
-
-                               
                                 emptyBuilder: (context, searchEntry) => Center(
                                     child: Text('لايوجد',
                                         style: TextStyle(
@@ -288,18 +284,20 @@ class _addOrderState extends State<addOrder> {
                                 //  dropdownBuilder: _style,
                                 dropdownBuilder: _customDropDownAddress,
                                 popupItemBuilder: _style1,
-                                items: [
-                                  "زناتة",
-                                  "مصراتة",
-                                  "بنغازي",
-                                  "مصراتة",
-                                  "سبها"
-                                ],
-                                // label: "Country",
-                                onChanged: print,
+                                items: [],
+                                // List<String>.from(
+                                //     branche.map((e) => e['name'])),
+
+                                onChanged: (value) {
+                                  for (var i = 0; i < branche.length; i++) {
+                                    if (branche[i]['name'] == value) {
+                                      print(branche[i]['id']);
+                                    }
+                                  }
+                                },
 
                                 //show selected item
-                                selectedItem: "زتاتة",
+                                selectedItem:"" ,
                               ),
                             ),
                           ]),
@@ -388,12 +386,20 @@ class _addOrderState extends State<addOrder> {
                                 //  dropdownBuilder: _style,
                                 dropdownBuilder: _customDropDownAddress,
                                 popupItemBuilder: _style1,
-                                items: [],
+                                items: 
+                                 List<String>.from(
+                                    dlyPrices.map((e) => e['name'])),
                                 // label: "Country",
-                                onChanged: print,
+                                 onChanged: (value) {
+                                  for (var i = 0; i < dlyPrices.length; i++) {
+                                    if (dlyPrices[i]['name'] == value) {
+                                      print(dlyPrices[i]['id']);
+                                    }
+                                  }
+                                },
 
                                 //show selected item
-                                selectedItem: "طرابلس",
+                                selectedItem: "",
                               ),
                             ),
                           ]),
@@ -454,8 +460,6 @@ class _addOrderState extends State<addOrder> {
 
   Widget _style1(BuildContext context, String? item, bool isSelected) {
     return Directionality(
-
-      
       textDirection: ui.TextDirection.rtl,
       child: Padding(
         padding: const EdgeInsets.all(8.0),

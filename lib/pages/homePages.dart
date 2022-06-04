@@ -46,6 +46,8 @@ class _homePagessState extends State<homePagess> {
   final _Storage = GetStorage();
   var _color = true;
     List  branche = [];
+    List dlyPrices =[] ;
+   
   bool visible_ = false;
 
 
@@ -54,6 +56,7 @@ class _homePagessState extends State<homePagess> {
   void initState() {
     super.initState();
     Branches();
+    delivery_Prices();
   }
 
   //   @override
@@ -87,7 +90,7 @@ class _homePagessState extends State<homePagess> {
                 setState(() {
 
                     Navigator.pushNamed(context, 'addOrder',
-                            arguments: branche);
+                            arguments:  dlyPrices );
                   // currenScreen = addOrder();
                   // currentTab = 4;
                 });
@@ -330,5 +333,65 @@ class _homePagessState extends State<homePagess> {
       print(ex);
     }
   }
+
+    ///////////////////////////api deliveryPrices ///////////////////////////////////////////////
+
+  Future<void> delivery_Prices() async {
+    try {
+      visible_ = true;
+      var urlDeliveryPrices =
+          Uri.parse(api().url + api().deliveryPrices + "b43936e6-4f2c-4f21-a308-9ca99c56faeb");
+          print(urlDeliveryPrices);
+      var response = await http.get(urlDeliveryPrices,
+          // headers: {
+          //   "Authorization": "Bearer $token",
+          // },
+          );
+      var responsebody = jsonDecode(response.body);
+             
+
+      if (response.statusCode == 200) {
+        setState(() {
+          dlyPrices = responsebody['data']['cites'];
+          // visible_ = false;
+        });
+      }
+    } on SocketException {
+      setState(() {
+        // visible_ = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          content: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Text(
+              "خطأ في الاتصال بالانترنت",
+              style: GoogleFonts.cairo(
+                  textStyle:
+                      TextStyle(fontSize: 14, color: Themes.light_white)),
+            ),
+          )));
+    } on FormatException {
+      setState(() {
+        visible_ = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          content: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Text(
+              "يوجد خطأ في البيانات",
+              style: GoogleFonts.cairo(
+                  textStyle:
+                      TextStyle(fontSize: 14, color: Themes.light_white)),
+            ),
+          )));
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
 
 }
