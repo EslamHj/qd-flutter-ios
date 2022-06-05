@@ -317,7 +317,7 @@ class _loginState extends State<login> {
           _Storage.write("code", responsebody["data"]["user"]["code"]);
           _Storage.write("token", responsebody["data"]["token"]);
 
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => homePagess()),
           );

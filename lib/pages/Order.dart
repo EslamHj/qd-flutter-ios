@@ -120,7 +120,7 @@ class _orderState extends State<order> {
                           itemBuilder: (context, i) {
                             return GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(context, 'details_order');
+                                  Navigator.pushNamed(context, 'details_order',  arguments: orderJson[i]['id']);
                                 },
                                 child: _cardOrder(context, i));
                           }),

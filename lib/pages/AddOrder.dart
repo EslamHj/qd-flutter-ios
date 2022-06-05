@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,12 +6,14 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/MyButton.dart';
 import 'package:pro_delivery/coponents/MyInputField.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:pro_delivery/pages/Branches.dart';
 import 'package:pro_delivery/pages/homePages.dart';
 import 'dart:ui' as ui;
+import 'package:http/http.dart' as http;
 
 import '../coponents/darkMode.dart';
 
@@ -32,21 +35,41 @@ class _addOrderState extends State<addOrder> {
   var _color = false;
   List<dynamic> branche = [];
   List<dynamic> dlyPrices = [];
+  var cityID = "" ;
+  var fromBranchID = "" ;
+  var fromBranchName = "" ;
+
+  // var student = new Map();
+  // var order = {
+  //   "customerPhone1" : ""
+  // };
+  var customerPhone1 = TextEditingController();
+  var storeName = TextEditingController();
+  var recieverPhone1 = TextEditingController();
+  var recieverPhone2 = TextEditingController();
+  var address = TextEditingController();
+  var packagePrice = TextEditingController();
+  var packageNumber = TextEditingController();
+  var note = TextEditingController();
+  var token = "";
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // branche = ModalRoute.of(context)!.settings.arguments as List ;
-        dlyPrices = ModalRoute.of(context)!.settings.arguments as List ;
-        print(dlyPrices);
+    // dlyPrices = ModalRoute.of(context)!.settings.arguments as List;
+    token = _Storage.read("token");
 
-    // print(branche[1]);
+    // print(dlyPrices);
+
+    print(_Storage.read("token"));
   }
 
   @override
   void initState() {
     super.initState();
     _color = _Storage.read("isDarkMode");
+    delivery_Prices();
   }
 
   @override
@@ -76,6 +99,7 @@ class _addOrderState extends State<addOrder> {
                     children: [
                       Expanded(
                         child: MyInput(
+                          controller: recieverPhone1,
                           title: "رقم المستلم",
                           hint: hintV == false ? "" : "يجب الملء",
                         ),
@@ -85,6 +109,7 @@ class _addOrderState extends State<addOrder> {
                       ),
                       Expanded(
                         child: MyInput(
+                          controller: recieverPhone2,
                           title: "رقم المستلم 2",
                           hint: "",
                         ),
@@ -92,11 +117,12 @@ class _addOrderState extends State<addOrder> {
                     ],
                   ),
 
-                  MyInput(title: "اسم الصفحة", hint: ""),
+                  MyInput(controller: storeName, title: "اسم الصفحة", hint: ""),
                   Row(
                     children: [
                       Expanded(
                         child: MyInput(
+                          controller: customerPhone1,
                           title: "رقم المرسل",
                           hint: "",
                         ),
@@ -117,6 +143,7 @@ class _addOrderState extends State<addOrder> {
                     children: [
                       Expanded(
                         child: MyInput(
+                          controller: packagePrice,
                           title: "سعر الطرد",
                           hint: "",
                         ),
@@ -126,6 +153,7 @@ class _addOrderState extends State<addOrder> {
                       ),
                       Expanded(
                         child: MyInput(
+                          controller: packageNumber,
                           title: "عدد العناصر",
                           hint: "",
                         ),
@@ -134,6 +162,7 @@ class _addOrderState extends State<addOrder> {
                   ),
 
                   MyInput(
+                    controller: address,
                     title: "عنوان المستلم",
                     hint: "",
                   ),
@@ -284,20 +313,20 @@ class _addOrderState extends State<addOrder> {
                                 //  dropdownBuilder: _style,
                                 dropdownBuilder: _customDropDownAddress,
                                 popupItemBuilder: _style1,
-                                items: [],
-                                // List<String>.from(
-                                //     branche.map((e) => e['name'])),
-
+                                items: List<String>.from(
+                                    branche.map((e) => e['name'])),
+                                // label: "Country",
                                 onChanged: (value) {
                                   for (var i = 0; i < branche.length; i++) {
                                     if (branche[i]['name'] == value) {
-                                      print(branche[i]['id']);
+                                      this.fromBranchID = branche[i]['id'] ;
+                                      this.fromBranchName =  branche[i]['name'] ;
                                     }
                                   }
                                 },
 
                                 //show selected item
-                                selectedItem:"" ,
+                                selectedItem: "",
                               ),
                             ),
                           ]),
@@ -386,14 +415,15 @@ class _addOrderState extends State<addOrder> {
                                 //  dropdownBuilder: _style,
                                 dropdownBuilder: _customDropDownAddress,
                                 popupItemBuilder: _style1,
-                                items: 
-                                 List<String>.from(
+                                items: List<String>.from(
                                     dlyPrices.map((e) => e['name'])),
                                 // label: "Country",
-                                 onChanged: (value) {
+                                onChanged: (value) {
                                   for (var i = 0; i < dlyPrices.length; i++) {
                                     if (dlyPrices[i]['name'] == value) {
-                                      print(dlyPrices[i]['id']);
+                                      
+                                      this.cityID = dlyPrices[i]['id'] ;
+                                    
                                     }
                                   }
                                 },
@@ -408,7 +438,7 @@ class _addOrderState extends State<addOrder> {
                     ),
                   ),
 
-                  MyInput(title: "ملاحظة", hint: ""),
+                  MyInput(controller: note, title: "ملاحظة", hint: ""),
                   SizedBox(
                     height: 30,
                   ),
@@ -417,7 +447,7 @@ class _addOrderState extends State<addOrder> {
                     onTap: () {
                       setState(() {
                         hintV = true;
-                        print("hhhh");
+                        add();
                       });
                     },
                     child: Container(
@@ -499,44 +529,127 @@ class _addOrderState extends State<addOrder> {
     );
   }
 
-  // _getDateFromUser() async {
-  //   DateTime? _pickerDate = await showDatePicker(
-  //       context: context,
-  //       initialDate: DateTime.now(),
-  //       firstDate: DateTime(2015),
-  //       lastDate: DateTime(2121));
 
-  //   if (_pickerDate != null) {
-  //     setState(() {
-  //       _selecteDate = _pickerDate;
-  //     });
-  //   } else {
-  //     print("it's null or something is wrong");
-  //   }
-  // }
+      ///////////////////////////api deliveryPrices ///////////////////////////////////////////////
 
-  // _getTimeFromUser({required bool isStarTime}) async {
-  //   var pickedTime = await _showTimePicker();
-  //   String _formatedTime = pickedTime.format(context);
-  //   if (pickedTime == null) {
-  //   } else if (isStarTime == true) {
-  //     setState(() {
-  //       _startTime = _formatedTime;
-  //     });
-  //   } else if (isStarTime == false) {
-  //     setState(() {
-  //       _endTime = _formatedTime;
-  //     });
-  //   }
-  // }
+  Future<void> delivery_Prices() async {
+    try {
+      // visible_ = true;
+      var urlDeliveryPrices =
+          Uri.parse(api().url + api().deliveryPrices + "b43936e6-4f2c-4f21-a308-9ca99c56faeb");
+          print(urlDeliveryPrices);
+      var response = await http.get(urlDeliveryPrices,
+          // headers: {
+          //   "Authorization": "Bearer $token",
+          // },
+          );
+      var responsebody = jsonDecode(response.body);
+             
 
-  // _showTimePicker() {
-  //   return showTimePicker(
-  //       initialEntryMode: TimePickerEntryMode.input,
-  //       context: context,
-  //       initialTime: TimeOfDay(
-  //         hour: int.parse(_startTime.split(":")[0]),
-  //         minute: int.parse(_startTime.split(":")[1].split(" ")[0]),
-  //       ));
-  // }
+      if (response.statusCode == 200) {
+        setState(() {
+          dlyPrices = responsebody['data']['cites'];
+          branche =  responsebody['data']['branches'];
+          // visible_ = false;
+        });
+      }
+    } on SocketException {
+      setState(() {
+        // visible_ = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          content: Directionality(
+            textDirection: ui.TextDirection.rtl,
+            child: Text(
+              "خطأ في الاتصال بالانترنت",
+              style: GoogleFonts.cairo(
+                  textStyle:
+                      TextStyle(fontSize: 14, color: Themes.light_white)),
+            ),
+          )));
+    } on FormatException {
+      setState(() {
+        // visible_ = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          content: Directionality(
+            textDirection: ui.TextDirection.rtl,
+            child: Text(
+              "يوجد خطأ في البيانات",
+              style: GoogleFonts.cairo(
+                  textStyle:
+                      TextStyle(fontSize: 14, color: Themes.light_white)),
+            ),
+          )));
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+
+  ///////////////////////////api add ///////////////////////////////////////////////
+
+  Future<void> add() async {
+    try {
+      // visible_ = true;
+      var _body = {
+        'customerPhone1': customerPhone1.text.toString(),
+        'storeName': storeName.text.toString(),
+        'recieverPhone1': recieverPhone1.text.toString(),
+        'recieverPhone2': recieverPhone2.text.toString(),
+        'address': address.text.toString(),
+        'cityID': this.cityID,
+        'customerCode': "00765",
+        'fromBranchID': this.fromBranchID,
+        'fromBranchName': this.fromBranchName,
+        'recieverName': "",
+        'packagePrice': packagePrice.text.toString(),
+        'packageNumber': packageNumber.text.toString(),
+        'note': note.text.toString()
+      };
+
+      print(_body)
+;
+      var urlAdd = Uri.parse(api().url + api().addOrder);
+      var response = await http.post(
+        urlAdd,
+        body: jsonEncode(_body),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Accept": "application/json",
+          "content-type": "application/json"
+        },
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => homePagess()),
+        );
+        // visible_ = false;
+      }
+    } on SocketException {
+      setState(() {
+        // visible_ = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          content: Directionality(
+            textDirection: ui.TextDirection.rtl,
+            child: Text(
+              "خطأ في الاتصال بالانترنت",
+              style: GoogleFonts.cairo(
+                  textStyle:
+                      TextStyle(fontSize: 14, color: Themes.light_white)),
+            ),
+          )));
+    } catch (ex) {
+      print(ex);
+    }
+  }
 }

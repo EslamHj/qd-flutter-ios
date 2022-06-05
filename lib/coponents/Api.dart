@@ -6,4 +6,9 @@ class api {
   var deliveryPrices = "api/cities/GetByBranch/";
   ///// شاشة قيد الإنتظار /////////
   var order = "api/WebOrders/GetByCustomerCode/" ;
+
+  /////  اضافة طرد /////////
+  var addOrder = "api/WebOrders" ;
+
+
 }
