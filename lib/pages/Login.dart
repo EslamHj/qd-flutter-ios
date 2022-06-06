@@ -24,6 +24,8 @@ class _loginState extends State<login> {
   var _color = true;
   bool visible_ = false;
   bool hidePass = true;
+  bool visible_login = true;
+
   var emailController = TextEditingController();
   var passController = TextEditingController();
   GlobalKey<FormState> formStateV = new GlobalKey<FormState>();
@@ -189,41 +191,45 @@ class _loginState extends State<login> {
                 ),
               ),
 
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    visible_ = true;
-                  });
-                  login();
-                },
-                child: Container(
-                    margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-                    height: 54,
-                    alignment: Alignment.center,
-                    //  width: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            (Color.fromARGB(255, 96, 55, 134)),
-                            (Color.fromARGB(255, 149, 102, 192))
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight),
-                      borderRadius: BorderRadius.circular(50),
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //       offset: Offset(0, 10),
-                      //       blurRadius: 50,
-                      //       color: Color(0xffEEEEEE))
-                      // ]
-                    ),
-                    child: Text("دخول",
-                        style: GoogleFonts.cairo(
-                          textStyle: TextStyle(
-                            color: Themes.light_white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ))),
+              Visibility(
+                visible: visible_login,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      visible_ = true;
+                    });
+
+                    login();
+                  },
+                  child: Container(
+                      margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+                      height: 54,
+                      alignment: Alignment.center,
+                      //  width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              (Color.fromARGB(255, 96, 55, 134)),
+                              (Color.fromARGB(255, 149, 102, 192))
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight),
+                        borderRadius: BorderRadius.circular(50),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //       offset: Offset(0, 10),
+                        //       blurRadius: 50,
+                        //       color: Color(0xffEEEEEE))
+                        // ]
+                      ),
+                      child: Text("دخول",
+                          style: GoogleFonts.cairo(
+                            textStyle: TextStyle(
+                              color: Themes.light_white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ))),
+                ),
               ),
 
               Padding(
@@ -268,11 +274,14 @@ class _loginState extends State<login> {
 
               Visibility(
                   visible: visible_,
-                  child: Center(
-                      child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        Themes.light.primaryColor),
-                  ))),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Themes.light.primaryColor),
+                    )),
+                  )),
             ],
           ),
         ),
@@ -299,6 +308,7 @@ class _loginState extends State<login> {
 
   Future<void> login() async {
     try {
+      visible_login = false;
       if (emailController.text.isNotEmpty && passController.text.isNotEmpty) {
         // if(formData!.validate()){
         var response = await http.get(Uri.parse(api().url +
@@ -306,11 +316,12 @@ class _loginState extends State<login> {
             emailController.text +
             "/" +
             passController.text));
-          var responsebody = jsonDecode(response.body);
+        var responsebody = jsonDecode(response.body);
 
         if (response.statusCode == 200) {
           setState(() {
             visible_ = false;
+            visible_login = true;
           });
 
           _Storage.write("name", responsebody["data"]["user"]["name"]);
@@ -322,7 +333,6 @@ class _loginState extends State<login> {
             MaterialPageRoute(builder: (context) => homePagess()),
           );
         } else {
-
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: Color.fromARGB(255, 118, 82, 153),
               content: Directionality(
@@ -336,6 +346,7 @@ class _loginState extends State<login> {
               )));
           setState(() {
             visible_ = false;
+            visible_login = true;
           });
         }
       } else {
@@ -352,11 +363,13 @@ class _loginState extends State<login> {
             )));
         setState(() {
           visible_ = false;
+          visible_login = true;
         });
       }
     } on FormatException {
       setState(() {
         visible_ = false;
+        visible_login = true;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -373,6 +386,7 @@ class _loginState extends State<login> {
     } on SocketException {
       setState(() {
         visible_ = false;
+        visible_login = true;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -21,7 +21,8 @@ class _branchesState extends State<branches> {
   final _Storage = GetStorage();
   var _color = false;
   List branche = [];
-  bool visible_ = false;
+  bool visible_lodding = false;
+  bool visible_body = false;
 
   @override
   void initState() {
@@ -33,23 +34,32 @@ class _branchesState extends State<branches> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
+      body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _cardTite(context),
         Visibility(
-            visible: visible_,
-            child: Center(
-                child: CircularProgressIndicator(
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(Themes.light.primaryColor),
-            ))),
-        Expanded(
-          child: ListView.builder(
-              itemCount: branche.length,
-              itemBuilder: (context, i) {
-                return _cardBranch(context, i);
-              }),
+          visible: visible_body,
+          child: _cardTite(context),
         ),
+        Visibility(
+            visible: visible_lodding,
+            child: Container(
+              child: Center(
+                  child: CircularProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(Themes.light.primaryColor),
+              )),
+            )),
+        Visibility(
+            visible: visible_body,
+            child: Expanded(
+              child: ListView.builder(
+                  itemCount: branche.length,
+                  itemBuilder: (context, i) {
+                    return _cardBranch(context, i);
+                  }),
+            )),
         SizedBox(
           height: 13,
         ),
@@ -237,7 +247,7 @@ class _branchesState extends State<branches> {
 
   Future<void> Branches() async {
     try {
-      visible_ = true;
+      visible_lodding = true;
       var urlBranches = Uri.parse(api().url + api().Branches);
       var response = await http.get(urlBranches
           // headers: {
@@ -250,11 +260,12 @@ class _branchesState extends State<branches> {
       });
 
       if (response.statusCode == 200) {
-        visible_ = false;
+        visible_lodding = false;
+        visible_body = true;
       }
     } on SocketException {
       setState(() {
-        visible_ = false;
+        visible_lodding = false;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

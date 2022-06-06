@@ -11,6 +11,7 @@ import 'package:pro_delivery/coponents/MyButton.dart';
 import 'package:pro_delivery/coponents/MyInputField.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:pro_delivery/pages/Branches.dart';
+import 'package:pro_delivery/pages/Delivery_Prices.dart';
 import 'package:pro_delivery/pages/homePages.dart';
 import 'dart:ui' as ui;
 import 'package:http/http.dart' as http;
@@ -35,9 +36,9 @@ class _addOrderState extends State<addOrder> {
   var _color = false;
   List<dynamic> branche = [];
   List<dynamic> dlyPrices = [];
-  var cityID = "" ;
-  var fromBranchID = "" ;
-  var fromBranchName = "" ;
+  var cityID = "";
+  var fromBranchID = "b43936e6-4f2c-4f21-a308-9ca99c56faeb";
+  var fromBranchName = "";
 
   // var student = new Map();
   // var order = {
@@ -52,6 +53,13 @@ class _addOrderState extends State<addOrder> {
   var packageNumber = TextEditingController();
   var note = TextEditingController();
   var token = "";
+
+  bool visible_lodding = false;
+  bool visible_body = true;
+  bool visible_branch_lodding = true;
+  bool visible_branch = false;
+  bool visible_city_lodding = false;
+  bool visible_city = false;
 
   @override
   void didChangeDependencies() {
@@ -69,6 +77,7 @@ class _addOrderState extends State<addOrder> {
   void initState() {
     super.initState();
     _color = _Storage.read("isDarkMode");
+
     delivery_Prices();
   }
 
@@ -83,88 +92,108 @@ class _addOrderState extends State<addOrder> {
               child: SingleChildScrollView(
                   child: Column(
                 children: [
-                  // Text(
-                  //   "add task" ,
-                  //   style: TextStyle(fontSize: 30 ,
-                  //    fontWeight: FontWeight.bold,
-                  //   //  color:  Get.isDarkMode ? Colors.red : Colors.black
-                  //    ) ,
-                  // ),
+                  Visibility(
+                      visible: visible_lodding,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 20),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Themes.light.primaryColor),
+                        )),
+                      )),
 
                   SizedBox(
                     height: 5,
                   ),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: MyInput(
-                          controller: recieverPhone1,
-                          title: "رقم المستلم",
-                          hint: hintV == false ? "" : "يجب الملء",
+                  Visibility(
+                    visible: visible_body,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: MyInput(
+                            controller: recieverPhone1,
+                            title: "رقم المستلم",
+                            hint: hintV == false ? "" : "يجب الملء",
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 12,
-                      ),
-                      Expanded(
-                        child: MyInput(
-                          controller: recieverPhone2,
-                          title: "رقم المستلم 2",
-                          hint: "",
+                        SizedBox(
+                          width: 12,
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: MyInput(
+                            controller: recieverPhone2,
+                            title: "رقم المستلم 2",
+                            hint: "",
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  MyInput(controller: storeName, title: "اسم الصفحة", hint: ""),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: MyInput(
-                          controller: customerPhone1,
-                          title: "رقم المرسل",
-                          hint: "",
+                  Visibility(
+                      visible: visible_body,
+                      child: MyInput(
+                          controller: storeName,
+                          title: "اسم الصفحة",
+                          hint: "")),
+                  Visibility(
+                    visible: visible_body,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: MyInput(
+                            controller: customerPhone1,
+                            title: "رقم المرسل",
+                            hint: "",
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 12,
-                      ),
-                      Expanded(
-                        child: MyInput(
-                          title: "رقم المرسل 2",
-                          hint: "",
+                        SizedBox(
+                          width: 12,
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: MyInput(
+                            title: "رقم المرسل 2",
+                            hint: "",
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: MyInput(
-                          controller: packagePrice,
-                          title: "سعر الطرد",
-                          hint: "",
+                  Visibility(
+                    visible: visible_body,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: MyInput(
+                            controller: packagePrice,
+                            title: "سعر الطرد",
+                            hint: "",
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 12,
-                      ),
-                      Expanded(
-                        child: MyInput(
-                          controller: packageNumber,
-                          title: "عدد العناصر",
-                          hint: "",
+                        SizedBox(
+                          width: 12,
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: MyInput(
+                            controller: packageNumber,
+                            title: "عدد العناصر",
+                            hint: "",
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  MyInput(
-                    controller: address,
-                    title: "عنوان المستلم",
-                    hint: "",
+                  Visibility(
+                    visible: visible_body,
+                    child: MyInput(
+                      controller: address,
+                      title: "عنوان المستلم",
+                      hint: "",
+                    ),
                   ),
 
                   // MyInput(
@@ -218,251 +247,307 @@ class _addOrderState extends State<addOrder> {
 
 /////// ------------ DropdownSearch branch ------------ ////////
 
-                  Container(
-                    margin: EdgeInsets.only(top: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "المكتب",
-                          style: GoogleFonts.cairo(
-                            textStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Get.isDarkMode
-                                    ? Themes.dark_white
-                                    : Themes.light.primaryColor),
-                          ),
-                        ),
-                        Container(
-                          height: 52,
-                          margin: EdgeInsets.only(top: 8.0),
-                          padding: EdgeInsets.only(right: 14),
-                          decoration: BoxDecoration(
-                              color: Get.isDarkMode
-                                  ? Themes.dark_primary
-                                  : Colors.grey[300],
-                              border: Border.all(
+                  Visibility(
+                      visible: visible_branch_lodding,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 20),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Themes.light.primaryColor),
+                        )),
+                      )),
+
+                  Visibility(
+                    visible: visible_branch,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "المكتب",
+                            style: GoogleFonts.cairo(
+                              textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
                                   color: Get.isDarkMode
                                       ? Themes.dark_white
-                                      : Themes.light.primaryColor,
-                                  width: 1.0),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Row(children: [
-                            Expanded(
-                              child: DropdownSearch<String>(
-                                emptyBuilder: (context, searchEntry) => Center(
-                                    child: Text('لايوجد',
-                                        style: TextStyle(
-                                            color: Themes.light.primaryColor))),
-
-                                // autoFocusSearchBox: true,
-
-                                searchBoxDecoration: InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                    color: Themes.light.primaryColor,
-                                    width: 2,
-                                  )),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                    color: Themes.light.primaryColor,
-                                    width: 2,
-                                  )),
-                                  hintTextDirection: ui.TextDirection.rtl,
-                                ),
-                                searchBoxStyle: GoogleFonts.cairo(
-                                    textStyle: TextStyle(
-                                        // decorationColor: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                        color: _color
-                                            ? Themes.dark_white
-                                            : Themes.light_black)),
-
-                                dropdownSearchTextAlignVertical:
-                                    TextAlignVertical.bottom,
-                                dropdownSearchTextAlign: TextAlign.right,
-
-                                dropdownSearchBaseStyle:
-                                    TextStyle(fontFamily: 'MeQuran2'),
-                                showSearchBox: true,
-                                mode: Mode.DIALOG,
-                                dropdownSearchDecoration: InputDecoration(
-                                  hintStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: 0,
-                                  )),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: 0,
-                                  )),
-                                ),
-
-                                // mode: Mode.DIALOG,
-                                //to show search box
-                                // showSearchBox: true,
-                                showSelectedItem: true,
-                                //list of dropdown items
-                                //  dropdownBuilder: _style,
-                                dropdownBuilder: _customDropDownAddress,
-                                popupItemBuilder: _style1,
-                                items: List<String>.from(
-                                    branche.map((e) => e['name'])),
-                                // label: "Country",
-                                onChanged: (value) {
-                                  for (var i = 0; i < branche.length; i++) {
-                                    if (branche[i]['name'] == value) {
-                                      this.fromBranchID = branche[i]['id'] ;
-                                      this.fromBranchName =  branche[i]['name'] ;
-                                    }
-                                  }
-                                },
-
-                                //show selected item
-                                selectedItem: "",
-                              ),
+                                      : Themes.light.primaryColor),
                             ),
-                          ]),
-                        )
-                      ],
+                          ),
+                          Container(
+                            height: 52,
+                            margin: EdgeInsets.only(top: 8.0),
+                            padding: EdgeInsets.only(right: 14),
+                            decoration: BoxDecoration(
+                                color: Get.isDarkMode
+                                    ? Themes.dark_primary
+                                    : Colors.grey[300],
+                                border: Border.all(
+                                    color: Get.isDarkMode
+                                        ? Themes.dark_white
+                                        : Themes.light.primaryColor,
+                                    width: 1.0),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Row(children: [
+                              Expanded(
+                                child: DropdownSearch<String>(
+                                  emptyBuilder: (context, searchEntry) =>
+                                      Center(
+                                          child: Text('لايوجد',
+                                              style: TextStyle(
+                                                  color: Themes
+                                                      .light.primaryColor))),
+
+                                  // autoFocusSearchBox: true,
+
+                                  searchBoxDecoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Themes.light.primaryColor,
+                                      width: 2,
+                                    )),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Themes.light.primaryColor,
+                                      width: 2,
+                                    )),
+                                    hintTextDirection: ui.TextDirection.rtl,
+                                  ),
+                                  searchBoxStyle: GoogleFonts.cairo(
+                                      textStyle: TextStyle(
+                                          // decorationColor: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: _color
+                                              ? Themes.dark_white
+                                              : Themes.light_black)),
+
+                                  dropdownSearchTextAlignVertical:
+                                      TextAlignVertical.bottom,
+                                  dropdownSearchTextAlign: TextAlign.right,
+
+                                  dropdownSearchBaseStyle:
+                                      TextStyle(fontFamily: 'MeQuran2'),
+                                  showSearchBox: true,
+                                  mode: Mode.DIALOG,
+                                  dropdownSearchDecoration: InputDecoration(
+                                    hintStyle: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 0,
+                                    )),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 0,
+                                    )),
+                                  ),
+
+                                  // mode: Mode.DIALOG,
+                                  //to show search box
+                                  // showSearchBox: true,
+                                  showSelectedItem: true,
+                                  //list of dropdown items
+                                  //  dropdownBuilder: _style,
+                                  dropdownBuilder: _customDropDownAddress,
+                                  popupItemBuilder: _style1,
+                                  items: List<String>.from(
+                                      branche.map((e) => e['name'])),
+                                  // label: "Country",
+                                  onChanged: (value) {
+                                    for (var i = 0; i < branche.length; i++) {
+                                      if (branche[i]['name'] == value) {
+                                        this.fromBranchID = branche[i]['id'];
+                                        this.fromBranchName =
+                                            branche[i]['name'];
+                                      }
+                                    }
+                                    setState(() {
+                                      visible_city_lodding = true;
+                                      visible_city = false;
+
+                                      delivery_Prices();
+                                    });
+                                  },
+
+                                  //show selected item
+                                  selectedItem: "",
+                                ),
+                              ),
+                            ]),
+                          )
+                        ],
+                      ),
                     ),
                   ),
 
 /////// ------------ DropdownSearch city ------------ ////////
-
-                  Container(
-                    margin: EdgeInsets.only(top: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "المدينة",
-                          style: GoogleFonts.cairo(
-                            textStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Get.isDarkMode
-                                    ? Themes.dark_white
-                                    : Themes.light.primaryColor),
-                          ),
-                        ),
-                        Container(
-                          height: 52,
-                          margin: EdgeInsets.only(top: 8.0),
-                          padding: EdgeInsets.only(right: 14),
-                          decoration: BoxDecoration(
-                              color: Get.isDarkMode
-                                  ? Themes.dark_primary
-                                  : Colors.grey[300],
-                              border: Border.all(
+                  Visibility(
+                      visible: visible_city_lodding,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 20),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Themes.light.primaryColor),
+                        )),
+                      )),
+                  Visibility(
+                    visible: visible_city,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "المدينة",
+                            style: GoogleFonts.cairo(
+                              textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
                                   color: Get.isDarkMode
                                       ? Themes.dark_white
-                                      : Themes.light.primaryColor,
-                                  width: 1.0),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Row(children: [
-                            Expanded(
-                              child: DropdownSearch<String>(
-                                // autoFocusSearchBox: true,
-
-                                searchBoxStyle: GoogleFonts.cairo(
-                                    textStyle: TextStyle(
-
-                                        // decorationColor: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                        color: _color
-                                            ? Themes.dark_white
-                                            : Themes.light_black)),
-
-                                dropdownSearchTextAlignVertical:
-                                    TextAlignVertical.bottom,
-                                dropdownSearchTextAlign: TextAlign.center,
-
-                                dropdownSearchBaseStyle:
-                                    TextStyle(fontFamily: 'MeQuran2'),
-                                showSearchBox: true,
-                                mode: Mode.DIALOG,
-                                dropdownSearchDecoration: InputDecoration(
-                                  hintStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: 0,
-                                  )),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: 0,
-                                  )),
-                                ),
-
-                                // mode: Mode.DIALOG,
-                                //to show search box
-                                // showSearchBox: true,
-                                showSelectedItem: true,
-                                //list of dropdown items
-                                //  dropdownBuilder: _style,
-                                dropdownBuilder: _customDropDownAddress,
-                                popupItemBuilder: _style1,
-                                items: List<String>.from(
-                                    dlyPrices.map((e) => e['name'])),
-                                // label: "Country",
-                                onChanged: (value) {
-                                  for (var i = 0; i < dlyPrices.length; i++) {
-                                    if (dlyPrices[i]['name'] == value) {
-                                      
-                                      this.cityID = dlyPrices[i]['id'] ;
-                                    
-                                    }
-                                  }
-                                },
-
-                                //show selected item
-                                selectedItem: "",
-                              ),
+                                      : Themes.light.primaryColor),
                             ),
-                          ]),
-                        )
-                      ],
+                          ),
+                          Container(
+                            height: 52,
+                            margin: EdgeInsets.only(top: 8.0),
+                            padding: EdgeInsets.only(right: 14),
+                            decoration: BoxDecoration(
+                                color: Get.isDarkMode
+                                    ? Themes.dark_primary
+                                    : Colors.grey[300],
+                                border: Border.all(
+                                    color: Get.isDarkMode
+                                        ? Themes.dark_white
+                                        : Themes.light.primaryColor,
+                                    width: 1.0),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Row(children: [
+                              Expanded(
+                                child: DropdownSearch<String>(
+                                  emptyBuilder: (context, searchEntry) =>
+                                      Center(
+                                          child: Text('لايوجد',
+                                              style: TextStyle(
+                                                  color: Themes
+                                                      .light.primaryColor))),
+                                  searchBoxDecoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Themes.light.primaryColor,
+                                      width: 2,
+                                    )),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Themes.light.primaryColor,
+                                      width: 2,
+                                    )),
+                                    hintTextDirection: ui.TextDirection.rtl,
+                                  ),
+                                  searchBoxStyle: GoogleFonts.cairo(
+                                      textStyle: TextStyle(
+
+                                          // decorationColor: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: _color
+                                              ? Themes.dark_white
+                                              : Themes.light_black)),
+
+                                  dropdownSearchTextAlignVertical:
+                                      TextAlignVertical.bottom,
+                                  dropdownSearchTextAlign: TextAlign.center,
+
+                                  dropdownSearchBaseStyle:
+                                      TextStyle(fontFamily: 'MeQuran2'),
+                                  showSearchBox: true,
+                                  mode: Mode.DIALOG,
+                                  dropdownSearchDecoration: InputDecoration(
+                                    hintStyle: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 0,
+                                    )),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 0,
+                                    )),
+                                  ),
+
+                                  // mode: Mode.DIALOG,
+                                  //to show search box
+                                  // showSearchBox: true,
+                                  showSelectedItem: true,
+                                  //list of dropdown items
+                                  //  dropdownBuilder: _style,
+                                  dropdownBuilder: _customDropDownAddress,
+                                  popupItemBuilder: _style1,
+                                  items: List<String>.from(
+                                      dlyPrices.map((e) => e['name'])),
+                                  // label: "Country",
+                                  onChanged: (value) {
+                                    for (var i = 0; i < dlyPrices.length; i++) {
+                                      if (dlyPrices[i]['name'] == value) {
+                                        this.cityID = dlyPrices[i]['id'];
+                                      }
+                                    }
+                                  },
+
+                                  //show selected item
+                                  selectedItem: "",
+                                ),
+                              ),
+                            ]),
+                          )
+                        ],
+                      ),
                     ),
                   ),
 
-                  MyInput(controller: note, title: "ملاحظة", hint: ""),
+                  Visibility(
+                      visible: visible_body,
+                      child:
+                          MyInput(controller: note, title: "ملاحظة", hint: "")),
                   SizedBox(
                     height: 30,
                   ),
 
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        hintV = true;
-                        add();
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Themes.light.primaryColor,
-                      ),
-                      child: Text(
-                        "حفظ",
-                        style: GoogleFonts.cairo(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold)),
+                  Visibility(
+                    visible: visible_body,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          hintV = true;
+                          add();
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.topCenter,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Themes.light.primaryColor,
+                        ),
+                        child: Text(
+                          "حفظ",
+                          style: GoogleFonts.cairo(
+                              textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                        ),
                       ),
                     ),
                   ),
@@ -529,27 +614,29 @@ class _addOrderState extends State<addOrder> {
     );
   }
 
-
-      ///////////////////////////api deliveryPrices ///////////////////////////////////////////////
+  ///////////////////////////api deliveryPrices ///////////////////////////////////////////////
 
   Future<void> delivery_Prices() async {
     try {
       // visible_ = true;
       var urlDeliveryPrices =
-          Uri.parse(api().url + api().deliveryPrices + "b43936e6-4f2c-4f21-a308-9ca99c56faeb");
-          print(urlDeliveryPrices);
-      var response = await http.get(urlDeliveryPrices,
-          // headers: {
-          //   "Authorization": "Bearer $token",
-          // },
-          );
+          Uri.parse(api().url + api().deliveryPrices + fromBranchID);
+      var response = await http.get(
+        urlDeliveryPrices,
+        // headers: {
+        //   "Authorization": "Bearer $token",
+        // },
+      );
       var responsebody = jsonDecode(response.body);
-             
 
       if (response.statusCode == 200) {
         setState(() {
           dlyPrices = responsebody['data']['cites'];
-          branche =  responsebody['data']['branches'];
+          branche = responsebody['data']['branches'];
+          visible_branch = true;
+          visible_branch_lodding = false;
+          visible_city = true;
+          visible_city_lodding = false;
           // visible_ = false;
         });
       }
@@ -590,12 +677,14 @@ class _addOrderState extends State<addOrder> {
     }
   }
 
-
   ///////////////////////////api add ///////////////////////////////////////////////
 
   Future<void> add() async {
     try {
-      // visible_ = true;
+      visible_lodding = true;
+      visible_body = false;
+      visible_city = false;
+      visible_branch = false;
       var _body = {
         'customerPhone1': customerPhone1.text.toString(),
         'storeName': storeName.text.toString(),
@@ -612,8 +701,7 @@ class _addOrderState extends State<addOrder> {
         'note': note.text.toString()
       };
 
-      print(_body)
-;
+      print(_body);
       var urlAdd = Uri.parse(api().url + api().addOrder);
       var response = await http.post(
         urlAdd,
@@ -630,7 +718,8 @@ class _addOrderState extends State<addOrder> {
           context,
           MaterialPageRoute(builder: (context) => homePagess()),
         );
-        // visible_ = false;
+        visible_lodding = false;
+        visible_body = true;
       }
     } on SocketException {
       setState(() {

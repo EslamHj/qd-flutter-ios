@@ -21,10 +21,11 @@ class _deliveryPricesState extends State<deliveryPrices> {
   Map<String, dynamic> dlyPrices_Map = {};
   List dlyPrices = [];
   bool visible_ = false;
-  var idBranche = "";
-  String token = "" ;
-    final _Storage = GetStorage();
+  bool visible_2 = false;
 
+  var idBranche = "";
+  String token = "";
+  final _Storage = GetStorage();
 
   @override
   void initState() {
@@ -35,7 +36,7 @@ class _deliveryPricesState extends State<deliveryPrices> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     idBranche = ModalRoute.of(context)!.settings.arguments as String;
-        token = _Storage.read("token");
+    token = _Storage.read("token");
 
     delivery_Prices();
   }
@@ -45,8 +46,12 @@ class _deliveryPricesState extends State<deliveryPrices> {
     return Scaffold(
         appBar: _appBar(),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-              SizedBox(height: 25,),
+            SizedBox(
+              height: 25,
+            ),
             Visibility(
                 visible: visible_,
                 child: Center(
@@ -54,14 +59,19 @@ class _deliveryPricesState extends State<deliveryPrices> {
                   valueColor:
                       AlwaysStoppedAnimation<Color>(Themes.light.primaryColor),
                 ))),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: dlyPrices.length,
-                  itemBuilder: (context, i) {
-                    return _cardPrice(context, i);
-                  }),
+            Visibility(
+              visible: visible_2,
+              child: Expanded(
+                child: ListView.builder(
+                    itemCount: dlyPrices.length,
+                    itemBuilder: (context, i) {
+                      return _cardPrice(context, i);
+                    }),
+              ),
             ),
-             SizedBox(height: 13,),
+            SizedBox(
+              height: 13,
+            ),
           ],
         ));
   }
@@ -81,9 +91,7 @@ class _deliveryPricesState extends State<deliveryPrices> {
                 fit: BoxFit.cover,
               ),
             )),
-          
       ],
-      
     );
   }
 
@@ -196,20 +204,21 @@ class _deliveryPricesState extends State<deliveryPrices> {
       visible_ = true;
       var urlDeliveryPrices =
           Uri.parse(api().url + api().deliveryPrices + idBranche);
-          print(urlDeliveryPrices);
-      var response = await http.get(urlDeliveryPrices,
-          headers: {
-            "Authorization": "Bearer $token",
-          },
-          );
+      print(urlDeliveryPrices);
+      var response = await http.get(
+        urlDeliveryPrices,
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      );
       var responsebody = jsonDecode(response.body);
-                print(responsebody);
-
+      print(responsebody);
 
       if (response.statusCode == 200) {
         setState(() {
           dlyPrices = responsebody['data']['cites'];
           visible_ = false;
+          visible_2 = true;
         });
       }
     } on SocketException {
