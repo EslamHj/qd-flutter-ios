@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
-import 'package:pro_delivery/coponents/darkmode_service.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class order extends StatefulWidget {
@@ -24,12 +21,15 @@ class _orderState extends State<order> {
   List orderJson = [];
   bool visible_ = false;
   String code = "";
+  String token = "";
 
   @override
   void initState() {
     super.initState();
     _color = _Storage.read("isDarkMode");
     code = _Storage.read("code");
+    token = _Storage.read("token");
+
     order();
   }
 
@@ -37,28 +37,32 @@ class _orderState extends State<order> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: net == true
-            ? Container(
-                margin: EdgeInsets.only(top: 60),
-                child: Column(
-                  children: [
-                    Visibility(
-                        visible: visible_,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 25),
-                          child: Center(
-                              child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Themes.light.primaryColor),
-                          )),
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Visibility(
+                      visible: visible_,
+                      child: Container(
+                        // margin: EdgeInsets.only(top: 25),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Themes.light.primaryColor),
                         )),
-                    Center(
+                      )),
+                  Visibility(
+                    visible: !visible_,
+                    child: Center(
                       child: Image.asset(
                         'assets/net.png',
                         width: 200,
                       ),
                     ),
-
-                    Text(
+                  ),
+                  Visibility(
+                    visible: !visible_,
+                    child: Text(
                       "خطأ في الاتصال بالانترنت",
                       style: GoogleFonts.cairo(
                           textStyle: TextStyle(
@@ -66,21 +70,10 @@ class _orderState extends State<order> {
                               color: Themes.light.primaryColor,
                               fontWeight: FontWeight.bold)),
                     ),
-
-                    // GestureDetector(
-                    //   onTap: () {
-                    //   order();
-                    //   net =false ;
-                    //   visible_ =true ;
-                    //   },
-                    //   child: Icon(
-                    //     Icons.refresh,
-                    //     size: 40,
-                    //     color: Themes.light.primaryColor,
-                    //   ),
-                    // )
-
-                    IconButton(
+                  ),
+                  Visibility(
+                    visible: !visible_,
+                    child: IconButton(
                         onPressed: () {
                           setState(() {
                             order();
@@ -92,9 +85,9 @@ class _orderState extends State<order> {
                           Icons.refresh,
                           size: 40,
                           color: Themes.light.primaryColor,
-                        ))
-                  ],
-                ),
+                        )),
+                  )
+                ],
               )
             : Column(
                 children: [
@@ -120,7 +113,7 @@ class _orderState extends State<order> {
                           itemBuilder: (context, i) {
                             return GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(context, 'details_order',  arguments: orderJson[i]['id']);
+                                  details_order(i);
                                 },
                                 child: _cardOrder(context, i));
                           }),
@@ -160,24 +153,10 @@ class _orderState extends State<order> {
                   children: [
                     Column(children: [
                       Container(
-                        width: 150,
-                        child: Text(
-                          "00985678",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: _color == true
-                                  ? Themes.dark_white
-                                  : Themes.light.primaryColor),
-                        ),
-                      ),
-                      Container(
                         width: 160,
                         child: Text(
-                          orderJson[index]['note'],
-                          maxLines: 1,
+                          orderJson[index]['note'].toString(),
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.cairo(
                             textStyle: TextStyle(
@@ -215,7 +194,7 @@ class _orderState extends State<order> {
                       Container(
                         width: 100,
                         child: Text(
-                          orderJson[index]['city']['name'],
+                          orderJson[index]['cityName'].toString(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.cairo(
@@ -237,7 +216,7 @@ class _orderState extends State<order> {
                       Container(
                         width: _width / 4,
                         child: Text(
-                          orderJson[index]['recieverPhone1'],
+                          orderJson[index]['recieverPhone1'].toString(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -251,7 +230,7 @@ class _orderState extends State<order> {
                       Container(
                         width: _width / 4,
                         child: Text(
-                          orderJson[index]['recieverPhone2'],
+                          orderJson[index]['recieverPhone2'].toString(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -296,12 +275,13 @@ class _orderState extends State<order> {
   Future<void> order() async {
     try {
       visible_ = true;
-      var urlBranches = Uri.parse(api().url + api().order + code);
-      var response = await http.get(urlBranches
-          // headers: {
-          //   "Authorization": "Bearer $token",
-          // },
-          );
+      var urlOrder = Uri.parse(api().url + api().order);
+      var response = await http.get(
+        urlOrder,
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      );
       var responsebody = jsonDecode(response.body);
       setState(() {
         orderJson = responsebody['data'];
@@ -316,29 +296,12 @@ class _orderState extends State<order> {
         visible_ = false;
         net = true;
       });
-
-//       Center(
-//     child: CircleAvatar(
-//         radius: 40,
-//         backgroundImage: AssetImage('assets/net.png'),
-//     ),
-// );
-
-      // Image.asset(
-      //         'assets/net.png',
-      //       );
-
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     backgroundColor: Color.fromARGB(255, 118, 82, 153),
-      //     content: Directionality(
-      //       textDirection: TextDirection.rtl,
-      //       child: Text(
-      //         "خطأ في الاتصال بالانترنت",
-      //         style: GoogleFonts.cairo(
-      //             textStyle:
-      //                 TextStyle(fontSize: 14, color: Themes.light_white)),
-      //       ),
-      //     )));
     } catch (ex) {}
+  }
+
+  details_order(index) {
+      Navigator.pushNamed(context, 'details_order',
+          arguments: orderJson[index]['id']);
+   
   }
 }

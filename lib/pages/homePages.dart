@@ -318,17 +318,7 @@ class _homePagessState extends State<homePagess> {
         // visible_ = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
-          content: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Text(
-              "خطأ في الاتصال بالانترنت",
-              style: GoogleFonts.cairo(
-                  textStyle:
-                      TextStyle(fontSize: 14, color: Themes.light_white)),
-            ),
-          )));
+      
     } catch (ex) {
       print(ex);
     }

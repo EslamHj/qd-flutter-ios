@@ -6,7 +6,6 @@ import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/Maps.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pro_delivery/pages/Delivery_Prices.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,49 +21,112 @@ class _branchesState extends State<branches> {
   var _color = false;
   List branche = [];
   bool visible_lodding = false;
+  bool visible_lodding_net = false;
   bool visible_body = false;
+  String token = "";
+  bool net = false;
 
   @override
   void initState() {
     super.initState();
     _color = _Storage.read("isDarkMode");
+    token = _Storage.read("token");
+
     Branches();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Visibility(
-          visible: visible_body,
-          child: _cardTite(context),
-        ),
-        Visibility(
-            visible: visible_lodding,
-            child: Container(
-              child: Center(
-                  child: CircularProgressIndicator(
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(Themes.light.primaryColor),
-              )),
-            )),
-        Visibility(
-            visible: visible_body,
-            child: Expanded(
-              child: ListView.builder(
-                  itemCount: branche.length,
-                  itemBuilder: (context, i) {
-                    return _cardBranch(context, i);
-                  }),
-            )),
-        SizedBox(
-          height: 13,
-        ),
-      ],
-    ));
+        body: net == true
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Visibility(
+                      visible: visible_lodding_net,
+                      child: Container(
+                        // margin: EdgeInsets.only(top: 25),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Themes.light.primaryColor),
+                        )),
+                      )),
+                  Visibility(
+                    visible: !visible_lodding_net,
+                    child: Center(
+                      child: Image.asset(
+                        'assets/net.png',
+                        width: 200,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !visible_lodding_net,
+                    child: Text(
+                      "خطأ في الاتصال بالانترنت",
+                      style: GoogleFonts.cairo(
+                          textStyle: TextStyle(
+                              fontSize: 16,
+                              color: Themes.light.primaryColor,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !visible_lodding_net,
+                    child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            Branches();
+                            visible_lodding_net = true;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.refresh,
+                          size: 40,
+                          color: Themes.light.primaryColor,
+                        )),
+                  )
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Visibility(
+                  //   visible: visible_body,
+                  //   child: _cardTite(context),
+                  // ),
+
+                  Visibility(
+                      visible: visible_lodding,
+                      child: Container(
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Themes.light.primaryColor),
+                        )),
+                      )),
+                  SizedBox(height: 20),
+                  Visibility(
+                      visible: visible_body,
+                      child: Expanded(
+                        child: RefreshIndicator(
+                          color: Themes.light.primaryColor,
+                          onRefresh: Branches,
+                          child: ListView.builder(
+                              itemCount: branche.length,
+                              itemBuilder: (context, i) {
+                                return _cardBranch(context, i);
+                              }),
+                        ),
+                      )),
+                  SizedBox(
+                    height: 13,
+                  ),
+                ],
+              ));
   }
 
   _cardTite(context) {
@@ -118,7 +180,7 @@ class _branchesState extends State<branches> {
     return Stack(
       children: [
         Container(
-          height: 115,
+          height: 135,
           margin: EdgeInsets.fromLTRB(20, 0, 20, 12),
           width: _width - 40,
           decoration: BoxDecoration(
@@ -142,7 +204,7 @@ class _branchesState extends State<branches> {
                       width: _width / 2,
                       padding: EdgeInsets.only(bottom: 8),
                       child: Text(
-                        branche[index]["name"],
+                        branche[index]["name"].toString(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.cairo(
@@ -157,7 +219,7 @@ class _branchesState extends State<branches> {
                     Column(
                       children: [
                         Text(
-                          branche[index]["phone"].toString(),
+                          branche[index]["phone1"].toString(),
                           style: GoogleFonts.cairo(
                               textStyle: TextStyle(
                                   fontSize: 14,
@@ -180,6 +242,7 @@ class _branchesState extends State<branches> {
                     )
                   ],
                 ),
+                SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
@@ -213,7 +276,7 @@ class _branchesState extends State<branches> {
                         child: GestureDetector(
                       onTap: () {
                         // MapUrl.openMap(47.628293269721, -122.34263420105);
-                        MapUrl.openMap("V66J", "992");
+                        MapUrl.openMap("V66J+992");
                       },
                       child: Container(
                         width: _width / 2 - 30,
@@ -248,12 +311,14 @@ class _branchesState extends State<branches> {
   Future<void> Branches() async {
     try {
       visible_lodding = true;
+      visible_lodding_net = true;
       var urlBranches = Uri.parse(api().url + api().Branches);
-      var response = await http.get(urlBranches
-          // headers: {
-          //   "Authorization": "Bearer $token",
-          // },
-          );
+      var response = await http.get(
+        urlBranches,
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      );
       var responsebody = jsonDecode(response.body);
       setState(() {
         branche = responsebody['data'];
@@ -261,24 +326,17 @@ class _branchesState extends State<branches> {
 
       if (response.statusCode == 200) {
         visible_lodding = false;
+        visible_lodding_net = false;
         visible_body = true;
+        net = false;
       }
     } on SocketException {
       setState(() {
         visible_lodding = false;
-      });
+        visible_lodding_net = false;
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
-          content: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Text(
-              "خطأ في الاتصال بالانترنت",
-              style: GoogleFonts.cairo(
-                  textStyle:
-                      TextStyle(fontSize: 14, color: Themes.light_white)),
-            ),
-          )));
+        net = true;
+      });
     } catch (ex) {}
   }
 }

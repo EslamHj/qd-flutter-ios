@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/Api.dart';
@@ -289,20 +286,6 @@ class _loginState extends State<login> {
     );
   }
 
-  // buildShowDialog(BuildContext context) {
-
-  //   return showDialog(
-  //       context: context,
-  //       barrierDismissible: false,
-  //       builder: (BuildContext context) {
-  //         return Center(
-  //           child: CircularProgressIndicator(
-  //             valueColor:
-  //                 AlwaysStoppedAnimation<Color>(Themes.light.primaryColor),
-  //           ),
-  //         );
-  //       });
-  // }
 
   ///////////////////////////api login ///////////////////////////////////////////////
 
@@ -310,13 +293,21 @@ class _loginState extends State<login> {
     try {
       visible_login = false;
       if (emailController.text.isNotEmpty && passController.text.isNotEmpty) {
-        // if(formData!.validate()){
-        var response = await http.get(Uri.parse(api().url +
+        var urlLogin = Uri.parse(api().url +
             api().login +
+            "userName=" +
             emailController.text +
-            "/" +
-            passController.text));
+            "&passward=" +
+            passController.text);
+
+        var response = await http.get(
+          urlLogin,
+          headers: {
+            "Authorization": "Bearer",
+          },
+        );
         var responsebody = jsonDecode(response.body);
+          print(responsebody["data"]["name"]);
 
         if (response.statusCode == 200) {
           setState(() {
@@ -324,8 +315,9 @@ class _loginState extends State<login> {
             visible_login = true;
           });
 
-          _Storage.write("name", responsebody["data"]["user"]["name"]);
-          _Storage.write("code", responsebody["data"]["user"]["code"]);
+
+          _Storage.write("name", responsebody["data"]["name"]);
+          _Storage.write("code", responsebody["data"]["code"]);
           _Storage.write("token", responsebody["data"]["token"]);
 
           Navigator.pushReplacement(

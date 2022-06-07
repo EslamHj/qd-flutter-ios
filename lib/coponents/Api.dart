@@ -1,11 +1,11 @@
 class api {
-  var url = "https://testapi.qdlibya.com/";
-  var login = "api/webusers/login/";
+  var url = "http://demo.qdlibya.com/";
+  var login = "api/mobile/Login?";
   // /// شاشة  اسعار التوصيل /////
-  var Branches = "api/branches/GetMainBranches";
-  var deliveryPrices = "api/cities/GetByBranch/";
+  var Branches = "api/mobile/GetMainBranches";
+  var deliveryPrices = "api/mobile/GetCitiesByBranch?BranchId=";
   ///// شاشة قيد الإنتظار /////////
-  var order = "api/WebOrders/GetByCustomerCode/" ;
+  var order = "api/mobile/GetWebOrders" ;
 
   /////  اضافة طرد /////////
   var addOrder = "api/WebOrders" ;

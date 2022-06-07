@@ -57,7 +57,7 @@ class _details_orderState extends State<details_order> {
     idOrder = ModalRoute.of(context)!.settings.arguments as String;
 
     Details_Order();
-    delivery_Prices();
+    // delivery_Prices();
   }
 
   @override
@@ -679,19 +679,18 @@ class _details_orderState extends State<details_order> {
       visible_city = false;
       visible_branch = false;
 
-      var urlBranches = Uri.parse(api().url + api().addOrder + "/" + idOrder);
-      print(urlBranches);
-      var response = await http.get(urlBranches
-          // headers: {
-          //   "Authorization": "Bearer $token",
-          // },
-          );
+      var urlOrder = Uri.parse(api().url + api().order);
+      var response = await http.get(
+        urlOrder,
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      );
 
       var responsebody = jsonDecode(response.body);
       setState(() {
-        detailsOrder = responsebody['data'];
+        detailsOrder = responsebody['data'][0];
       });
-      print(detailsOrder);
 
       if (response.statusCode == 200) {
         customerPhone1.text = detailsOrder['customerPhone1'].toString();
@@ -703,10 +702,10 @@ class _details_orderState extends State<details_order> {
         packageNumber.text = detailsOrder['packageNumber'].toString();
         note.text = detailsOrder['note'].toString();
         this.brancheName = detailsOrder['fromBranchName'].toString();
-        this.cityName = detailsOrder['city']['name'].toString();
+        this.cityName = detailsOrder['cityName'].toString();
         this.cityID = detailsOrder['cityID'].toString();
         this.fromBranchID = detailsOrder['fromBranchID'].toString();
-        this.fromBranchName = detailsOrder['fromBranchName'].toString();
+        // this.fromBranchName = detailsOrder['fromBranchName'].toString();
 
         visible_lodding = false;
         visible_body = true;
@@ -714,22 +713,26 @@ class _details_orderState extends State<details_order> {
       }
     } on SocketException {
       setState(() {
-        // visible_ = false;
+        visible_lodding = false;
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => homePagess()),
+        );
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
-          content: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Text(
-              "خطأ في الاتصال بالانترنت",
-              style: GoogleFonts.cairo(
-                  textStyle:
-                      TextStyle(fontSize: 14, color: Themes.light_white)),
-            ),
-          )));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //     backgroundColor: Color.fromARGB(255, 118, 82, 153),
+      //     content: Directionality(
+      //       textDirection: TextDirection.rtl,
+      //       child: Text(
+      //         "خطأ في الاتصال بالانترنت",
+      //         style: GoogleFonts.cairo(
+      //             textStyle:
+      //                 TextStyle(fontSize: 14, color: Themes.light_white)),
+      //       ),
+      //     )));
     } catch (ex) {
-      print(ex);
+      visible_lodding = false;
     }
   }
 
@@ -783,7 +786,7 @@ class _details_orderState extends State<details_order> {
       }
     } on SocketException {
       setState(() {
-        // visible_ = false;
+        visible_lodding = false;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -798,7 +801,7 @@ class _details_orderState extends State<details_order> {
             ),
           )));
     } catch (ex) {
-      print(ex);
+      visible_lodding = false;
     }
   }
 

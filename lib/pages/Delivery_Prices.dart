@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
-import 'package:pro_delivery/pages/Branches.dart';
-
 import 'package:http/http.dart' as http;
 
 class deliveryPrices extends StatefulWidget {
@@ -22,6 +19,7 @@ class _deliveryPricesState extends State<deliveryPrices> {
   List dlyPrices = [];
   bool visible_ = false;
   bool visible_2 = false;
+  bool net = false;
 
   var idBranche = "";
   String token = "";
@@ -45,35 +43,91 @@ class _deliveryPricesState extends State<deliveryPrices> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: _appBar(),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 25,
-            ),
-            Visibility(
-                visible: visible_,
-                child: Center(
-                    child: CircularProgressIndicator(
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(Themes.light.primaryColor),
-                ))),
-            Visibility(
-              visible: visible_2,
-              child: Expanded(
-                child: ListView.builder(
-                    itemCount: dlyPrices.length,
-                    itemBuilder: (context, i) {
-                      return _cardPrice(context, i);
-                    }),
-              ),
-            ),
-            SizedBox(
-              height: 13,
-            ),
-          ],
-        ));
+        body: net == true
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Visibility(
+                      visible: visible_,
+                      child: Container(
+                        // margin: EdgeInsets.only(top: 25),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Themes.light.primaryColor),
+                        )),
+                      )),
+                  Visibility(
+                    visible: !visible_,
+                    child: Center(
+                      child: Image.asset(
+                        'assets/net.png',
+                        width: 200,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !visible_,
+                    child: Text(
+                      "خطأ في الاتصال بالانترنت",
+                      style: GoogleFonts.cairo(
+                          textStyle: TextStyle(
+                              fontSize: 16,
+                              color: Themes.light.primaryColor,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !visible_,
+                    child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            delivery_Prices();
+                            visible_ = true;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.refresh,
+                          size: 40,
+                          color: Themes.light.primaryColor,
+                        )),
+                  )
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Visibility(
+                      visible: visible_,
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Themes.light.primaryColor),
+                      ))),
+                  Visibility(
+                    visible: visible_2,
+                    child: Expanded(
+                      child: RefreshIndicator(
+                        color: Themes.light.primaryColor,
+                        onRefresh: delivery_Prices,
+                        child: ListView.builder(
+                            itemCount: dlyPrices.length,
+                            itemBuilder: (context, i) {
+                              return _cardPrice(context, i);
+                            }),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 13,
+                  ),
+                ],
+              ));
   }
 
   _appBar() {
@@ -212,31 +266,21 @@ class _deliveryPricesState extends State<deliveryPrices> {
         },
       );
       var responsebody = jsonDecode(response.body);
-      print(responsebody);
 
       if (response.statusCode == 200) {
         setState(() {
-          dlyPrices = responsebody['data']['cites'];
+          dlyPrices = responsebody['data']['results'];
           visible_ = false;
           visible_2 = true;
+          net = false;
         });
       }
     } on SocketException {
       setState(() {
         visible_ = false;
-      });
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
-          content: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Text(
-              "خطأ في الاتصال بالانترنت",
-              style: GoogleFonts.cairo(
-                  textStyle:
-                      TextStyle(fontSize: 14, color: Themes.light_white)),
-            ),
-          )));
+        net = true;
+      });
     } on FormatException {
       setState(() {
         visible_ = false;
@@ -255,7 +299,6 @@ class _deliveryPricesState extends State<deliveryPrices> {
           )));
     } catch (ex) {
       print(ex);
-      print("object");
     }
   }
 }
