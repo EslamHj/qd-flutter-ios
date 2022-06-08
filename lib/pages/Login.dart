@@ -36,6 +36,7 @@ class _loginState extends State<login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
       body: SingleChildScrollView(
           child: Directionality(
         textDirection: TextDirection.rtl,
@@ -286,7 +287,6 @@ class _loginState extends State<login> {
     );
   }
 
-
   ///////////////////////////api login ///////////////////////////////////////////////
 
   Future<void> login() async {
@@ -307,14 +307,13 @@ class _loginState extends State<login> {
           },
         );
         var responsebody = jsonDecode(response.body);
-          print(responsebody["data"]["name"]);
+        print(responsebody["data"]["name"]);
 
         if (response.statusCode == 200) {
           setState(() {
             visible_ = false;
             visible_login = true;
           });
-
 
           _Storage.write("name", responsebody["data"]["name"]);
           _Storage.write("code", responsebody["data"]["code"]);

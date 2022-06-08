@@ -56,7 +56,8 @@ class _homePagessState extends State<homePagess> {
   void initState() {
     super.initState();
     Branches();
-    // delivery_Prices();
+        _color = _Storage.read("isDarkMode");
+
   }
 
   //   @override
@@ -100,6 +101,8 @@ class _homePagessState extends State<homePagess> {
                 FloatingActionButtonLocation.startFloat,
               
             bottomNavigationBar: BottomAppBar(
+              // color: _color ? Themes.dark_primary2 : Themes.light_white ,
+              color: Themes.light_white ,
               shape: CircularNotchedRectangle(),
               notchMargin: 0,
               child: Directionality(
@@ -115,6 +118,7 @@ class _homePagessState extends State<homePagess> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MaterialButton(
+                            
                             minWidth: 30,
                             onPressed: () {
                               setState(() {

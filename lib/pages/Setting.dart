@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -23,25 +22,13 @@ class _settingState extends State<setting> {
   void initState() {
     super.initState();
     _value = _Storage.read("isDarkMode");
+    
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   darkService().readedarkMode().then((data) {
-  //     setState(() {
-  //       data == "true" ? _value = true : _value = false;
-  //       _value == false
-  //           ? Get.changeTheme(Themes.light)
-  //           : Get.changeTheme(Themes.dark);
-  //       print(_value);
-  //     });
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _value ? Themes.dark_primary : Themes.light_primary,
         body: Stack(
       children: [
         Container(
@@ -49,11 +36,12 @@ class _settingState extends State<setting> {
           height: 100,
           width: double.infinity,
           decoration: BoxDecoration(
-              color: _value == true ? Themes.dark_primary : Themes.light_white, borderRadius: BorderRadius.circular(20),
-                 border: Border.all(
-              color: _value == true ? Themes.dark_grey : Themes.light_white,
-              width: 1),
-              ),
+            color: _value == true ? Themes.dark_primary : Themes.light_white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+                color: _value == true ? Themes.dark_grey : Themes.light_white,
+                width: 1),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
@@ -74,9 +62,9 @@ class _settingState extends State<setting> {
                             textStyle: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color:_value == true
-                                  ? Themes.dark_white
-                                  : Themes.light.primaryColor)),
+                                color: _value == true
+                                    ? Themes.dark_white
+                                    : Themes.light.primaryColor)),
                       ),
                     ),
                     Container(
@@ -88,13 +76,31 @@ class _settingState extends State<setting> {
                           activeColor: Themes.light.primaryColor,
                           onChanged: (bool value) {
                             setState(() {
-                              _value = value;
-                              // _value == true ? local = "true" : local = "false";
-                              _value == false
-                                  ? Get.changeTheme(Themes.light)
-                                  : Get.changeTheme(Themes.dark);
-                              darkService().saveThemeMode(_value);
-                            });
+                              // if (Get.isDarkMode) {
+                              //   _value = true;
+                              //   ScaffoldMessenger.of(context).showSnackBar(
+                              //       SnackBar(
+                              //           backgroundColor:
+                              //               Color.fromARGB(255, 118, 82, 153),
+                              //           content: Directionality(
+                              //             textDirection: TextDirection.rtl,
+                              //             child: Text(
+                              //               "لايمكن تغير التطبيق الى الوضع العادي يجب تغير نظام الجهاز الى الوضع العاد اولا",
+                              //               style: GoogleFonts.cairo(
+                              //                   textStyle: TextStyle(
+                              //                       fontSize: 14,
+                              //                       color: Themes.light_white)),
+                              //             ),
+                              //           )));
+                              // } else {
+                                _value = value;
+                                // _value == false
+                                //     ? Get.changeTheme(Themes.light)
+                                //     : Get.changeTheme(Themes.dark);
+                                _Storage.write("isDarkMode", _value);
+                                  
+                              }
+                            );
                           },
                         ),
                       ),

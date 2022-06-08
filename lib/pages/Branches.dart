@@ -38,6 +38,8 @@ class _branchesState extends State<branches> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+            backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
+
         body: net == true
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -224,7 +226,7 @@ class _branchesState extends State<branches> {
                               textStyle: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Get.isDarkMode
+                                  color: _color
                                       ? Themes.dark_white
                                       : Themes.light.primaryColor)),
                         ),
@@ -234,7 +236,7 @@ class _branchesState extends State<branches> {
                               textStyle: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Get.isDarkMode
+                                  color:  _color
                                       ? Themes.dark_white
                                       : Themes.light.primaryColor)),
                         ),

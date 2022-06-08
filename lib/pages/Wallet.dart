@@ -22,16 +22,16 @@ class _walletState extends State<wallet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
         body: SafeArea(
             child: Column(
-      children: [_cardCash(context), _cardOrder(context)],
-    )));
+          children: [_cardCash(context), _cardOrder(context)],
+        )));
   }
 }
 
 _cardCash(context) {
-   
-      double _width = MediaQuery.of(context).size.width;
+  double _width = MediaQuery.of(context).size.width;
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -39,8 +39,8 @@ _cardCash(context) {
           textDirection: TextDirection.ltr,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-           margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
-            width: _width-40,
+            margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
+            width: _width - 40,
             height: 170,
             decoration: BoxDecoration(
                 color: Themes.light.primaryColor,
@@ -117,12 +117,10 @@ _cardCash(context) {
           ))
     ],
   );
+}
 
-  
-  }
-
-  _cardOrder(context) {
-        double _width = MediaQuery.of(context).size.width;
+_cardOrder(context) {
+  double _width = MediaQuery.of(context).size.width;
 
   final _Storage = GetStorage();
   var _color = _Storage.read("isDarkMode");
@@ -133,12 +131,12 @@ _cardCash(context) {
         height: 130,
         width: double.infinity,
         decoration: BoxDecoration(
-            color:_color == true ? Themes.dark_primary : Themes.light_white, borderRadius: BorderRadius.circular(20),
-             border: Border.all(
-                color:_color == true ? Themes.dark_grey  :  Themes.light_white,
-                 width: 1
-               ),
-            ),
+          color: _color == true ? Themes.dark_primary : Themes.light_white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+              color: _color == true ? Themes.dark_grey : Themes.light_white,
+              width: 1),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
@@ -159,7 +157,9 @@ _cardCash(context) {
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                              color:_color == true ? Themes.dark_white : Themes.light.primaryColor),
+                            color: _color == true
+                                ? Themes.dark_white
+                                : Themes.light.primaryColor),
                       ),
                     ),
                     Container(
@@ -172,7 +172,9 @@ _cardCash(context) {
                           textStyle: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color:_color == true ? Themes.dark_white : Themes.light.primaryColor),
+                              color: _color == true
+                                  ? Themes.dark_white
+                                  : Themes.light.primaryColor),
                         ),
                       ),
                     ),
@@ -186,7 +188,9 @@ _cardCash(context) {
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                              color:_color == true ? Themes.dark_white  : Themes.light.primaryColor),
+                            color: _color == true
+                                ? Themes.dark_white
+                                : Themes.light.primaryColor),
                       ),
                       Text(
                         "د.ل",
@@ -219,7 +223,7 @@ _cardCash(context) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: _width/4,
+                    width: _width / 4,
                     child: Text(
                       "0926067840",
                       maxLines: 1,
@@ -234,7 +238,7 @@ _cardCash(context) {
                     width: 10,
                   ),
                   Container(
-                    width: _width/2-30,
+                    width: _width / 2 - 30,
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         color: Themes.light.primaryColor,
@@ -258,6 +262,4 @@ _cardCash(context) {
       )
     ],
   );
-  }
-
-
+}

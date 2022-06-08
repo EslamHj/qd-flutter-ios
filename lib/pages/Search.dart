@@ -47,6 +47,7 @@ class _searchState extends State<search> {
                   children: [
                     Expanded(
                       child: MyInput(
+                         color : _color ,
                         title: "كود الطرد",
                         hint: "",
                       ),
@@ -56,6 +57,7 @@ class _searchState extends State<search> {
                     ),
                     Expanded(
                       child: MyInput(
+                         color : _color ,
                         title: "رقم المستلم",
                         hint: "",
                       ),

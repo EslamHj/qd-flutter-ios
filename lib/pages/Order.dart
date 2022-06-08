@@ -36,6 +36,7 @@ class _orderState extends State<order> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
         body: net == true
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -300,8 +301,7 @@ class _orderState extends State<order> {
   }
 
   details_order(index) {
-      Navigator.pushNamed(context, 'details_order',
-          arguments: orderJson[index]['id']);
-   
+    Navigator.pushNamed(context, 'details_order',
+        arguments: orderJson[index]['id']);
   }
 }

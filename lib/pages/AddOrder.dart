@@ -45,6 +45,7 @@ class _addOrderState extends State<addOrder> {
   //   "customerPhone1" : ""
   // };
   var customerPhone1 = TextEditingController();
+  var customerPhone2 = TextEditingController();
   var storeName = TextEditingController();
   var recieverPhone1 = TextEditingController();
   var recieverPhone2 = TextEditingController();
@@ -52,6 +53,8 @@ class _addOrderState extends State<addOrder> {
   var packagePrice = TextEditingController();
   var packageNumber = TextEditingController();
   var note = TextEditingController();
+  var orderDescription = TextEditingController();
+
   var token = "";
 
   bool visible_lodding = false;
@@ -66,7 +69,6 @@ class _addOrderState extends State<addOrder> {
     super.didChangeDependencies();
     // branche = ModalRoute.of(context)!.settings.arguments as List ;
     // dlyPrices = ModalRoute.of(context)!.settings.arguments as List;
-    token = _Storage.read("token");
 
     // print(dlyPrices);
 
@@ -76,14 +78,22 @@ class _addOrderState extends State<addOrder> {
   @override
   void initState() {
     super.initState();
+    try {
     _color = _Storage.read("isDarkMode");
+    token = _Storage.read("token");
+        delivery_Prices();
 
-    delivery_Prices();
+    
+
+    } catch(ex){
+
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
         appBar: _appBar(),
         body: Directionality(
             textDirection: ui.TextDirection.rtl,
@@ -108,33 +118,9 @@ class _addOrderState extends State<addOrder> {
                   ),
 
                   Visibility(
-                    visible: visible_body,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: MyInput(
-                            controller: recieverPhone1,
-                            title: "رقم المستلم",
-                            hint: hintV == false ? "" : "يجب الملء",
-                          ),
-                        ),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                          child: MyInput(
-                            controller: recieverPhone2,
-                            title: "رقم المستلم 2",
-                            hint: "",
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Visibility(
                       visible: visible_body,
                       child: MyInput(
+                          color: _color,
                           controller: storeName,
                           title: "اسم الصفحة",
                           hint: "")),
@@ -144,6 +130,7 @@ class _addOrderState extends State<addOrder> {
                       children: [
                         Expanded(
                           child: MyInput(
+                            color: _color,
                             controller: customerPhone1,
                             title: "رقم المرسل",
                             hint: "",
@@ -154,6 +141,8 @@ class _addOrderState extends State<addOrder> {
                         ),
                         Expanded(
                           child: MyInput(
+                            controller: customerPhone2,
+                            color: _color,
                             title: "رقم المرسل 2",
                             hint: "",
                           ),
@@ -168,6 +157,34 @@ class _addOrderState extends State<addOrder> {
                       children: [
                         Expanded(
                           child: MyInput(
+                            color: _color,
+                            controller: recieverPhone1,
+                            title: "رقم المستلم",
+                            hint: hintV == false ? "" : "يجب الملء",
+                          ),
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Expanded(
+                          child: MyInput(
+                            color: _color,
+                            controller: recieverPhone2,
+                            title: "رقم المستلم 2",
+                            hint: "",
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Visibility(
+                    visible: visible_body,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: MyInput(
+                            color: _color,
                             controller: packagePrice,
                             title: "سعر الطرد",
                             hint: "",
@@ -178,6 +195,7 @@ class _addOrderState extends State<addOrder> {
                         ),
                         Expanded(
                           child: MyInput(
+                            color: _color,
                             controller: packageNumber,
                             title: "عدد العناصر",
                             hint: "",
@@ -190,11 +208,28 @@ class _addOrderState extends State<addOrder> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
+                      color: _color,
                       controller: address,
                       title: "عنوان المستلم",
                       hint: "",
                     ),
                   ),
+
+                     Visibility(
+                      visible: visible_body,
+                      child: MyInput(
+                          color: _color,
+                          controller: orderDescription,
+                          title: "الوصف",
+                          hint: "")),
+
+                             Visibility(
+                      visible: visible_body,
+                      child: MyInput(
+                          color: _color,
+                          controller: note,
+                          title: "ملاحظة",
+                          hint: "")),
 
                   // MyInput(
                   //   title: "Date",
@@ -271,7 +306,7 @@ class _addOrderState extends State<addOrder> {
                               textStyle: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Get.isDarkMode
+                                  color: _color
                                       ? Themes.dark_white
                                       : Themes.light.primaryColor),
                             ),
@@ -281,11 +316,11 @@ class _addOrderState extends State<addOrder> {
                             margin: EdgeInsets.only(top: 8.0),
                             padding: EdgeInsets.only(right: 14),
                             decoration: BoxDecoration(
-                                color: Get.isDarkMode
+                                color: _color
                                     ? Themes.dark_primary
                                     : Colors.grey[300],
                                 border: Border.all(
-                                    color: Get.isDarkMode
+                                    color: _color
                                         ? Themes.dark_white
                                         : Themes.light.primaryColor,
                                     width: 1.0),
@@ -411,7 +446,7 @@ class _addOrderState extends State<addOrder> {
                               textStyle: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Get.isDarkMode
+                                  color: _color
                                       ? Themes.dark_white
                                       : Themes.light.primaryColor),
                             ),
@@ -421,11 +456,11 @@ class _addOrderState extends State<addOrder> {
                             margin: EdgeInsets.only(top: 8.0),
                             padding: EdgeInsets.only(right: 14),
                             decoration: BoxDecoration(
-                                color: Get.isDarkMode
+                                color: _color
                                     ? Themes.dark_primary
                                     : Colors.grey[300],
                                 border: Border.all(
-                                    color: Get.isDarkMode
+                                    color: _color
                                         ? Themes.dark_white
                                         : Themes.light.primaryColor,
                                     width: 1.0),
@@ -517,10 +552,7 @@ class _addOrderState extends State<addOrder> {
                     ),
                   ),
 
-                  Visibility(
-                      visible: visible_body,
-                      child:
-                          MyInput(controller: note, title: "ملاحظة", hint: "")),
+               
                   SizedBox(
                     height: 30,
                   ),
@@ -568,7 +600,7 @@ class _addOrderState extends State<addOrder> {
                 textStyle: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Get.isDarkMode
+                    color: _color
                         ? Themes.dark_white
                         : Themes.light_black))));
   }
@@ -588,7 +620,7 @@ class _addOrderState extends State<addOrder> {
                   color: isSelected
                       ? Themes.light_grey
                       : _color == true
-                          ? Themes.dark_white
+                          ? Themes.light_black
                           : Themes.light_black)),
         ),
       ),
@@ -620,24 +652,31 @@ class _addOrderState extends State<addOrder> {
     try {
       // visible_ = true;
       var urlDeliveryPrices =
-          Uri.parse(api().url + api().deliveryPrices + fromBranchID);
-      var response = await http.get(
-        urlDeliveryPrices,
-        // headers: {
-        //   "Authorization": "Bearer $token",
-        // },
-      );
-      var responsebody = jsonDecode(response.body);
+          Uri.parse(api().url + api().GetCitiesAndBranches + fromBranchID);
+      print(urlDeliveryPrices);
 
+      var response = await http.get(
+      
+          urlDeliveryPrices,
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      var responsebody = jsonDecode(response.body);
+      print(responsebody);
       if (response.statusCode == 200) {
         setState(() {
-          dlyPrices = responsebody['data']['cites'];
+          dlyPrices = responsebody['data']['cities'];
           branche = responsebody['data']['branches'];
           visible_branch = true;
           visible_branch_lodding = false;
           visible_city = true;
           visible_city_lodding = false;
           // visible_ = false;
+        //   _color == false
+        // ? Get.changeTheme(Themes.light)
+        // : Get.changeTheme(Themes.dark);
         });
       }
     } on SocketException {
@@ -687,18 +726,18 @@ class _addOrderState extends State<addOrder> {
       visible_branch = false;
       var _body = {
         'customerPhone1': customerPhone1.text.toString(),
+        'customerPhone2': customerPhone2.text.toString(),
         'storeName': storeName.text.toString(),
         'recieverPhone1': recieverPhone1.text.toString(),
         'recieverPhone2': recieverPhone2.text.toString(),
         'address': address.text.toString(),
         'cityID': this.cityID,
-        'customerCode': "00765",
         'fromBranchID': this.fromBranchID,
-        'fromBranchName': this.fromBranchName,
-        'recieverName': "",
+        'fromBranchName': this.fromBranchName ,
         'packagePrice': packagePrice.text.toString(),
-        'packageNumber': packageNumber.text.toString(),
-        'note': note.text.toString()
+        'packageNumber': packageNumber.text.toString() == "" ? 1 : packageNumber.text.toString(),
+        'note': note.text.toString(),
+        'orderDescription' : orderDescription.text.toString()
       };
 
       print(_body);

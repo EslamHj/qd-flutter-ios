@@ -31,6 +31,8 @@ class _details_movementsState extends State<details_movements> {
     double _width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+                  backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
+
         appBar: _appBar(),
         body: Directionality(
             textDirection: ui.TextDirection.rtl,
@@ -47,6 +49,7 @@ class _details_movementsState extends State<details_movements> {
                     children: [
                       Expanded(
                         child: MyInput(
+                           color : _color ,
                           title: "كود الطرد",
                           hint: "",
                         ),
@@ -56,6 +59,7 @@ class _details_movementsState extends State<details_movements> {
                       ),
                       Expanded(
                         child: MyInput(
+                           color : _color ,
                           title: "حالة الطرد",
                           hint: "",
                         ),
@@ -66,13 +70,14 @@ class _details_movementsState extends State<details_movements> {
                   Row(
                     children: [
                       Expanded(
-                        child: MyInput(title: "اسم الصفحة", hint: ""),
+                        child: MyInput( color : _color ,title: "اسم الصفحة", hint: ""),
                       ),
                       SizedBox(
                         width: 12,
                       ),
                       Expanded(
                         child: MyInput(
+                           color : _color ,
                           title: "الفرع",
                           hint: "",
                         ),
@@ -84,6 +89,7 @@ class _details_movementsState extends State<details_movements> {
                     children: [
                       Expanded(
                         child: MyInput(
+                           color : _color ,
                           title: "رقم المستلم",
                           hint: "",
                         ),
@@ -93,6 +99,7 @@ class _details_movementsState extends State<details_movements> {
                       ),
                       Expanded(
                         child: MyInput(
+                           color : _color ,
                           title: "عدد العناصر",
                           hint: "",
                         ),
@@ -104,6 +111,7 @@ class _details_movementsState extends State<details_movements> {
                     children: [
                       Expanded(
                         child: MyInput(
+                           color : _color ,
                           title: "سعر الطرد",
                           hint: "",
                         ),
@@ -113,6 +121,7 @@ class _details_movementsState extends State<details_movements> {
                       ),
                       Expanded(
                         child: MyInput(
+                           color : _color ,
                           title: "سعر التوصيل",
                           hint: "",
                         ),
@@ -121,6 +130,7 @@ class _details_movementsState extends State<details_movements> {
                   ),
 
                   MyInput(
+                     color : _color ,
                     title: "عنوان المستلم",
                     hint: "",
                   ),
@@ -222,7 +232,7 @@ class _details_movementsState extends State<details_movements> {
                       ],
                     ),
                   ),
-                  MyInput(title: "ملاحظة", hint: ""),
+                  MyInput( color : _color ,title: "ملاحظة", hint: ""),
                   SizedBox(
                     height: 15,
                   ),

@@ -24,10 +24,12 @@ class _deliveryPricesState extends State<deliveryPrices> {
   var idBranche = "";
   String token = "";
   final _Storage = GetStorage();
+  bool _color = false;
 
   @override
   void initState() {
     super.initState();
+    _color = _Storage.read("isDarkMode");
   }
 
   @override
@@ -42,6 +44,7 @@ class _deliveryPricesState extends State<deliveryPrices> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
         appBar: _appBar(),
         body: net == true
             ? Column(

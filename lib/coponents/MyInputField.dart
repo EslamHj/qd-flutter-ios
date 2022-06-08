@@ -9,6 +9,7 @@ class MyInput extends StatelessWidget {
 
    final String title ;
    final String hint ;
+   final bool color ;
    final TextEditingController ? controller ;
    final Widget ? widget;
   
@@ -18,6 +19,7 @@ class MyInput extends StatelessWidget {
   required this.hint,
   this.controller,
   this.widget,
+  required this.color ,
   
   }) : super(key: key);
 
@@ -33,7 +35,7 @@ class MyInput extends StatelessWidget {
             style:GoogleFonts.cairo( textStyle:  TextStyle(
               fontSize:  14,
               fontWeight: FontWeight.w600,
-              color: Get.isDarkMode ?Themes.dark_white : Themes.light.primaryColor
+              color: color ?Themes.dark_white : Themes.light.primaryColor
 
 
             )
@@ -46,9 +48,9 @@ class MyInput extends StatelessWidget {
             margin: EdgeInsets.only(top: 8.0),
             padding: EdgeInsets.only(right: 14),
              decoration: BoxDecoration(
-                color: Get.isDarkMode ?  Themes.dark_primary : Colors.grey[300],
+                color: color ?  Themes.dark_primary : Colors.grey[300],
                border: Border.all(
-                 color:  Get.isDarkMode ?  Themes.dark_white : Themes.light.primaryColor,
+                 color:  color ?  Themes.dark_white : Themes.light.primaryColor,
                  width: 1
                ),
                borderRadius: BorderRadius.circular(5)
@@ -60,10 +62,10 @@ class MyInput extends StatelessWidget {
                     
                    readOnly: widget == null ? false : true,
                    autofocus: false,
-                   cursorColor: Get.isDarkMode ?Themes.dark_white : Themes.light.primaryColor,
+                   cursorColor: color ?Themes.dark_white : Themes.light.primaryColor,
                    controller: controller,
                    style:  GoogleFonts.cairo( textStyle:TextStyle( fontSize: 14 ,  fontWeight: FontWeight.w400,height: 1.4 ,
-                    color: Get.isDarkMode ? Themes.dark_white :Themes.light_black)),
+                    color: color ? Themes.dark_white :Themes.light_black)),
                    decoration: InputDecoration(
                      hintText: hint,
                      hintStyle:TextStyle(fontSize: 14 , fontWeight: FontWeight.w400 , color: Color.fromARGB(255, 206, 47, 35)),
