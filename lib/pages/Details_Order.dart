@@ -40,10 +40,10 @@ class _details_orderState extends State<details_order> {
   var note = TextEditingController();
   var orderDescription = TextEditingController();
 
-  String brancheName = "";
+  String fromBranchName = "";
   String cityName = "";
   String cityID = "";
-  String fromBranchID = "b43936e6-4f2c-4f21-a308-9ca99c56faeb";
+  String fromBranchID = "";
   var token = "";
   String branchName = "";
 
@@ -59,9 +59,7 @@ class _details_orderState extends State<details_order> {
     super.didChangeDependencies();
     IdOrder = ModalRoute.of(context)!.settings.arguments as String;
     token = _Storage.read("token");
-    print(token);
     Details_Order();
-    delivery_Prices();
   }
 
   @override
@@ -279,6 +277,9 @@ class _details_orderState extends State<details_order> {
                             child: Row(children: [
                               Expanded(
                                 child: DropdownSearch<String>(
+                                  popupBackgroundColor: _color
+                                      ? Themes.dark_primary
+                                      : Themes.light_primary,
                                   emptyBuilder: (context, searchEntry) =>
                                       Center(
                                           child: Text('لايوجد',
@@ -350,9 +351,8 @@ class _details_orderState extends State<details_order> {
                                     for (var i = 0; i < branche.length; i++) {
                                       if (branche[i]['name'] == value) {
                                         this.fromBranchID = branche[i]['id'];
-                                        this.branchName =
+                                        this.fromBranchName =
                                             branche[i]['name'];
-                                           
                                       }
                                     }
                                     setState(() {
@@ -364,7 +364,7 @@ class _details_orderState extends State<details_order> {
                                   },
 
                                   //show selected item
-                                  selectedItem: this.brancheName,
+                                  selectedItem: this.fromBranchName.toString(),
                                 ),
                               ),
                             ]),
@@ -420,6 +420,9 @@ class _details_orderState extends State<details_order> {
                             child: Row(children: [
                               Expanded(
                                 child: DropdownSearch<String>(
+                                  popupBackgroundColor: _color
+                                      ? Themes.dark_primary
+                                      : Themes.light_primary,
                                   emptyBuilder: (context, searchEntry) =>
                                       Center(
                                           child: Text('لايوجد',
@@ -489,12 +492,14 @@ class _details_orderState extends State<details_order> {
                                     for (var i = 0; i < dlyPrices.length; i++) {
                                       if (dlyPrices[i]['name'] == value) {
                                         this.cityID = dlyPrices[i]['id'];
+                                        this.cityName =
+                                            dlyPrices[i]['name'].toString();
                                       }
                                     }
                                   },
 
                                   //show selected item
-                                  selectedItem: "",
+                                  selectedItem: this.cityName.toString(),
                                 ),
                               ),
                             ]),
@@ -591,18 +596,27 @@ class _details_orderState extends State<details_order> {
       textDirection: ui.TextDirection.rtl,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(
-          item!,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.cairo(
-              textStyle: TextStyle(
-                  fontSize: 15,
-                  fontWeight: isSelected ? FontWeight.bold : null,
-                  color: isSelected
-                      ? Themes.light_grey
-                      : _color == true
-                          ? Themes.light_black
-                          : Themes.light_black)),
+        child: Container(
+          decoration: !isSelected
+              ? null
+              : BoxDecoration(
+                  border: Border.all(color: Theme.of(context).primaryColor),
+                  borderRadius: BorderRadius.circular(5),
+                  color: Themes.light.primaryColor,
+                ),
+          child: Text(
+            item!,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.cairo(
+                textStyle: TextStyle(
+                    fontSize: 15,
+                    fontWeight: isSelected ? FontWeight.bold : null,
+                    color: isSelected
+                        ? Themes.light_white
+                        : _color == true
+                            ? Themes.dark_white
+                            : Themes.light_black)),
+          ),
         ),
       ),
     );
@@ -652,6 +666,7 @@ class _details_orderState extends State<details_order> {
           visible_branch_lodding = false;
           visible_city = true;
           visible_city_lodding = false;
+
           // visible_ = false;
           //   _color == false
           // ? Get.changeTheme(Themes.light)
@@ -727,15 +742,14 @@ class _details_orderState extends State<details_order> {
         packageNumber.text = detailsOrder['packageNumber'].toString();
         note.text = detailsOrder['note'].toString();
         orderDescription.text = detailsOrder['orderDescription'].toString();
-        this.brancheName = detailsOrder['branchName'].toString();
         this.cityName = detailsOrder['cityName'].toString();
         this.cityID = detailsOrder['cityID'].toString();
-        // this.fromBranchID = detailsOrder['fromBranchID'].toString();
-        // this.fromBranchName = detailsOrder['branchName'].toString();
-
+        this.fromBranchID = detailsOrder['fromBranchID'].toString();
+        this.fromBranchName = detailsOrder['fromBranchName'].toString();
         visible_lodding = false;
         visible_body = true;
         visible_branch_lodding = true;
+        delivery_Prices();
       }
     } on SocketException {
       setState(() {
@@ -759,9 +773,9 @@ class _details_orderState extends State<details_order> {
       //     )));
     } catch (ex) {
       visible_lodding = false;
-        visible_body = true;
-        visible_city = false;
-        visible_branch = false;
+      visible_body = true;
+      visible_city = false;
+      visible_branch = false;
     }
   }
 
@@ -781,11 +795,14 @@ class _details_orderState extends State<details_order> {
         'recieverPhone1': recieverPhone1.text.toString(),
         'recieverPhone2': recieverPhone2.text.toString(),
         'address': address.text.toString(),
-        'cityID': this.cityID,
-        'branchID': this.fromBranchID,
-        'branchName': this.branchName,
+        'cityID': this.cityID.toString(),
+        'cityName': this.cityName.toString(),
+        'fromBranchID': this.fromBranchID.toString(),
+        'fromBranchName': this.fromBranchName.toString(),
         'packagePrice': packagePrice.text.toString(),
-        'packageNumber': packageNumber.text.toString() == "" ? 1 : packageNumber.text.toString(),
+        'packageNumber': packageNumber.text.toString() == ""
+            ? 1
+            : packageNumber.text.toString(),
         'note': note.text.toString(),
         'orderDescription': orderDescription.text.toString(),
       };
@@ -829,16 +846,19 @@ class _details_orderState extends State<details_order> {
             ),
           )));
     } catch (ex) {
-       visible_lodding = false;
-        visible_body = true;
-        visible_city = false;
-        visible_branch = false;
+      visible_lodding = false;
+      visible_body = true;
+      visible_city = false;
+      visible_branch = false;
     }
   }
 
   ///////////////////////////api delete ///////////////////////////////////////////////
 
   Future<void> delete() async {
+    visible_branch_lodding = false;
+    visible_city = true;
+    visible_city_lodding = false;
     try {
       visible_lodding = true;
       visible_body = false;
@@ -880,10 +900,10 @@ class _details_orderState extends State<details_order> {
             ),
           )));
     } catch (ex) {
-       visible_lodding = false;
-        visible_body = true;
-        visible_city = false;
-        visible_branch = false;
+      visible_lodding = false;
+      visible_body = true;
+      visible_city = false;
+      visible_branch = false;
     }
   }
 }

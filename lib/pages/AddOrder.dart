@@ -37,8 +37,9 @@ class _addOrderState extends State<addOrder> {
   List<dynamic> branche = [];
   List<dynamic> dlyPrices = [];
   var cityID = "";
-  var fromBranchID = "b43936e6-4f2c-4f21-a308-9ca99c56faeb";
+  var fromBranchID = "";
   var fromBranchName = "";
+  var cityName = "";
 
   // var student = new Map();
   // var order = {
@@ -63,31 +64,26 @@ class _addOrderState extends State<addOrder> {
   bool visible_branch = false;
   bool visible_city_lodding = false;
   bool visible_city = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // branche = ModalRoute.of(context)!.settings.arguments as List ;
-    // dlyPrices = ModalRoute.of(context)!.settings.arguments as List;
-
-    // print(dlyPrices);
-
-    print(_Storage.read("token"));
-  }
-
+  String phone1 = "";
+  String phone2 = "";
   @override
   void initState() {
     super.initState();
     try {
-    _color = _Storage.read("isDarkMode");
-    token = _Storage.read("token");
-        delivery_Prices();
-
-    
-
-    } catch(ex){
-
-    }
+      
+      _color = _Storage.read("isDarkMode");
+      token = _Storage.read("token");
+      phone1 = _Storage.read("phone1");
+      phone2 = _Storage.read("phone2");
+      // storeName = _Storage.read("storeName");
+      // fromBranchID = _Storage.read("fromBranchID");
+      // fromBranchName = _Storage.read("fromBranchName");
+      // customerPhone1.text = phone1;
+      // customerPhone2.text = phone2;
+        BranchesAndCity();
+      
+      // delivery_Prices();
+    } catch (ex) {}
   }
 
   @override
@@ -215,7 +211,7 @@ class _addOrderState extends State<addOrder> {
                     ),
                   ),
 
-                     Visibility(
+                  Visibility(
                       visible: visible_body,
                       child: MyInput(
                           color: _color,
@@ -223,7 +219,7 @@ class _addOrderState extends State<addOrder> {
                           title: "الوصف",
                           hint: "")),
 
-                             Visibility(
+                  Visibility(
                       visible: visible_body,
                       child: MyInput(
                           color: _color,
@@ -328,6 +324,10 @@ class _addOrderState extends State<addOrder> {
                             child: Row(children: [
                               Expanded(
                                 child: DropdownSearch<String>(
+                                  popupBackgroundColor: _color
+                                      ? Themes.dark_primary
+                                      : Themes.light_primary,
+
                                   emptyBuilder: (context, searchEntry) =>
                                       Center(
                                           child: Text('لايوجد',
@@ -412,7 +412,7 @@ class _addOrderState extends State<addOrder> {
                                   },
 
                                   //show selected item
-                                  selectedItem: "",
+                                  selectedItem: this.fromBranchName,
                                 ),
                               ),
                             ]),
@@ -468,6 +468,10 @@ class _addOrderState extends State<addOrder> {
                             child: Row(children: [
                               Expanded(
                                 child: DropdownSearch<String>(
+                                  popupBackgroundColor: _color
+                                      ? Themes.dark_primary
+                                      : Themes.light_primary,
+
                                   emptyBuilder: (context, searchEntry) =>
                                       Center(
                                           child: Text('لايوجد',
@@ -537,6 +541,7 @@ class _addOrderState extends State<addOrder> {
                                     for (var i = 0; i < dlyPrices.length; i++) {
                                       if (dlyPrices[i]['name'] == value) {
                                         this.cityID = dlyPrices[i]['id'];
+                                        this.cityName = value.toString();
                                       }
                                     }
                                   },
@@ -552,7 +557,6 @@ class _addOrderState extends State<addOrder> {
                     ),
                   ),
 
-               
                   SizedBox(
                     height: 30,
                   ),
@@ -600,9 +604,7 @@ class _addOrderState extends State<addOrder> {
                 textStyle: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: _color
-                        ? Themes.dark_white
-                        : Themes.light_black))));
+                    color: _color ? Themes.dark_white : Themes.light_black))));
   }
 
   Widget _style1(BuildContext context, String? item, bool isSelected) {
@@ -610,18 +612,27 @@ class _addOrderState extends State<addOrder> {
       textDirection: ui.TextDirection.rtl,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(
-          item!,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.cairo(
-              textStyle: TextStyle(
-                  fontSize: 15,
-                  fontWeight: isSelected ? FontWeight.bold : null,
-                  color: isSelected
-                      ? Themes.light_grey
-                      : _color == true
-                          ? Themes.light_black
-                          : Themes.light_black)),
+        child: Container(
+          decoration: !isSelected
+              ? null
+              : BoxDecoration(
+                  border: Border.all(color: Theme.of(context).primaryColor),
+                  borderRadius: BorderRadius.circular(5),
+                  color: Themes.light.primaryColor,
+                ),
+          child: Text(
+            item!,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.cairo(
+                textStyle: TextStyle(
+                    fontSize: 15,
+                    fontWeight: isSelected ? FontWeight.bold : null,
+                    color: isSelected
+                        ? Themes.light_white
+                        : _color == true
+                            ? Themes.dark_white
+                            : Themes.light_black)),
+          ),
         ),
       ),
     );
@@ -646,6 +657,67 @@ class _addOrderState extends State<addOrder> {
     );
   }
 
+  ///////////////////////////api BranchesAndCity ///////////////////////////////////////////////
+
+  Future<void> BranchesAndCity() async {
+    try {
+      print("kk");
+      var urlBranches = Uri.parse(api().url + api().Branches);
+      var response = await http.get(
+        urlBranches,
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      );
+      print(urlBranches);
+      var responsebody = jsonDecode(response.body);
+      
+      setState(() {
+        branche = responsebody['data'];
+      });
+
+
+      if (response.statusCode == 200) {
+
+        fromBranchName = branche[0]['name'] ;
+
+         var urlDeliveryPrices =
+          Uri.parse(api().url + api().GetCitiesAndBranches + branche[0]['id']);
+
+      var response_dly = await http.get(
+        urlDeliveryPrices,
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      var responsebody_dly = jsonDecode(response_dly.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          dlyPrices = responsebody_dly['data']['cities'];
+          branche = responsebody_dly['data']['branches'];
+          visible_branch = true;
+          visible_branch_lodding = false;
+          visible_city = true;
+          visible_city_lodding = false;
+        });
+      }
+      }
+    } on SocketException {
+      setState(() {
+        visible_branch = true;
+        visible_branch_lodding = false;
+        visible_city = true;
+        visible_city_lodding = false;
+      });
+    } catch (ex) {
+      visible_branch = true;
+      visible_branch_lodding = false;
+      visible_city = true;
+      visible_city_lodding = false;
+    }
+  }
+
   ///////////////////////////api deliveryPrices ///////////////////////////////////////////////
 
   Future<void> delivery_Prices() async {
@@ -656,8 +728,7 @@ class _addOrderState extends State<addOrder> {
       print(urlDeliveryPrices);
 
       var response = await http.get(
-      
-          urlDeliveryPrices,
+        urlDeliveryPrices,
         headers: {
           "Authorization": "Bearer $token",
         },
@@ -674,9 +745,9 @@ class _addOrderState extends State<addOrder> {
           visible_city = true;
           visible_city_lodding = false;
           // visible_ = false;
-        //   _color == false
-        // ? Get.changeTheme(Themes.light)
-        // : Get.changeTheme(Themes.dark);
+          //   _color == false
+          // ? Get.changeTheme(Themes.light)
+          // : Get.changeTheme(Themes.dark);
         });
       }
     } on SocketException {
@@ -697,7 +768,10 @@ class _addOrderState extends State<addOrder> {
           )));
     } on FormatException {
       setState(() {
-        // visible_ = false;
+        visible_branch = true;
+        visible_branch_lodding = false;
+        visible_city = true;
+        visible_city_lodding = false;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -712,7 +786,10 @@ class _addOrderState extends State<addOrder> {
             ),
           )));
     } catch (ex) {
-      print(ex);
+      visible_branch = true;
+      visible_branch_lodding = false;
+      visible_city = true;
+      visible_city_lodding = false;
     }
   }
 
@@ -732,15 +809,17 @@ class _addOrderState extends State<addOrder> {
         'recieverPhone2': recieverPhone2.text.toString(),
         'address': address.text.toString(),
         'cityID': this.cityID,
+        'cityName': this.cityName,
         'fromBranchID': this.fromBranchID,
-        'fromBranchName': this.fromBranchName ,
+        'fromBranchName': this.fromBranchName,
         'packagePrice': packagePrice.text.toString(),
-        'packageNumber': packageNumber.text.toString() == "" ? 1 : packageNumber.text.toString(),
+        'packageNumber': packageNumber.text.toString() == ""
+            ? 1
+            : packageNumber.text.toString(),
         'note': note.text.toString(),
-        'orderDescription' : orderDescription.text.toString()
+        'orderDescription': orderDescription.text.toString()
       };
 
-      print(_body);
       var urlAdd = Uri.parse(api().url + api().addOrder);
       var response = await http.post(
         urlAdd,
@@ -751,8 +830,11 @@ class _addOrderState extends State<addOrder> {
           "content-type": "application/json"
         },
       );
-      print(response.statusCode);
       if (response.statusCode == 200) {
+        _Storage.write("storeName", storeName.text.toString());
+        _Storage.write("fromBranchID", this.fromBranchID);
+        _Storage.write("fromBranchName", this.fromBranchName);
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => homePagess()),

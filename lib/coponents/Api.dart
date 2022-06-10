@@ -14,4 +14,7 @@ class api {
     var Details_Order = "api/mobile/GetWebOrder" ;
    var EditWebOrder = "api/mobile/EditWebOrder/";
    var DeleteWebOrder = "api/mobile/DeleteWebOrder/";
+   /// تحت الإجراء
+  var Under_procedure  = "api/mobile/GetOrders";
+  var Under_procedure_Id  = "api/mobile/GetOrder/" ;
 }

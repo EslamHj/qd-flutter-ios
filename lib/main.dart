@@ -7,6 +7,7 @@ import 'package:pro_delivery/pages/Delivery_Prices.dart';
 import 'package:pro_delivery/pages/Details_Movements.dart';
 import 'package:pro_delivery/pages/Details_Order.dart';
 import 'package:pro_delivery/pages/Login.dart';
+import 'package:pro_delivery/pages/homePages.dart';
 import 'coponents/darkmode_service.dart';
 
 void main() async {
@@ -26,28 +27,32 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _Storage = GetStorage();
 
+  Widget login_tokon() {
+    var token = _Storage.read("token") ;
+    if ( token == null ) {
+     return login();
+    }
+    else {
+    return homePagess();
+    }
+  }
   @override
   void initState() {
     super.initState();
 
     setState(() {
-     
-      if (_Storage.read("isDarkMode") != null) {
-       _Storage.read("isDarkMode") == false ? Get.changeTheme(Themes.light) : null ;    
-         } else {
 
-           if(Get.isDarkMode) {
-       _Storage.write("isDarkMode", true) ;
-        Get.changeTheme(Themes.dark
-        
-        );
-           }
-           else {
- _Storage.write("isDarkMode", false) ;
-        Get.changeTheme(Themes.light);
-           }
-      }
     
+      if (_Storage.read("isDarkMode") != null) {
+        _Storage.read("isDarkMode") == false
+            ? Get.changeTheme(Themes.light)
+            : null;
+      } else {
+      
+          _Storage.write("isDarkMode", false);
+          Get.changeTheme(Themes.light);
+        }
+      
     });
   }
 
@@ -63,7 +68,7 @@ class _MyAppState extends State<MyApp> {
         "details_order": (context) => details_order(),
         "details_movements": (context) => details_movements(),
       },
-      home: login(),
+      home: login_tokon(),
     );
   }
 }

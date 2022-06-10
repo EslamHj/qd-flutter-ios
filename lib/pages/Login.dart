@@ -307,7 +307,7 @@ class _loginState extends State<login> {
           },
         );
         var responsebody = jsonDecode(response.body);
-        print(responsebody["data"]["name"]);
+        print(responsebody["data"]);
 
         if (response.statusCode == 200) {
           setState(() {
@@ -318,6 +318,12 @@ class _loginState extends State<login> {
           _Storage.write("name", responsebody["data"]["name"]);
           _Storage.write("code", responsebody["data"]["code"]);
           _Storage.write("token", responsebody["data"]["token"]);
+          _Storage.write("phone1", responsebody["data"]["phone1"]);
+          _Storage.write("phone2", responsebody["data"]["phone2"]);
+          _Storage.write("role", responsebody["data"]["role"]);
+          _Storage.write("storeName", "");
+          _Storage.write("fromBranchID", "00");
+          _Storage.write("fromBranchName", "");
 
           Navigator.pushReplacement(
             context,
