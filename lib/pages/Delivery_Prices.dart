@@ -37,7 +37,6 @@ class _deliveryPricesState extends State<deliveryPrices> {
     super.didChangeDependencies();
     idBranche = ModalRoute.of(context)!.settings.arguments as String;
     token = _Storage.read("token");
-
     delivery_Prices();
   }
 

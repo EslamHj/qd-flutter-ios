@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 
 
 import 'package:pro_delivery/coponents/darkMode.dart';
+import 'package:pro_delivery/pages/TabsOrder.dart';
 
 class search extends StatefulWidget {
   search({Key? key}) : super(key: key);
@@ -26,9 +27,11 @@ class search extends StatefulWidget {
 }
 
 class _searchState extends State<search> {
+  Widget currenScreen = tabsorder();
 
-  var _selecteDate = DateTime.now();
-  DateTime _selecteDate2 = DateTime.now();
+  DateTime from = DateTime.parse("2020-06-11");
+  DateTime to = DateTime.now();
+
   final _Storage = GetStorage();
 
     var _color = false;
@@ -249,7 +252,7 @@ class _searchState extends State<search> {
                                       visible_city_lodding = true;
                                       visible_city = false;
 
-                                      // delivery_Prices();
+                                      delivery_Prices();
                                     });
                                   },
 
@@ -455,7 +458,7 @@ class _searchState extends State<search> {
                                     ? Themes.dark_white
                                     : Themes.light.primaryColor,),
                      ),
-                     hintText: DateFormat('yyyy-MM-dd').format(_selecteDate),
+                     hintText: DateFormat('yyyy-MM-dd').format(from),
                      hintStyle:TextStyle(fontSize: 14 , fontWeight: FontWeight.w400 ,  color: _color ? Themes.dark_white :Themes.light_black),
                      focusedBorder: UnderlineInputBorder(
                        borderSide: BorderSide(
@@ -532,14 +535,14 @@ class _searchState extends State<search> {
                    decoration: InputDecoration(
                      icon: GestureDetector(
                       onTap: () {
-                         _getDateFromUser(context);
+                         _getDateToUser(context);
                       },
                        child: Icon( Icons.calendar_today_rounded,
                                 color: _color
                                     ? Themes.dark_white
                                     : Themes.light.primaryColor,),
                      ),
-                     hintText: DateFormat('yyyy-MM-dd').format(_selecteDate),
+                     hintText: DateFormat('yyyy-MM-dd').format(to),
                      hintStyle:TextStyle(fontSize: 14 , fontWeight: FontWeight.w400 ,  color: _color ? Themes.dark_white :Themes.light_black),
                      focusedBorder: UnderlineInputBorder(
                        borderSide: BorderSide(
@@ -674,12 +677,53 @@ DateTime? picked = await showDatePicker(
         child: child ??Text(""),
       );
     }
-    initialDate: _selecteDate,
+    initialDate: from,
     firstDate: DateTime(1960, 8),
     lastDate: DateTime.now());
-if (picked != null && picked != _selecteDate)
+if (picked != null && picked != from)
   setState(() {
-    _selecteDate = picked;
+    from = picked;
+     
+  });}
+
+
+  Future<void> _getDateToUser(BuildContext context) async {
+DateTime? picked = await showDatePicker(
+      context: context,
+    builder: (BuildContext context, Widget ?child) {
+      return Theme(
+        data: ThemeData(
+          primarySwatch: Colors.grey,
+          splashColor: Color.fromARGB(255, 90, 66, 66),
+          textTheme: TextTheme(
+            subtitle1: TextStyle(color: Colors.white),
+            button: TextStyle(color: Colors.black),
+
+          ),
+          colorScheme: ColorScheme.light(
+
+              primary: Color(0xFF6F35A5),
+              onSecondary: Colors.white,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: _color ? Colors.white : Colors.black,
+              secondary: Colors.white),
+            textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        primary: _color ? Themes.dark_white :Themes.light.primaryColor, // button text color
+      ),
+            )
+              dialogBackgroundColor : _color ? Themes.dark_primary2 : Colors.white,
+        ),
+        child: child ??Text(""),
+      );
+    }
+    initialDate: to,
+    firstDate: DateTime(1960, 8),
+    lastDate: DateTime.now());
+if (picked != null && picked != to)
+  setState(() {
+    to = picked;
      
   });}
 
@@ -826,31 +870,42 @@ if (picked != null && picked != _selecteDate)
 
   Future<void> Under_procedure() async {
     try {
-      // visible_ = true;
-      var urlOrder = Uri.parse(api().url + api().Under_procedure + "?BarCode=" +barCode.text + "&RecieverPhone=" +recieverPhone1.text);
-      var response = await http.get(
-        urlOrder,
-        headers: {
-          "Authorization": "Bearer $token",
-        },
-      );
-      var responsebody = jsonDecode(response.body);
-      print(responsebody);
-      setState(() {
-        orderJson = responsebody['data']['results'];
-      });
+        var body = {
+          "BarCode" : this.barCode.text.toString(),
+          "recieverPhone1" : this.recieverPhone1.text.toString(),
+          "CityId" : this.cityID ,
+          "From" : DateFormat('yyyy-MM-dd').format(from) ,
+          "To" : DateFormat('yyyy-MM-dd').format(to) ,
+        };
+         Navigator.pushNamed(context, 'searchIndex',
+        arguments: body);
 
-      if (response.statusCode == 200) {
-         Navigator.pushNamed(context, 'details_movements',
-        arguments: orderJson);
-        // visible_ = false;
-        // net = false;
-      }
-    } on SocketException {
-      setState(() {
-        // visible_ = false;
-        // net = true;
-      });
+    //   // visible_ = true;
+    //   var urlOrder = Uri.parse(api().url + api().Under_procedure + "?BarCode=" +barCode.text + "&RecieverPhone=" +recieverPhone1.text);
+    //   var response = await http.get(
+    //     urlOrder,
+    //     headers: {
+    //       "Authorization": "Bearer $token",
+    //     },
+    //   );
+    //   var responsebody = jsonDecode(response.body);
+    //   print(responsebody);
+    //   setState(() {
+    //     orderJson = responsebody['data']['results'];
+    //   });
+
+    //   if (response.statusCode == 200) {
+      
+    //     //  Navigator.pushNamed(context, 'details_movements',
+    //     // arguments: orderJson);
+    //     // visible_ = false;
+    //     // net = false;
+    //   }
+    // } on SocketException {
+    //   setState(() {
+    //     // visible_ = false;
+    //     // net = true;
+    //   });
     } catch (ex) {}
   }
 

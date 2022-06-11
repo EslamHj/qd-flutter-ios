@@ -45,19 +45,17 @@ class _homePagessState extends State<homePagess> {
 
   final _Storage = GetStorage();
   var _color = true;
-    List  branche = [];
-    List dlyPrices =[] ;
-   
+  List branche = [];
+  List dlyPrices = [];
+
   bool visible_ = false;
-
-
+  var body = "" ;
 
   @override
   void initState() {
     super.initState();
     Branches();
-        _color = _Storage.read("isDarkMode");
-
+    _color = _Storage.read("isDarkMode");
   }
 
   //   @override
@@ -83,32 +81,31 @@ class _homePagessState extends State<homePagess> {
               child: currenScreen,
               bucket: bucket,
             ),
-              floatingActionButton: currentTab == 4 || currentTab == 5 ? null : FloatingActionButton(
-             backgroundColor: Themes.light.primaryColor,
-              child: Icon(Icons.add,
-                  color: _color == true ? Colors.white : Colors.white),
-              onPressed: () {
-                setState(() {
-
-                    Navigator.pushNamed(context, 'addOrder',
-                            arguments:  dlyPrices );
-                  // currenScreen = addOrder();
-                  // currentTab = 4;
-                });
-              },
-            ),
+            floatingActionButton: currentTab == 4 || currentTab == 5
+                ? null
+                : FloatingActionButton(
+                    backgroundColor: Themes.light.primaryColor,
+                    child: Icon(Icons.add,
+                        color: _color == true ? Colors.white : Colors.white),
+                    onPressed: () {
+                      setState(() {
+                        Navigator.pushNamed(context, 'addOrder',
+                            arguments: dlyPrices);
+                        // currenScreen = addOrder();
+                        // currentTab = 4;
+                      });
+                    },
+                  ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.startFloat,
-              
             bottomNavigationBar: BottomAppBar(
               // color: _color ? Themes.dark_primary2 : Themes.light_white ,
-              color: Themes.light_white ,
+              color: Themes.light_white,
               shape: CircularNotchedRectangle(),
               notchMargin: 0,
               child: Directionality(
                 textDirection: TextDirection.rtl,
-                child: 
-                Container(
+                child: Container(
                   height: 60,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -118,10 +115,10 @@ class _homePagessState extends State<homePagess> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MaterialButton(
-                            
                             minWidth: 30,
                             onPressed: () {
                               setState(() {
+                                _Storage.write("currenScreen", "0");
                                 currenScreen = tabsorder();
                                 currentTab = 0;
                               });
@@ -254,35 +251,31 @@ class _homePagessState extends State<homePagess> {
   _appBar() {
     return AppBar(
       backgroundColor: Themes.light.primaryColor,
-       elevation: currentTab == 0 ? 0 : null,
+      elevation: currentTab == 0 ? 0 : null,
       leading: Container(
-        margin: EdgeInsets.all(5),
-      child : ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: Image.asset(
-          'assets/qd.png',
-          height: 50,
-          width: 50,
-          fit: BoxFit.cover,
-            
-          ),
-      )
-      ),
-     
-      actions: <Widget> [
-
-         IconButton(
-            icon: const Icon(Icons.search_outlined , 
-            size: 25,
+          margin: EdgeInsets.all(5),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Image.asset(
+              'assets/qd.png',
+              height: 50,
+              width: 50,
+              fit: BoxFit.cover,
             ),
-            onPressed: () {
-              setState(() {
-                  currenScreen = search();
-                  currentTab = 5;
-                });
-            },
+          )),
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(
+            Icons.search_outlined,
+            size: 25,
           ),
-        
+          onPressed: () {
+            setState(() {
+              currenScreen = search();
+              currentTab = 5;
+            });
+          },
+        ),
         SizedBox(
           width: 20,
         ),
@@ -297,8 +290,7 @@ class _homePagessState extends State<homePagess> {
     );
   }
 
-
-    ///////////////////////////api Branches ///////////////////////////////////////////////
+  ///////////////////////////api Branches ///////////////////////////////////////////////
 
   Future<void> Branches() async {
     try {
@@ -321,8 +313,6 @@ class _homePagessState extends State<homePagess> {
       setState(() {
         // visible_ = false;
       });
-
-      
     } catch (ex) {
       print(ex);
     }
@@ -342,7 +332,6 @@ class _homePagessState extends State<homePagess> {
   //         // },
   //         );
   //     var responsebody = jsonDecode(response.body);
-             
 
   //     if (response.statusCode == 200) {
   //       setState(() {
@@ -386,6 +375,5 @@ class _homePagessState extends State<homePagess> {
   //     print(ex);
   //   }
   // }
-
 
 }
