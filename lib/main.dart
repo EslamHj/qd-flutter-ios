@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,6 +11,7 @@ import 'package:pro_delivery/pages/Details_Order.dart';
 import 'package:pro_delivery/pages/Login.dart';
 import 'package:pro_delivery/pages/homePages.dart';
 import 'coponents/darkmode_service.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +32,8 @@ class _MyAppState extends State<MyApp> {
 
   Widget login_tokon() {
     var token = _Storage.read("token") ;
-    if ( token == null ) {
+
+    if ( token == null || JwtDecoder.isExpired(token) ) {
      return login();
     }
     else {

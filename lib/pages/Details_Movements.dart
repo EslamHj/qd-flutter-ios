@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:pro_delivery/coponents/MyButton.dart';
 import 'package:pro_delivery/coponents/MyInputField.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -83,8 +85,7 @@ class _details_movementsState extends State<details_movements> {
               child: SingleChildScrollView(
                   child: Column(
                 children: [
-
-                    Visibility(
+                  Visibility(
                       visible: visible_lodding,
                       child: Container(
                         margin: EdgeInsets.only(top: 20),
@@ -94,7 +95,7 @@ class _details_movementsState extends State<details_movements> {
                               Themes.light.primaryColor),
                         )),
                       )),
-                      
+
                   SizedBox(
                     height: 5,
                   ),
@@ -102,6 +103,11 @@ class _details_movementsState extends State<details_movements> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
+                       inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                      readOnly: true,
                       controller: supplierName,
                       color: _color,
                       title: "اسم المندوب",
@@ -115,6 +121,11 @@ class _details_movementsState extends State<details_movements> {
                       children: [
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                            readOnly: true,
                             controller: barCode,
                             color: _color,
                             title: "كود الطرد",
@@ -126,6 +137,11 @@ class _details_movementsState extends State<details_movements> {
                         ),
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                            readOnly: true,
                             controller: status,
                             color: _color,
                             title: "حالة الطرد",
@@ -142,6 +158,11 @@ class _details_movementsState extends State<details_movements> {
                       children: [
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                            readOnly: true,
                             color: _color,
                             controller: customerPhone1,
                             title: "رقم المرسل",
@@ -153,6 +174,11 @@ class _details_movementsState extends State<details_movements> {
                         ),
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                            readOnly: true,
                             controller: customerPhone2,
                             color: _color,
                             title: "رقم المرسل 2",
@@ -169,6 +195,11 @@ class _details_movementsState extends State<details_movements> {
                       children: [
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                            readOnly: true,
                             color: _color,
                             controller: recieverPhone1,
                             title: "رقم المستلم",
@@ -180,6 +211,11 @@ class _details_movementsState extends State<details_movements> {
                         ),
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                            readOnly: true,
                             color: _color,
                             controller: recieverPhone2,
                             title: "رقم المستلم 2",
@@ -197,6 +233,11 @@ class _details_movementsState extends State<details_movements> {
                         Expanded(
                           flex: 2,
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                            readOnly: true,
                             controller: packagePrice,
                             color: _color,
                             title: "سعر الطرد",
@@ -209,6 +250,11 @@ class _details_movementsState extends State<details_movements> {
                         Expanded(
                           flex: 2,
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                            readOnly: true,
                             controller: deliveryPrice,
                             color: _color,
                             title: "سعر التوصيل",
@@ -221,6 +267,11 @@ class _details_movementsState extends State<details_movements> {
                         Expanded(
                           flex: 1,
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                            readOnly: true,
                             controller: packageNumber,
                             color: _color,
                             title: "العدد",
@@ -234,6 +285,11 @@ class _details_movementsState extends State<details_movements> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
+                       inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                      readOnly: true,
                       controller: address,
                       color: _color,
                       title: "عنوان المستلم",
@@ -244,6 +300,11 @@ class _details_movementsState extends State<details_movements> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
+                       inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                      readOnly: true,
                       controller: cityName,
                       color: _color,
                       title: "المدينة",
@@ -254,6 +315,11 @@ class _details_movementsState extends State<details_movements> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
+                         inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                          readOnly: true,
                           color: _color,
                           controller: orderDescription,
                           title: "الوصف",
@@ -262,7 +328,13 @@ class _details_movementsState extends State<details_movements> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
+                       inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                        readOnly: true,
                         controller: note,
+                        widget: null,
                         color: _color,
                         title: "ملاحظة",
                         hint: ""),
@@ -290,14 +362,14 @@ class _details_movementsState extends State<details_movements> {
                   Visibility(
                     visible: visible_body,
                     child: Container(
-                      height: 300,
+                      height: 270,
                       width: double.infinity,
                       child: ListView.builder(
                           itemCount: activities.length,
                           itemBuilder: (context, i) {
                             return Container(
                               height: 45,
-                              margin: EdgeInsets.only(top: 8.0),
+                              margin: EdgeInsets.only(top: 8.0, bottom: 13),
                               padding: EdgeInsets.symmetric(horizontal: 14),
                               decoration: BoxDecoration(
                                 color: Themes.light.primaryColor,
@@ -341,8 +413,11 @@ class _details_movementsState extends State<details_movements> {
                                           // ),
                                         ]),
                                     Text(
-                                        activities[i]['activityDate']
-                                            .toString(),
+                                        DateFormat("yyyy-MM-dd'T'HH:mm")
+                                            .parse(
+                                                activities[i]['activityDate'])
+                                            .toString()
+                                            .replaceAll(RegExp(':00.000'), ''),
                                         style: GoogleFonts.cairo(
                                             textStyle: TextStyle(
                                                 fontSize: 13,

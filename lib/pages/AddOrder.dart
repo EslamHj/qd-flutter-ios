@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -70,19 +71,20 @@ class _addOrderState extends State<addOrder> {
   void initState() {
     super.initState();
     try {
-      
       _color = _Storage.read("isDarkMode");
       token = _Storage.read("token");
-      phone1 = _Storage.read("phone1");
-      phone2 = _Storage.read("phone2");
-      // storeName = _Storage.read("storeName");
-      // fromBranchID = _Storage.read("fromBranchID");
-      // fromBranchName = _Storage.read("fromBranchName");
-      // customerPhone1.text = phone1;
-      // customerPhone2.text = phone2;
+      // phone1 = _Storage.read("phone1");
+      // phone2 = _Storage.read("phone2");
+      storeName.text = _Storage.read("storeName").toString();
+      fromBranchID = _Storage.read("fromBranchID").toString();
+      fromBranchName = _Storage.read("fromBranchName").toString();
+      customerPhone1.text = _Storage.read("phone1");
+      customerPhone2.text = _Storage.read("phone2");
+      if (_Storage.read("fromBranchID").toString() == "00") {
         BranchesAndCity();
-      
-      // delivery_Prices();
+      } else {
+        delivery_Prices();
+      }
     } catch (ex) {}
   }
 
@@ -116,6 +118,11 @@ class _addOrderState extends State<addOrder> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                          readOnly: false,
                           color: _color,
                           controller: storeName,
                           title: "اسم الصفحة",
@@ -126,10 +133,15 @@ class _addOrderState extends State<addOrder> {
                       children: [
                         Expanded(
                           child: MyInput(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]")),
+                            ],
+                            readOnly: false,
                             color: _color,
                             controller: customerPhone1,
                             title: "رقم المرسل",
-                            hint: "",
+                            hint: hintV == false ? "" : "يجب الملء",
                           ),
                         ),
                         SizedBox(
@@ -137,6 +149,11 @@ class _addOrderState extends State<addOrder> {
                         ),
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]")),
+                            ],
+                            readOnly: false,
                             controller: customerPhone2,
                             color: _color,
                             title: "رقم المرسل 2",
@@ -153,6 +170,11 @@ class _addOrderState extends State<addOrder> {
                       children: [
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]")),
+                            ],
+                            readOnly: false,
                             color: _color,
                             controller: recieverPhone1,
                             title: "رقم المستلم",
@@ -164,6 +186,11 @@ class _addOrderState extends State<addOrder> {
                         ),
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]")),
+                            ],
+                            readOnly: false,
                             color: _color,
                             controller: recieverPhone2,
                             title: "رقم المستلم 2",
@@ -180,10 +207,15 @@ class _addOrderState extends State<addOrder> {
                       children: [
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]")),
+                            ],
+                            readOnly: false,
                             color: _color,
                             controller: packagePrice,
                             title: "سعر الطرد",
-                            hint: "",
+                            hint: hintV == false ? "" : "يجب الملء",
                           ),
                         ),
                         SizedBox(
@@ -191,6 +223,11 @@ class _addOrderState extends State<addOrder> {
                         ),
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]")),
+                            ],
+                            readOnly: false,
                             color: _color,
                             controller: packageNumber,
                             title: "عدد العناصر",
@@ -204,6 +241,11 @@ class _addOrderState extends State<addOrder> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
+                       inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                      readOnly: false,
                       color: _color,
                       controller: address,
                       title: "عنوان المستلم",
@@ -214,6 +256,11 @@ class _addOrderState extends State<addOrder> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
+                         inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                          readOnly: false,
                           color: _color,
                           controller: orderDescription,
                           title: "الوصف",
@@ -222,6 +269,11 @@ class _addOrderState extends State<addOrder> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
+                         inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                          readOnly: false,
                           color: _color,
                           controller: note,
                           title: "ملاحظة",
@@ -510,6 +562,7 @@ class _addOrderState extends State<addOrder> {
                                   showSearchBox: true,
                                   mode: Mode.DIALOG,
                                   dropdownSearchDecoration: InputDecoration(
+                                    // hintText: "ttt",
                                     hintStyle: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -547,7 +600,7 @@ class _addOrderState extends State<addOrder> {
                                   },
 
                                   //show selected item
-                                  selectedItem: "",
+                                  selectedItem: this.cityName,
                                 ),
                               ),
                             ]),
@@ -661,7 +714,6 @@ class _addOrderState extends State<addOrder> {
 
   Future<void> BranchesAndCity() async {
     try {
-      print("kk");
       var urlBranches = Uri.parse(api().url + api().Branches);
       var response = await http.get(
         urlBranches,
@@ -671,37 +723,39 @@ class _addOrderState extends State<addOrder> {
       );
       print(urlBranches);
       var responsebody = jsonDecode(response.body);
-      
+
       setState(() {
         branche = responsebody['data'];
       });
 
-
       if (response.statusCode == 200) {
+        fromBranchName = branche[0]['name'];
+        fromBranchID = branche[0]['id'];
 
-        fromBranchName = branche[0]['name'] ;
+        var urlDeliveryPrices = Uri.parse(
+            api().url + api().GetCitiesAndBranches + branche[0]['id']);
 
-         var urlDeliveryPrices =
-          Uri.parse(api().url + api().GetCitiesAndBranches + branche[0]['id']);
+        var response_dly = await http.get(
+          urlDeliveryPrices,
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        );
 
-      var response_dly = await http.get(
-        urlDeliveryPrices,
-        headers: {
-          "Authorization": "Bearer $token",
-        },
-      );
+        var responsebody_dly = jsonDecode(response_dly.body);
+        if (response.statusCode == 200) {
+          setState(() {
+            dlyPrices = responsebody_dly['data']['cities'];
+            branche = responsebody_dly['data']['branches'];
+            this.cityID = dlyPrices[0]['id'];
+            this.cityName = dlyPrices[0]['name'];
 
-      var responsebody_dly = jsonDecode(response_dly.body);
-      if (response.statusCode == 200) {
-        setState(() {
-          dlyPrices = responsebody_dly['data']['cities'];
-          branche = responsebody_dly['data']['branches'];
-          visible_branch = true;
-          visible_branch_lodding = false;
-          visible_city = true;
-          visible_city_lodding = false;
-        });
-      }
+            visible_branch = true;
+            visible_branch_lodding = false;
+            visible_city = true;
+            visible_city_lodding = false;
+          });
+        }
       }
     } on SocketException {
       setState(() {
@@ -723,6 +777,7 @@ class _addOrderState extends State<addOrder> {
   Future<void> delivery_Prices() async {
     try {
       // visible_ = true;
+      print("ppppp");
       var urlDeliveryPrices =
           Uri.parse(api().url + api().GetCitiesAndBranches + fromBranchID);
       print(urlDeliveryPrices);
@@ -740,14 +795,13 @@ class _addOrderState extends State<addOrder> {
         setState(() {
           dlyPrices = responsebody['data']['cities'];
           branche = responsebody['data']['branches'];
+          this.cityID = dlyPrices[0]['id'];
+          this.cityName = dlyPrices[0]['name'];
+
           visible_branch = true;
           visible_branch_lodding = false;
           visible_city = true;
           visible_city_lodding = false;
-          // visible_ = false;
-          //   _color == false
-          // ? Get.changeTheme(Themes.light)
-          // : Get.changeTheme(Themes.dark);
         });
       }
     } on SocketException {
@@ -797,50 +851,69 @@ class _addOrderState extends State<addOrder> {
 
   Future<void> add() async {
     try {
-      visible_lodding = true;
-      visible_body = false;
-      visible_city = false;
-      visible_branch = false;
-      var _body = {
-        'customerPhone1': customerPhone1.text.toString(),
-        'customerPhone2': customerPhone2.text.toString(),
-        'storeName': storeName.text.toString(),
-        'recieverPhone1': recieverPhone1.text.toString(),
-        'recieverPhone2': recieverPhone2.text.toString(),
-        'address': address.text.toString(),
-        'cityID': this.cityID,
-        'cityName': this.cityName,
-        'fromBranchID': this.fromBranchID,
-        'fromBranchName': this.fromBranchName,
-        'packagePrice': packagePrice.text.toString(),
-        'packageNumber': packageNumber.text.toString() == ""
-            ? 1
-            : packageNumber.text.toString(),
-        'note': note.text.toString(),
-        'orderDescription': orderDescription.text.toString()
-      };
+      if (customerPhone1.text.isNotEmpty &&
+          packagePrice.text.isNotEmpty &&
+          recieverPhone1.text.isNotEmpty) {
+        hintV = false;
+        visible_lodding = true;
+        visible_body = false;
+        visible_city = false;
+        visible_branch = false;
+        var _body = {
+          'customerPhone1': customerPhone1.text.toString(),
+          'customerPhone2': customerPhone2.text.toString(),
+          'storeName': storeName.text.toString(),
+          'recieverPhone1': recieverPhone1.text.toString(),
+          'recieverPhone2': recieverPhone2.text.toString(),
+          'address': address.text.toString(),
+          'cityID': this.cityID,
+          'cityName': this.cityName,
+          'fromBranchID': this.fromBranchID,
+          'fromBranchName': this.fromBranchName,
+          'packagePrice': packagePrice.text.toString(),
+          'packageNumber': packageNumber.text.toString() == ""
+              ? 1
+              : packageNumber.text.toString(),
+          'note': note.text.toString(),
+          'orderDescription': orderDescription.text.toString()
+        };
 
-      var urlAdd = Uri.parse(api().url + api().addOrder);
-      var response = await http.post(
-        urlAdd,
-        body: jsonEncode(_body),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Accept": "application/json",
-          "content-type": "application/json"
-        },
-      );
-      if (response.statusCode == 200) {
-        _Storage.write("storeName", storeName.text.toString());
-        _Storage.write("fromBranchID", this.fromBranchID);
-        _Storage.write("fromBranchName", this.fromBranchName);
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => homePagess()),
+        var urlAdd = Uri.parse(api().url + api().addOrder);
+        var response = await http.post(
+          urlAdd,
+          body: jsonEncode(_body),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Accept": "application/json",
+            "content-type": "application/json"
+          },
         );
-        visible_lodding = false;
-        visible_body = true;
+        if (response.statusCode == 200) {
+          _Storage.write("storeName", storeName.text.toString());
+          _Storage.write("fromBranchID", this.fromBranchID);
+          _Storage.write("fromBranchName", this.fromBranchName);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => homePagess()),
+          );
+          visible_lodding = false;
+          visible_body = true;
+        }
+      } else {
+        hintV = true;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            content: Directionality(
+              textDirection: ui.TextDirection.rtl,
+              child: Text(
+                "يجب الملء",
+                style: GoogleFonts.cairo(
+                    textStyle:
+                        TextStyle(fontSize: 14, color: Themes.light_white)),
+              ),
+            )));
       }
     } on SocketException {
       setState(() {

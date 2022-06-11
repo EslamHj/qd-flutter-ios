@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -117,6 +118,11 @@ class _details_orderState extends State<details_order> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
+                         inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                          readOnly: false,
                           color: _color,
                           controller: storeName,
                           title: "اسم الصفحة",
@@ -127,7 +133,13 @@ class _details_orderState extends State<details_order> {
                     child: Row(
                       children: [
                         Expanded(
+                          
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")),
+                          ],
+                              readOnly: false,
                             color: _color,
                             controller: customerPhone1,
                             title: "رقم المرسل",
@@ -139,6 +151,11 @@ class _details_orderState extends State<details_order> {
                         ),
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")),
+                          ],
+                              readOnly: false,
                             controller: customerPhone2,
                             color: _color,
                             title: "رقم المرسل 2",
@@ -155,6 +172,11 @@ class _details_orderState extends State<details_order> {
                       children: [
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")),
+                          ],
+                              readOnly: false,
                             color: _color,
                             controller: recieverPhone1,
                             title: "رقم المستلم",
@@ -166,6 +188,11 @@ class _details_orderState extends State<details_order> {
                         ),
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")),
+                          ],
+                              readOnly: false,
                             color: _color,
                             controller: recieverPhone2,
                             title: "رقم المستلم 2",
@@ -182,6 +209,11 @@ class _details_orderState extends State<details_order> {
                       children: [
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")),
+                          ],
+                              readOnly: false,
                             color: _color,
                             controller: packagePrice,
                             title: "سعر الطرد",
@@ -193,6 +225,11 @@ class _details_orderState extends State<details_order> {
                         ),
                         Expanded(
                           child: MyInput(
+                             inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")),
+                          ],
+                              readOnly: false,
                             color: _color,
                             controller: packageNumber,
                             title: "عدد العناصر",
@@ -206,6 +243,11 @@ class _details_orderState extends State<details_order> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
+                       inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                        readOnly: false,
                       color: _color,
                       controller: address,
                       title: "عنوان المستلم",
@@ -216,6 +258,11 @@ class _details_orderState extends State<details_order> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
+                         inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                          readOnly: false,
                           color: _color,
                           controller: orderDescription,
                           title: "الوصف",
@@ -224,6 +271,11 @@ class _details_orderState extends State<details_order> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
+                         inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                          ],
+                          readOnly: false,
                           color: _color,
                           controller: note,
                           title: "ملاحظة",

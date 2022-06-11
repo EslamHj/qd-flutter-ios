@@ -41,6 +41,7 @@ dependencies:
   path_provider: ^2.0.10
   device_preview: ^1.0.0
   simple_animations: ^4.0.2
+  jwt_decoder: ^2.0.1
   
 flutter_native_splash:
     color: "#ffffff"

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,7 +10,9 @@ class MyInput extends StatelessWidget {
 
    final String title ;
    final String hint ;
+   final List<TextInputFormatter> inputFormatters ;
    final bool color ;
+   final bool readOnly ;
    final TextEditingController ? controller ;
    final Widget ? widget;
   
@@ -20,6 +23,8 @@ class MyInput extends StatelessWidget {
   this.controller,
   this.widget,
   required this.color ,
+  required this.readOnly ,
+  required this.inputFormatters,
   
   }) : super(key: key);
 
@@ -43,10 +48,10 @@ class MyInput extends StatelessWidget {
           ),
 
           Container(
-            height: 42,
+            height: 48,
            
             margin: EdgeInsets.only(top: 8.0),
-            padding: EdgeInsets.only(right: 14),
+            padding: EdgeInsets.only(right: 14 , left: 14),
              decoration: BoxDecoration(
                 color: color ?  Themes.dark_primary : Colors.grey[300],
                border: Border.all(
@@ -59,8 +64,9 @@ class MyInput extends StatelessWidget {
                children:[
                   Expanded(
                  child: TextFormField(
-                    
-                   readOnly: widget == null ? false : true,
+                    inputFormatters: inputFormatters ,
+                    //  [FilteringTextInputFormatter.allow(RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),],
+                   readOnly: readOnly,
                    autofocus: false,
                    cursorColor: color ?Themes.dark_white : Themes.light.primaryColor,
                    controller: controller,
