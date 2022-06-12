@@ -260,7 +260,6 @@ class _deliveryPricesState extends State<deliveryPrices> {
       visible_ = true;
       var urlDeliveryPrices =
           Uri.parse(api().url + api().deliveryPrices + idBranche);
-      print(urlDeliveryPrices);
       var response = await http.get(
         urlDeliveryPrices,
         headers: {
@@ -280,7 +279,6 @@ class _deliveryPricesState extends State<deliveryPrices> {
     } on SocketException {
       setState(() {
         visible_ = false;
-
         net = true;
       });
     } on FormatException {
@@ -300,7 +298,7 @@ class _deliveryPricesState extends State<deliveryPrices> {
             ),
           )));
     } catch (ex) {
-      print(ex);
+        visible_ = false;
     }
   }
 }

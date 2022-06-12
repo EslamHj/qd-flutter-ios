@@ -1,12 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
-import 'package:pro_delivery/coponents/darkmode_service.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:pro_delivery/coponents/Api.dart';
 import 'dart:convert';
@@ -343,7 +339,6 @@ class _searchIndexState extends State<searchIndex> {
         },
       );
       var responsebody = jsonDecode(response.body);
-      print(responsebody);
       setState(() {
         orderJson = responsebody['data']['results'];
       });
@@ -357,7 +352,9 @@ class _searchIndexState extends State<searchIndex> {
         visible_ = false;
         net = true;
       });
-    } catch (ex) {}
+    } catch (ex) {
+      visible_ = false;
+    }
   }
 
   Details_Movements(index) {

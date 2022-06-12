@@ -284,7 +284,6 @@ class _orderState extends State<order> {
         },
       );
       var responsebody = jsonDecode(response.body);
-      print(responsebody);
       setState(() {
         orderJson = responsebody['data'];
       });
@@ -298,7 +297,9 @@ class _orderState extends State<order> {
         visible_ = false;
         net = true;
       });
-    } catch (ex) {}
+    } catch (ex) {
+       visible_ = false;
+    }
   }
 
   details_order(index) {

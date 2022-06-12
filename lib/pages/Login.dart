@@ -307,7 +307,6 @@ class _loginState extends State<login> {
           },
         );
         var responsebody = jsonDecode(response.body);
-        print(responsebody["data"]);
 
         if (response.statusCode == 200) {
           setState(() {
@@ -397,6 +396,9 @@ class _loginState extends State<login> {
                       TextStyle(fontSize: 14, color: Themes.light_white)),
             ),
           )));
-    } catch (ex) {}
+    } catch (ex) {
+      visible_ = false;
+      visible_login = true;
+    }
   }
 }

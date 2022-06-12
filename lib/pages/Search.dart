@@ -739,7 +739,6 @@ if (picked != null && picked != to)
           "Authorization": "Bearer $token",
         },
       );
-      print(urlBranches);
       var responsebody = jsonDecode(response.body);
 
       setState(() {
@@ -796,10 +795,8 @@ if (picked != null && picked != to)
   Future<void> delivery_Prices() async {
     try {
       // visible_ = true;
-      print("ppppp");
       var urlDeliveryPrices =
           Uri.parse(api().url + api().GetCitiesAndBranches + fromBranchID);
-      print(urlDeliveryPrices);
 
       var response = await http.get(
         urlDeliveryPrices,
@@ -809,7 +806,6 @@ if (picked != null && picked != to)
       );
 
       var responsebody = jsonDecode(response.body);
-      print(responsebody);
       if (response.statusCode == 200) {
         setState(() {
           dlyPrices = responsebody['data']['cities'];
@@ -866,7 +862,7 @@ if (picked != null && picked != to)
     }
   }
 
-  ///////////////////////////api Under_procedure ///////////////////////////////////////////////
+  /////////////////////////// Under_procedure ///////////////////////////////////////////////
 
   Future<void> Under_procedure() async {
     try {
@@ -879,38 +875,8 @@ if (picked != null && picked != to)
         };
          Navigator.pushNamed(context, 'searchIndex',
         arguments: body);
-
-    //   // visible_ = true;
-    //   var urlOrder = Uri.parse(api().url + api().Under_procedure + "?BarCode=" +barCode.text + "&RecieverPhone=" +recieverPhone1.text);
-    //   var response = await http.get(
-    //     urlOrder,
-    //     headers: {
-    //       "Authorization": "Bearer $token",
-    //     },
-    //   );
-    //   var responsebody = jsonDecode(response.body);
-    //   print(responsebody);
-    //   setState(() {
-    //     orderJson = responsebody['data']['results'];
-    //   });
-
-    //   if (response.statusCode == 200) {
-      
-    //     //  Navigator.pushNamed(context, 'details_movements',
-    //     // arguments: orderJson);
-    //     // visible_ = false;
-    //     // net = false;
-    //   }
-    // } on SocketException {
-    //   setState(() {
-    //     // visible_ = false;
-    //     // net = true;
-    //   });
     } catch (ex) {}
   }
-
-
-
 }
 
 

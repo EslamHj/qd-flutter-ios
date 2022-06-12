@@ -6,7 +6,6 @@ import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/Maps.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class branches extends StatefulWidget {
@@ -38,8 +37,7 @@ class _branchesState extends State<branches> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
-
+        backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
         body: net == true
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -236,7 +234,7 @@ class _branchesState extends State<branches> {
                               textStyle: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color:  _color
+                                  color: _color
                                       ? Themes.dark_white
                                       : Themes.light.primaryColor)),
                         ),
@@ -339,6 +337,9 @@ class _branchesState extends State<branches> {
 
         net = true;
       });
-    } catch (ex) {}
+    } catch (ex) {
+      visible_lodding = false;
+      visible_lodding_net = false;
+    }
   }
 }

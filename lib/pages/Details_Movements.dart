@@ -1,15 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:pro_delivery/coponents/MyButton.dart';
 import 'package:pro_delivery/coponents/MyInputField.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:pro_delivery/pages/homePages.dart';
 import 'dart:ui' as ui;
 import '../coponents/darkMode.dart';

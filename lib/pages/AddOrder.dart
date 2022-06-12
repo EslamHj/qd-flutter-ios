@@ -1,22 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:pro_delivery/coponents/Api.dart';
-import 'package:pro_delivery/coponents/MyButton.dart';
 import 'package:pro_delivery/coponents/MyInputField.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:pro_delivery/pages/Branches.dart';
-import 'package:pro_delivery/pages/Delivery_Prices.dart';
 import 'package:pro_delivery/pages/homePages.dart';
 import 'dart:ui' as ui;
 import 'package:http/http.dart' as http;
-
 import '../coponents/darkMode.dart';
 
 class addOrder extends StatefulWidget {
@@ -27,11 +21,6 @@ class addOrder extends StatefulWidget {
 }
 
 class _addOrderState extends State<addOrder> {
-  DateTime _selecteDate = DateTime.now();
-  String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
-  String _endTime = "00:00";
-  int _selectedRemind = 5;
-  List<int> remindlist = [5, 10, 15, 20];
   final _Storage = GetStorage();
   bool hintV = false;
   var _color = false;
@@ -42,10 +31,6 @@ class _addOrderState extends State<addOrder> {
   var fromBranchName = "";
   var cityName = "";
 
-  // var student = new Map();
-  // var order = {
-  //   "customerPhone1" : ""
-  // };
   var customerPhone1 = TextEditingController();
   var customerPhone2 = TextEditingController();
   var storeName = TextEditingController();
@@ -73,8 +58,6 @@ class _addOrderState extends State<addOrder> {
     try {
       _color = _Storage.read("isDarkMode");
       token = _Storage.read("token");
-      // phone1 = _Storage.read("phone1");
-      // phone2 = _Storage.read("phone2");
       storeName.text = _Storage.read("storeName").toString();
       fromBranchID = _Storage.read("fromBranchID").toString();
       fromBranchName = _Storage.read("fromBranchName").toString();
@@ -149,7 +132,7 @@ class _addOrderState extends State<addOrder> {
                         ),
                         Expanded(
                           child: MyInput(
-                             inputFormatters: [
+                            inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                   RegExp("[0-9]")),
                             ],
@@ -170,7 +153,7 @@ class _addOrderState extends State<addOrder> {
                       children: [
                         Expanded(
                           child: MyInput(
-                             inputFormatters: [
+                            inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                   RegExp("[0-9]")),
                             ],
@@ -186,7 +169,7 @@ class _addOrderState extends State<addOrder> {
                         ),
                         Expanded(
                           child: MyInput(
-                             inputFormatters: [
+                            inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                   RegExp("[0-9]")),
                             ],
@@ -207,7 +190,7 @@ class _addOrderState extends State<addOrder> {
                       children: [
                         Expanded(
                           child: MyInput(
-                             inputFormatters: [
+                            inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                   RegExp("[0-9]")),
                             ],
@@ -223,7 +206,7 @@ class _addOrderState extends State<addOrder> {
                         ),
                         Expanded(
                           child: MyInput(
-                             inputFormatters: [
+                            inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                   RegExp("[0-9]")),
                             ],
@@ -241,10 +224,10 @@ class _addOrderState extends State<addOrder> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
-                       inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
-                          ],
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
+                      ],
                       readOnly: false,
                       color: _color,
                       controller: address,
@@ -256,7 +239,7 @@ class _addOrderState extends State<addOrder> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
-                         inputFormatters: [
+                          inputFormatters: [
                             FilteringTextInputFormatter.allow(
                                 RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
                           ],
@@ -269,7 +252,7 @@ class _addOrderState extends State<addOrder> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
-                         inputFormatters: [
+                          inputFormatters: [
                             FilteringTextInputFormatter.allow(
                                 RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
                           ],
@@ -721,7 +704,6 @@ class _addOrderState extends State<addOrder> {
           "Authorization": "Bearer $token",
         },
       );
-      print(urlBranches);
       var responsebody = jsonDecode(response.body);
 
       setState(() {
@@ -776,11 +758,8 @@ class _addOrderState extends State<addOrder> {
 
   Future<void> delivery_Prices() async {
     try {
-      // visible_ = true;
-      print("ppppp");
       var urlDeliveryPrices =
           Uri.parse(api().url + api().GetCitiesAndBranches + fromBranchID);
-      print(urlDeliveryPrices);
 
       var response = await http.get(
         urlDeliveryPrices,
@@ -790,7 +769,6 @@ class _addOrderState extends State<addOrder> {
       );
 
       var responsebody = jsonDecode(response.body);
-      print(responsebody);
       if (response.statusCode == 200) {
         setState(() {
           dlyPrices = responsebody['data']['cities'];
@@ -805,9 +783,7 @@ class _addOrderState extends State<addOrder> {
         });
       }
     } on SocketException {
-      setState(() {
-        // visible_ = false;
-      });
+      setState(() {});
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Color.fromARGB(255, 118, 82, 153),
@@ -916,9 +892,10 @@ class _addOrderState extends State<addOrder> {
             )));
       }
     } on SocketException {
-      setState(() {
-        // visible_ = false;
-      });
+      visible_branch = true;
+      visible_branch_lodding = false;
+      visible_city = true;
+      visible_city_lodding = false;
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Color.fromARGB(255, 118, 82, 153),
@@ -932,7 +909,10 @@ class _addOrderState extends State<addOrder> {
             ),
           )));
     } catch (ex) {
-      print(ex);
+      visible_branch = true;
+      visible_branch_lodding = false;
+      visible_city = true;
+      visible_city_lodding = false;
     }
   }
 }
