@@ -219,7 +219,7 @@ class _branchesState extends State<branches> {
                     Column(
                       children: [
                         Text(
-                          branche[index]["phone1"].toString(),
+                          branche[index]["phone1"].toString()  == 'null' ? '':  branche[index]["phone1"].toString(),
                           style: GoogleFonts.cairo(
                               textStyle: TextStyle(
                                   fontSize: 14,
@@ -229,7 +229,7 @@ class _branchesState extends State<branches> {
                                       : Themes.light.primaryColor)),
                         ),
                         Text(
-                          branche[index]["phone2"].toString(),
+                          branche[index]["phone2"].toString() == 'null' ? '':  branche[index]["phone2"].toString(),
                           style: GoogleFonts.cairo(
                               textStyle: TextStyle(
                                   fontSize: 14,

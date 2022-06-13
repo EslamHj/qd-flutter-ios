@@ -512,17 +512,17 @@ class _details_movementsState extends State<details_movements> {
         supplierName.text = detailsOrder['supplierName'].toString();
         barCode.text = detailsOrder['barCode'].toString();
         status.text = detailsOrder['status'].toString();
-        customerPhone1.text = detailsOrder['customerPhone1'].toString();
-        customerPhone2.text = detailsOrder['customerPhone2'].toString();
+        customerPhone1.text =  detailsOrder['customerPhone1'].toString()  == 'null' ? '':  detailsOrder['customerPhone1'].toString();
+        customerPhone2.text = detailsOrder['customerPhone2'].toString() == 'null' ? '':  detailsOrder['customerPhone2'].toString();
         recieverPhone1.text = detailsOrder['recieverPhone1'].toString();
-        recieverPhone2.text = detailsOrder['recieverPhone2'].toString();
+        recieverPhone2.text = detailsOrder['recieverPhone2'].toString() == 'null' ? '':  detailsOrder['recieverPhone2'].toString();
         packagePrice.text = detailsOrder['packagePrice'].toString();
         packageNumber.text = detailsOrder['packageNumber'].toString();
         deliveryPrice.text = detailsOrder['deliveryPrice'].toString();
-        address.text = detailsOrder['address'].toString();
+        address.text = detailsOrder['address'].toString() == 'null' ? '':  detailsOrder['address'].toString();
         cityName.text = detailsOrder['cityName'].toString();
-        note.text = detailsOrder['note'].toString();
-        orderDescription.text = detailsOrder['orderDescription'].toString();
+        note.text = detailsOrder['note'].toString() == 'null' ? '':  detailsOrder['note'].toString();
+        orderDescription.text = detailsOrder['orderDescription'].toString() == 'null' ? '':  detailsOrder['orderDescription'].toString();
         visible_lodding = false;
         visible_body = true;
       }

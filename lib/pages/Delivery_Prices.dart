@@ -15,20 +15,30 @@ class deliveryPrices extends StatefulWidget {
 }
 
 class _deliveryPricesState extends State<deliveryPrices> {
+  final _Storage = GetStorage();
+  final scrollController = ScrollController();
+
   Map<String, dynamic> dlyPrices_Map = {};
   List dlyPrices = [];
   bool visible_ = false;
   bool visible_2 = false;
   bool net = false;
-
+  int page = 1;
+  bool hasMore = true;
   var idBranche = "";
   String token = "";
-  final _Storage = GetStorage();
   bool _color = false;
 
   @override
   void initState() {
     super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.maxScrollExtent ==
+              scrollController.offset &&
+          hasMore == true) {
+        delivery_Prices();
+      }
+    });
     _color = _Storage.read("isDarkMode");
   }
 
@@ -118,9 +128,26 @@ class _deliveryPricesState extends State<deliveryPrices> {
                         color: Themes.light.primaryColor,
                         onRefresh: delivery_Prices,
                         child: ListView.builder(
-                            itemCount: dlyPrices.length,
+                            controller: scrollController,
+                            itemCount: dlyPrices.length + 1,
                             itemBuilder: (context, i) {
-                              return _cardPrice(context, i);
+                              if (i < dlyPrices.length) {
+                                return _cardPrice(context, i);
+                              } else {
+                                return Visibility(
+                                  visible: hasMore,
+                                  child: Padding(
+                                      padding:
+                                          EdgeInsets.only(top: 10, bottom: 20),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Themes.light.primaryColor),
+                                        ),
+                                      )),
+                                );
+                              }
                             }),
                       ),
                     ),
@@ -258,8 +285,12 @@ class _deliveryPricesState extends State<deliveryPrices> {
   Future<void> delivery_Prices() async {
     try {
       visible_ = true;
-      var urlDeliveryPrices =
-          Uri.parse(api().url + api().deliveryPrices + idBranche);
+      const limit = 25;
+
+      var urlDeliveryPrices = Uri.parse(api().url +
+          api().deliveryPrices +
+          idBranche +
+          "&Page=$page&PageSize=$limit");
       var response = await http.get(
         urlDeliveryPrices,
         headers: {
@@ -270,10 +301,16 @@ class _deliveryPricesState extends State<deliveryPrices> {
 
       if (response.statusCode == 200) {
         setState(() {
-          dlyPrices = responsebody['data']['results'];
-          visible_ = false;
-          visible_2 = true;
-          net = false;
+          if (dlyPrices.length == responsebody['data']['total']) {
+            hasMore = false;
+            visible_ = false;
+          } else {
+            dlyPrices.addAll(responsebody['data']['results']);
+            visible_ = false;
+            visible_2 = true;
+            net = false;
+            page++;
+          }
         });
       }
     } on SocketException {
@@ -298,7 +335,7 @@ class _deliveryPricesState extends State<deliveryPrices> {
             ),
           )));
     } catch (ex) {
-        visible_ = false;
+      visible_ = false;
     }
   }
 }

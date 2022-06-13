@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,7 +9,6 @@ import 'package:pro_delivery/pages/Details_Order.dart';
 import 'package:pro_delivery/pages/Login.dart';
 import 'package:pro_delivery/pages/SearchIndex.dart';
 import 'package:pro_delivery/pages/homePages.dart';
-import 'coponents/darkmode_service.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 void main() async {

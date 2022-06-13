@@ -64,13 +64,8 @@ class _searchState extends State<search> {
           token = _Storage.read("token");
                 fromBranchID =   _Storage.read("fromBranchID").toString();
       fromBranchName = _Storage.read("fromBranchName").toString();
-
-         if (_Storage.read("fromBranchID").toString() == "00") {
-        BranchesAndCity();
-      } else {
-        delivery_Prices();
-      }
-
+        Branches();
+      
   }
 
   @override
@@ -661,7 +656,7 @@ DateTime? picked = await showDatePicker(
           ),
           colorScheme: ColorScheme.light(
 
-              primary: Color(0xFF6F35A5),
+              primary: Themes.light.primaryColor,
               onSecondary: Colors.white,
               onPrimary: Colors.white,
               surface: Colors.white,
@@ -727,11 +722,12 @@ if (picked != null && picked != to)
      
   });}
 
+///////////////////////////api Branches ///////////////////////////////////////////////
 
-  ///////////////////////////api BranchesAndCity ///////////////////////////////////////////////
-
-  Future<void> BranchesAndCity() async {
+  Future<void> Branches() async {
     try {
+      visible_branch = false;
+      visible_branch_lodding = true;
       var urlBranches = Uri.parse(api().url + api().Branches);
       var response = await http.get(
         urlBranches,
@@ -740,54 +736,86 @@ if (picked != null && picked != to)
         },
       );
       var responsebody = jsonDecode(response.body);
-
       setState(() {
         branche = responsebody['data'];
       });
 
       if (response.statusCode == 200) {
-        fromBranchName = branche[0]['name'];
-        fromBranchID = branche[0]['id'];
-
-        var urlDeliveryPrices = Uri.parse(
-            api().url + api().GetCitiesAndBranches + branche[0]['id']);
-
-        var response_dly = await http.get(
-          urlDeliveryPrices,
-          headers: {
-            "Authorization": "Bearer $token",
-          },
-        );
-
-        var responsebody_dly = jsonDecode(response_dly.body);
-        if (response.statusCode == 200) {
-          setState(() {
-            dlyPrices = responsebody_dly['data']['cities'];
-            branche = responsebody_dly['data']['branches'];
-            this.cityID = dlyPrices[0]['id'];
-            this.cityName = dlyPrices[0]['name'];
-
-            visible_branch = true;
-            visible_branch_lodding = false;
-            visible_city = true;
-            visible_city_lodding = false;
-          });
-        }
+      visible_branch = true;
+      visible_branch_lodding = false;
       }
     } on SocketException {
       setState(() {
-        visible_branch = true;
-        visible_branch_lodding = false;
-        visible_city = true;
-        visible_city_lodding = false;
+      visible_branch = true;
+      visible_branch_lodding = false;
+
       });
     } catch (ex) {
       visible_branch = true;
       visible_branch_lodding = false;
-      visible_city = true;
-      visible_city_lodding = false;
     }
   }
+
+  ///////////////////////////api BranchesAndCity ///////////////////////////////////////////////
+
+  // Future<void> BranchesAndCity() async {
+  //   try {
+  //     var urlBranches = Uri.parse(api().url + api().Branches);
+  //     var response = await http.get(
+  //       urlBranches,
+  //       headers: {
+  //         "Authorization": "Bearer $token",
+  //       },
+  //     );
+  //     var responsebody = jsonDecode(response.body);
+
+  //     setState(() {
+  //       branche = responsebody['data'];
+  //     });
+
+  //     if (response.statusCode == 200) {
+  //       // fromBranchName = branche[0]['name'];
+  //       // fromBranchID = branche[0]['id'];
+
+  //       var urlDeliveryPrices = Uri.parse(
+  //           api().url + api().GetCitiesAndBranches + branche[0]['id']);
+
+  //       var response_dly = await http.get(
+  //         urlDeliveryPrices,
+  //         headers: {
+  //           "Authorization": "Bearer $token",
+  //         },
+  //       );
+
+  //       var responsebody_dly = jsonDecode(response_dly.body);
+  //       if (response.statusCode == 200) {
+  //         setState(() {
+  //           dlyPrices = responsebody_dly['data']['cities'];
+  //           branche = responsebody_dly['data']['branches'];
+  //           // this.cityID = dlyPrices[0]['id'];
+  //           // this.cityName = dlyPrices[0]['name'];
+
+  //           visible_branch = true;
+  //           visible_branch_lodding = false;
+  //           visible_city = true;
+  //           visible_city_lodding = false;
+  //         });
+  //       }
+  //     }
+  //   } on SocketException {
+  //     setState(() {
+  //       visible_branch = true;
+  //       visible_branch_lodding = false;
+  //       visible_city = true;
+  //       visible_city_lodding = false;
+  //     });
+  //   } catch (ex) {
+  //     visible_branch = true;
+  //     visible_branch_lodding = false;
+  //     visible_city = true;
+  //     visible_city_lodding = false;
+  //   }
+  // }
 
 
 ///////////////////////////api deliveryPrices ///////////////////////////////////////////////

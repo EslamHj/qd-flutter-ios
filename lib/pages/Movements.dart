@@ -16,20 +16,30 @@ class movements extends StatefulWidget {
 
 class _movementsState extends State<movements> {
   final _Storage = GetStorage();
+  final scrollController = ScrollController();
+  bool hasMore = true;
+
   var _color = true;
   bool net = false;
   List orderJson = [];
   bool visible_ = false;
   String code = "";
   String token = "";
-
+  int page = 1;
   @override
   void initState() {
     super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.maxScrollExtent ==
+              scrollController.offset &&
+          hasMore == true) {
+        Under_procedure();
+      }
+    });
+
     _color = _Storage.read("isDarkMode");
     code = _Storage.read("code");
     token = _Storage.read("token");
-
     Under_procedure();
   }
 
@@ -110,13 +120,29 @@ class _movementsState extends State<movements> {
                       color: Themes.light.primaryColor,
                       onRefresh: Under_procedure,
                       child: ListView.builder(
-                          itemCount: orderJson.length,
+                          controller: scrollController,
+                          itemCount: orderJson.length + 1,
                           itemBuilder: (context, i) {
-                            return GestureDetector(
-                                onTap: () {
-                                  Details_Movements(i);
-                                },
-                                child: _cardOrder(context, i));
+                            if (i < orderJson.length) {
+                              return GestureDetector(
+                                  onTap: () {
+                                    Details_Movements(i);
+                                  },
+                                  child: _cardOrder(context, i));
+                            } else {
+                              return Visibility(
+                                visible: hasMore,
+                                child: Padding(
+                                    padding: EdgeInsets.only(top: 10 ,bottom:20 ),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Themes.light.primaryColor),
+                                      ),
+                                    )),
+                              );
+                            }
                           }),
                     ),
                   ),
@@ -170,7 +196,9 @@ class _movementsState extends State<movements> {
                       Container(
                         width: 130,
                         child: Text(
-                          orderJson[index]['note'].toString(),
+                          orderJson[index]['note'].toString() == 'null'
+                              ? ''
+                              : orderJson[index]['note'].toString(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.cairo(
@@ -245,7 +273,10 @@ class _movementsState extends State<movements> {
                       Container(
                         width: _width / 4,
                         child: Text(
-                          orderJson[index]['recieverPhone2'].toString(),
+                          orderJson[index]['recieverPhone2'].toString() ==
+                                  'null'
+                              ? ''
+                              : orderJson[index]['recieverPhone2'].toString(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -289,8 +320,12 @@ class _movementsState extends State<movements> {
 
   Future<void> Under_procedure() async {
     try {
-      visible_ = true;
-      var urlOrder = Uri.parse(api().url + api().Under_procedure);
+      // visible_ = true;
+      const limit = 25;
+      var urlOrder = Uri.parse(api().url +
+          api().Under_procedure +
+          "?Page=$page" +
+          "&PageSize=$limit");
       var response = await http.get(
         urlOrder,
         headers: {
@@ -299,7 +334,14 @@ class _movementsState extends State<movements> {
       );
       var responsebody = jsonDecode(response.body);
       setState(() {
-        orderJson = responsebody['data']['results'];
+        // orderJson = responsebody['data']['results']
+        if (orderJson.length == responsebody['data']['total']) {
+          hasMore = false;
+          visible_ = false;
+        } else {
+          orderJson.addAll(responsebody['data']['results']);
+          page++;
+        }
       });
 
       if (response.statusCode == 200) {

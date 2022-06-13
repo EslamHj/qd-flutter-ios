@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
@@ -16,12 +17,16 @@ class searchIndex extends StatefulWidget {
 
 class _searchIndexState extends State<searchIndex> {
   final _Storage = GetStorage();
+  final scrollController = ScrollController();
+
   var _color = true;
   bool net = false;
   List orderJson = [];
   bool visible_ = false;
   String code = "";
   String token = "";
+  int page = 1;
+  bool hasMore = true;
   var body = {};
 
   @override
@@ -35,6 +40,13 @@ class _searchIndexState extends State<searchIndex> {
   @override
   void initState() {
     super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.maxScrollExtent ==
+          scrollController.offset && hasMore ==true) {
+        Under_procedure();
+      }
+    });
+
     _color = _Storage.read("isDarkMode");
     code = _Storage.read("code");
   }
@@ -113,21 +125,34 @@ class _searchIndexState extends State<searchIndex> {
                         )),
                   ),
                   Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      child: RefreshIndicator(
-                        color: Themes.light.primaryColor,
-                        onRefresh: Under_procedure,
-                        child: ListView.builder(
-                            itemCount: orderJson.length,
-                            itemBuilder: (context, i) {
+                    child: RefreshIndicator(
+                      color: Themes.light.primaryColor,
+                      onRefresh: Under_procedure,
+                      child: ListView.builder(
+                          controller: scrollController,
+                          itemCount: orderJson.length + 1,
+                          itemBuilder: (context, i) {
+                            if (i < orderJson.length) {
                               return GestureDetector(
                                   onTap: () {
                                     Details_Movements(i);
                                   },
                                   child: _cardOrder(context, i));
-                            }),
-                      ),
+                            } else {
+                              return Visibility(
+                                visible: hasMore,
+                                child: Padding(
+                                    padding: EdgeInsets.only(top: 10 ,bottom:20 ),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Themes.light.primaryColor),
+                                      ),
+                                    )),
+                              );
+                            }
+                          }),
                     ),
                   ),
                 ],
@@ -182,7 +207,9 @@ class _searchIndexState extends State<searchIndex> {
                         Container(
                           width: 130,
                           child: Text(
-                            orderJson[index]['note'].toString(),
+                             orderJson[index]['note'].toString() == 'null'
+                              ? ''
+                              : orderJson[index]['note'].toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.cairo(
@@ -257,7 +284,9 @@ class _searchIndexState extends State<searchIndex> {
                         Container(
                           width: _width / 4,
                           child: Text(
-                            orderJson[index]['recieverPhone2'].toString(),
+                            orderJson[index]['recieverPhone2'].toString()== 'null'
+                              ? ''
+                              : orderJson[index]['recieverPhone2'].toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -321,7 +350,9 @@ class _searchIndexState extends State<searchIndex> {
 
   Future<void> Under_procedure() async {
     try {
-      visible_ = true;
+      // visible_ = true;
+      const limit = 25;
+
       var urlOrder = Uri.parse(api().url +
           api().Under_procedure +
           "?BarCode=" +
@@ -329,18 +360,28 @@ class _searchIndexState extends State<searchIndex> {
           "&RecieverPhone=" +
           body['recieverPhone1'] +
           "&CityId=" +
-          body['CityId']+"&From=" +
-          body['From']+"&To=" +
-          body['To']);
+          body['CityId'] +
+          "&From=" +
+          body['From'] +
+          "&To=" +
+          body['To'] +
+          "&Page=$page" +
+          "&PageSize=$limit");
       var response = await http.get(
         urlOrder,
         headers: {
           "Authorization": "Bearer $token",
         },
       );
+
       var responsebody = jsonDecode(response.body);
       setState(() {
-        orderJson = responsebody['data']['results'];
+        if (orderJson.length == responsebody['data']['total']) {
+          hasMore = false;
+        } else {
+          orderJson.addAll(responsebody['data']['results']);
+          page++;
+        }
       });
 
       if (response.statusCode == 200) {

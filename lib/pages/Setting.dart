@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
-import 'package:pro_delivery/coponents/darkmode_service.dart';
 import 'package:pro_delivery/pages/Login.dart';
 
 class setting extends StatefulWidget {
@@ -18,7 +16,6 @@ class _settingState extends State<setting> {
   String local = "false";
   final _Storage = GetStorage();
 
-  darkService d = darkService();
   @override
   void initState() {
     super.initState();
