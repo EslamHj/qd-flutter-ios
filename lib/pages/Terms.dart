@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:get/get.dart';
 
@@ -176,7 +177,7 @@ class _termsState extends State<terms> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Image.asset(
-                'assets/qd.png',
+                api().urlIcon,
                 height: 50,
                 width: 47,
                 fit: BoxFit.cover,

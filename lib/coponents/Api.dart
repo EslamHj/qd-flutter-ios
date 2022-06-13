@@ -1,5 +1,6 @@
 class api {
   var url = "http://demo.qdlibya.com/";
+  var urlIcon ="assets/Q-login.png";
   var login = "api/mobile/Login?";
   // /// شاشة  اسعار التوصيل /////
   var Branches = "api/mobile/GetMainBranches";

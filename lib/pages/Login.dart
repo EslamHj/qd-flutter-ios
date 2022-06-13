@@ -50,23 +50,25 @@ class _loginState extends State<login> {
                     borderRadius:
                         BorderRadius.only(bottomLeft: Radius.circular(90)),
                     color: Themes.light.primaryColor,
-                    gradient: LinearGradient(
-                        colors: [
-                          (Color.fromARGB(255, 85, 51, 117)),
-                          (Color.fromARGB(255, 118, 82, 153))
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter)),
+                    // gradient: LinearGradient(
+                    //     colors: [
+                    //       (Color.fromARGB(255, 85, 51, 117)),
+                    //       (Color.fromARGB(255, 118, 82, 153))
+                    //     ],
+                    //     begin: Alignment.topCenter,
+                    //     end: Alignment.bottomCenter)
+                        ),
                 child: Center(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    //  Container(
-                    //    child: Image.asset("assets/qd.png"),
-                    //    height: 90,
-                    //    width: 90,
-                    //  ),
+                     Container(
+                       child: Image.asset("assets/Q-login.png"),
+                       height: 120,
+                       width: 120,
+                     ),
+                   
                     Container(
                       margin: EdgeInsets.only(right: 20, top: 20),
                       alignment: Alignment.bottomRight,
@@ -205,20 +207,16 @@ class _loginState extends State<login> {
                       alignment: Alignment.center,
                       //  width: double.infinity,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [
-                              (Color.fromARGB(255, 96, 55, 134)),
-                              (Color.fromARGB(255, 149, 102, 192))
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight),
+                        color: Themes.light.primaryColor,
+                        // gradient: LinearGradient(
+                        //     colors: [
+                        //       (Color.fromARGB(255, 96, 55, 134)),
+                        //       (Color.fromARGB(255, 149, 102, 192))
+                        //     ],
+                        //     begin: Alignment.centerLeft,
+                        //     end: Alignment.centerRight),
                         borderRadius: BorderRadius.circular(50),
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //       offset: Offset(0, 10),
-                        //       blurRadius: 50,
-                        //       color: Color(0xffEEEEEE))
-                        // ]
+                      
                       ),
                       child: Text("دخول",
                           style: GoogleFonts.cairo(

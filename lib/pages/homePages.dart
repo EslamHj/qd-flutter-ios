@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:pro_delivery/pages/AddOrder.dart';
 import 'package:pro_delivery/pages/Branches.dart';
@@ -235,10 +236,10 @@ class _homePagessState extends State<homePagess> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image.asset(
-              'assets/qd.png',
-              height: 50,
-              width: 50,
-              fit: BoxFit.cover,
+             api().urlIcon,
+              height: 40,
+              width: 40,
+              // fit: BoxFit.cover,
             ),
           )),
       actions: <Widget>[

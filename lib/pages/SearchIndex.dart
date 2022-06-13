@@ -336,7 +336,7 @@ class _searchIndexState extends State<searchIndex> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Image.asset(
-                'assets/qd.png',
+                api().urlIcon,
                 height: 50,
                 width: 47,
                 fit: BoxFit.cover,
