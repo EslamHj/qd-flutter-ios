@@ -2,10 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
-// const Color _kprimaryColor = Color(0xFF6F35A5);
-const Color _kprimaryColor = Color(0xFF801b49);
+const Color _kprimaryColor = Color(0xFF7a1944);
+// const Color _kprimaryColor = Color(0xFF801b49);
+// const Color _kprimaryColor = Color(0xFF6F35A5); //مووف
+
 // const Color _kprimaryColor = Color.fromARGB(255, 96, 55, 134);
 class Themes {
+
+  static final showSnackBarColor = Color.fromARGB(255, 139, 36, 83) ;
   //dark color
   static final dark_white = Colors.white;
     static final dark_primary2 = Color(0xFF424242);

@@ -323,8 +323,9 @@ class _deliveryPricesState extends State<deliveryPrices> {
         visible_ = false;
       });
 
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          backgroundColor: Themes.showSnackBarColor,
           content: Directionality(
             textDirection: TextDirection.rtl,
             child: Text(

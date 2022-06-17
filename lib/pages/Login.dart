@@ -64,14 +64,15 @@ class _loginState extends State<login> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    //  Container(
-                    //    child: Image.asset("assets/Q-login.png"),
-                    //    height: 120,
-                    //    width: 120,
-                    //  ),
+                     Container(
+                      margin: EdgeInsets.only(top: 20),
+                       child: Image.asset(api().urlIcon),
+                       height: 160,
+                       width: 160,
+                     ),
 
                     Container(
-                      margin: EdgeInsets.only(right: 20, top: 20),
+                      margin: EdgeInsets.only(right: 20),
                       alignment: Alignment.bottomRight,
                       child: Text(
                         "تسجيل الدخول",
@@ -333,8 +334,9 @@ class _loginState extends State<login> {
             );
           }
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              backgroundColor: Color.fromARGB(255, 118, 82, 153),
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Themes.showSnackBarColor,
               content: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Text(
@@ -350,8 +352,9 @@ class _loginState extends State<login> {
           });
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
@@ -372,8 +375,9 @@ class _loginState extends State<login> {
         visible_login = true;
       });
 
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          backgroundColor: Themes.showSnackBarColor,
           content: Directionality(
             textDirection: TextDirection.rtl,
             child: Text(
@@ -388,9 +392,9 @@ class _loginState extends State<login> {
         visible_ = false;
         visible_login = true;
       });
-
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          backgroundColor: Themes.showSnackBarColor,
           content: Directionality(
             textDirection: TextDirection.rtl,
             child: Text(

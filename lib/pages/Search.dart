@@ -684,7 +684,7 @@ if (picked != null && picked != from)
 
   Future<void> _getDateToUser(BuildContext context) async {
 DateTime? picked = await showDatePicker(
-      context: context,
+     context: context,
     builder: (BuildContext context, Widget ?child) {
       return Theme(
         data: ThemeData(
@@ -697,7 +697,7 @@ DateTime? picked = await showDatePicker(
           ),
           colorScheme: ColorScheme.light(
 
-              primary: Color(0xFF6F35A5),
+              primary: Themes.light.primaryColor,
               onSecondary: Colors.white,
               onPrimary: Colors.white,
               surface: Colors.white,
@@ -840,7 +840,7 @@ if (picked != null && picked != to)
           branche = responsebody['data']['branches'];
           this.cityID = dlyPrices[0]['id'];
           this.cityName = dlyPrices[0]['name'];
-
+          visible_body =false ;
           visible_branch = true;
           visible_branch_lodding = false;
           visible_city = true;
@@ -852,8 +852,9 @@ if (picked != null && picked != to)
         // visible_ = false;
       });
 
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          backgroundColor: Themes.showSnackBarColor,
           content: Directionality(
             textDirection: ui.TextDirection.rtl,
             child: Text(
@@ -871,8 +872,9 @@ if (picked != null && picked != to)
         visible_city_lodding = false;
       });
 
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          backgroundColor: Themes.showSnackBarColor,
           content: Directionality(
             textDirection: ui.TextDirection.rtl,
             child: Text(

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:pro_delivery/pages/Terms.dart';
+import 'package:email_validator/email_validator.dart';
 
 class createAccount extends StatefulWidget {
   createAccount({Key? key}) : super(key: key);
@@ -58,13 +60,14 @@ class _createAccountState extends State<createAccount> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  //  Container(
-                  //    child: Image.asset("assets/qd.png"),
-                  //    height: 90,
-                  //    width: 90,
-                  //  ),
+                 Container(
+                      margin: EdgeInsets.only(top: 20),
+                       child: Image.asset(api().urlIcon),
+                       height: 160,
+                       width: 160,
+                     ),
                   Container(
-                    margin: EdgeInsets.only(right: 20, top: 20),
+                    margin: EdgeInsets.only(right: 20),
                     alignment: Alignment.bottomRight,
                     child: Text(
                       "إنشاء حساب",
@@ -128,7 +131,7 @@ class _createAccountState extends State<createAccount> {
                     Icons.store,
                     color: Themes.light.primaryColor,
                   ),
-                  hintText: "اسم المتجر",
+                  hintText: "اسم الصفحة",
                   hintStyle: GoogleFonts.cairo(
                       textStyle: TextStyle(
                           color: Themes.light.primaryColor,
@@ -482,12 +485,8 @@ class _createAccountState extends State<createAccount> {
       if (name.text == "") {
         ScaffoldMessenger.of(context).clearSnackBars();
 
-  
-        print(RegExp(
-         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-        .hasMatch(email.text));
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
@@ -501,7 +500,7 @@ class _createAccountState extends State<createAccount> {
         ScaffoldMessenger.of(context).clearSnackBars();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
@@ -515,21 +514,39 @@ class _createAccountState extends State<createAccount> {
         ScaffoldMessenger.of(context).clearSnackBars();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
-                "الرجاء إدخال الإيميل",
+                "الرجاء إدخال البريد الإلكتروني",
                 style: GoogleFonts.cairo(
                     textStyle:
                         TextStyle(fontSize: 14, color: Themes.light_white)),
               ),
             )));
-      } else if (phone1.text == "") {
+      }
+
+      else if (!EmailValidator.validate(email.text)) {
         ScaffoldMessenger.of(context).clearSnackBars();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
+            content: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Text(
+                "البريد الإلكتروني غير صحيح",
+                style: GoogleFonts.cairo(
+                    textStyle:
+                        TextStyle(fontSize: 14, color: Themes.light_white)),
+              ),
+            )));
+      }
+      
+       else if (phone1.text == "") {
+        ScaffoldMessenger.of(context).clearSnackBars();
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
@@ -543,7 +560,7 @@ class _createAccountState extends State<createAccount> {
         ScaffoldMessenger.of(context).clearSnackBars();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
@@ -555,7 +572,7 @@ class _createAccountState extends State<createAccount> {
             )));
       } else if (password.text == "") {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
@@ -569,7 +586,7 @@ class _createAccountState extends State<createAccount> {
         ScaffoldMessenger.of(context).clearSnackBars();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
@@ -583,7 +600,7 @@ class _createAccountState extends State<createAccount> {
         ScaffoldMessenger.of(context).clearSnackBars();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
@@ -597,7 +614,7 @@ class _createAccountState extends State<createAccount> {
         ScaffoldMessenger.of(context).clearSnackBars();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(
@@ -611,7 +628,7 @@ class _createAccountState extends State<createAccount> {
         ScaffoldMessenger.of(context).clearSnackBars();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+            backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: TextDirection.rtl,
               child: Text(

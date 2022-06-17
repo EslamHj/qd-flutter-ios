@@ -785,8 +785,9 @@ class _addOrderState extends State<addOrder> {
     } on SocketException {
       setState(() {});
 
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          backgroundColor: Themes.showSnackBarColor,
           content: Directionality(
             textDirection: ui.TextDirection.rtl,
             child: Text(
@@ -804,8 +805,9 @@ class _addOrderState extends State<addOrder> {
         visible_city_lodding = false;
       });
 
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          backgroundColor: Themes.showSnackBarColor,
           content: Directionality(
             textDirection: ui.TextDirection.rtl,
             child: Text(
@@ -879,8 +881,9 @@ class _addOrderState extends State<addOrder> {
       } else {
         hintV = true;
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Color.fromARGB(255, 118, 82, 153),
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Themes.showSnackBarColor,
             content: Directionality(
               textDirection: ui.TextDirection.rtl,
               child: Text(
@@ -897,8 +900,9 @@ class _addOrderState extends State<addOrder> {
       visible_city = true;
       visible_city_lodding = false;
 
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Color.fromARGB(255, 118, 82, 153),
+          backgroundColor: Themes.showSnackBarColor,
           content: Directionality(
             textDirection: ui.TextDirection.rtl,
             child: Text(
