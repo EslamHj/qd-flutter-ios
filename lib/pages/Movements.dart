@@ -25,6 +25,9 @@ class _movementsState extends State<movements> {
   bool visible_ = false;
   String code = "";
   String token = "";
+  String name = "";
+  var role = "";
+  bool visible_role = false ;
   int page = 1;
   @override
   void initState() {
@@ -38,8 +41,14 @@ class _movementsState extends State<movements> {
     });
 
     _color = _Storage.read("isDarkMode");
-    code = _Storage.read("code");
-    token = _Storage.read("token");
+    code = _Storage.read("code").toString() ;
+    name = _Storage.read("name").toString() ;
+    token = _Storage.read("token").toString() ;
+    role =_Storage.read("role").toString() ;
+    if( role == "2") {
+     visible_role = true ;
+    }
+
     Under_procedure();
   }
 
@@ -102,6 +111,11 @@ class _movementsState extends State<movements> {
               )
             : Column(
                 children: [
+
+                  Visibility(
+                    visible: visible_role,
+                    child:  _cardCash(context),),
+              
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Visibility(
@@ -133,7 +147,8 @@ class _movementsState extends State<movements> {
                               return Visibility(
                                 visible: hasMore,
                                 child: Padding(
-                                    padding: EdgeInsets.only(top: 10 ,bottom:20 ),
+                                    padding:
+                                        EdgeInsets.only(top: 10, bottom: 20),
                                     child: Center(
                                       child: CircularProgressIndicator(
                                         valueColor:
@@ -312,6 +327,53 @@ class _movementsState extends State<movements> {
             ),
           ),
         )
+      ],
+    );
+  }
+
+  _cardCash(context) {
+    double _width = MediaQuery.of(context).size.width;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Directionality(
+            textDirection: TextDirection.ltr,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
+              width: _width - 40,
+              height: 70,
+              decoration: BoxDecoration(
+                  color: Themes.light.primaryColor,
+                  borderRadius: BorderRadius.circular(16)),
+              child: Column(
+                  //  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          code.toString(),
+                          style: GoogleFonts.cairo(
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          name.toString(),
+                          style: GoogleFonts.cairo(
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ]),
+            ))
       ],
     );
   }

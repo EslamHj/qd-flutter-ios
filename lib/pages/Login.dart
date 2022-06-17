@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/Api.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:pro_delivery/pages/CreateAccount.dart';
+import 'package:pro_delivery/pages/Suppliers/homeSuppliers.dart';
 import 'package:pro_delivery/pages/homePages.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,28 +48,28 @@ class _loginState extends State<login> {
               Container(
                 height: 300,
                 decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(90)),
-                    color: Themes.light.primaryColor,
-                    // gradient: LinearGradient(
-                    //     colors: [
-                    //       (Color.fromARGB(255, 85, 51, 117)),
-                    //       (Color.fromARGB(255, 118, 82, 153))
-                    //     ],
-                    //     begin: Alignment.topCenter,
-                    //     end: Alignment.bottomCenter)
-                        ),
+                  borderRadius:
+                      BorderRadius.only(bottomLeft: Radius.circular(90)),
+                  color: Themes.light.primaryColor,
+                  // gradient: LinearGradient(
+                  //     colors: [
+                  //       (Color.fromARGB(255, 85, 51, 117)),
+                  //       (Color.fromARGB(255, 118, 82, 153))
+                  //     ],
+                  //     begin: Alignment.topCenter,
+                  //     end: Alignment.bottomCenter)
+                ),
                 child: Center(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                     Container(
-                       child: Image.asset("assets/Q-login.png"),
-                       height: 120,
-                       width: 120,
-                     ),
-                   
+                    //  Container(
+                    //    child: Image.asset("assets/Q-login.png"),
+                    //    height: 120,
+                    //    width: 120,
+                    //  ),
+
                     Container(
                       margin: EdgeInsets.only(right: 20, top: 20),
                       alignment: Alignment.bottomRight,
@@ -216,7 +217,6 @@ class _loginState extends State<login> {
                         //     begin: Alignment.centerLeft,
                         //     end: Alignment.centerRight),
                         borderRadius: BorderRadius.circular(50),
-                      
                       ),
                       child: Text("دخول",
                           style: GoogleFonts.cairo(
@@ -311,7 +311,6 @@ class _loginState extends State<login> {
             visible_ = false;
             visible_login = true;
           });
-
           _Storage.write("name", responsebody["data"]["name"]);
           _Storage.write("code", responsebody["data"]["code"]);
           _Storage.write("token", responsebody["data"]["token"]);
@@ -322,10 +321,17 @@ class _loginState extends State<login> {
           _Storage.write("fromBranchID", "00");
           _Storage.write("fromBranchName", "");
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => homePagess()),
-          );
+          if (_Storage.read("role").toString() == "2") {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => homeSuppliers()),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => homePagess()),
+            );
+          }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: Color.fromARGB(255, 118, 82, 153),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
@@ -114,7 +115,8 @@ class _settingState extends State<setting> {
                   context,
                   MaterialPageRoute(builder: (context) => login()),
                 );
-                _Storage.remove("token");
+                   _Storage.remove("token");
+           
               },
               child: Container(
                 margin: EdgeInsets.fromLTRB(20, 25, 20, 5),

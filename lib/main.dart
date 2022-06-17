@@ -8,6 +8,7 @@ import 'package:pro_delivery/pages/Details_Movements.dart';
 import 'package:pro_delivery/pages/Details_Order.dart';
 import 'package:pro_delivery/pages/Login.dart';
 import 'package:pro_delivery/pages/SearchIndex.dart';
+import 'package:pro_delivery/pages/Suppliers/homeSuppliers.dart';
 import 'package:pro_delivery/pages/homePages.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -34,7 +35,15 @@ class _MyAppState extends State<MyApp> {
     if (token == null || JwtDecoder.isExpired(token)) {
       return login();
     } else {
-      return homePagess();
+      
+      var role =_Storage.read("role").toString()  ;
+
+      if (role == "2"){
+          return homeSuppliers();
+      }
+      else {
+          return homePagess();
+      }
     }
   }
 

@@ -276,7 +276,7 @@ class _branchesState extends State<branches> {
                         child: GestureDetector(
                       onTap: () {
                         // MapUrl.openMap(47.628293269721, -122.34263420105);
-                        MapUrl.openMap("V66J+992");
+                        MapUrl.openMap(branche[index]["location"].toString());
                       },
                       child: Container(
                         width: _width / 2 - 30,
