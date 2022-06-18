@@ -2,9 +2,10 @@
     package="com.eslam.delivery">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="Qdly"
+        android:label="QdL"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"

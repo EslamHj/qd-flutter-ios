@@ -43,6 +43,8 @@ dependencies:
   simple_animations: ^4.0.2
   jwt_decoder: ^2.0.1
   email_validator: ^2.0.1
+  flutter_local_notifications: ^9.5.3+1
+  rxdart: ^0.27.4
   
 flutter_native_splash:
     color: "#7a1944"

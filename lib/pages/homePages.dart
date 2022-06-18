@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pro_delivery/coponents/Api.dart';
+import 'package:pro_delivery/coponents/Notifications.dart';
 import 'package:pro_delivery/coponents/darkMode.dart';
 import 'package:pro_delivery/pages/AddOrder.dart';
 import 'package:pro_delivery/pages/Branches.dart';
@@ -11,6 +13,7 @@ import 'package:pro_delivery/pages/Search.dart';
 import 'package:pro_delivery/pages/Setting.dart';
 import 'package:pro_delivery/pages/TabsOrder.dart';
 import 'package:pro_delivery/pages/Wallet.dart';
+import 'package:rxdart/rxdart.dart';
 
 class homePagess extends StatefulWidget {
   homePagess({Key? key}) : super(key: key);
@@ -47,7 +50,15 @@ class _homePagessState extends State<homePagess> {
   void initState() {
     super.initState();
     _color = _Storage.read("isDarkMode");
+
+    NotificationApi.init();
+    listenNotification();
+    
   }
+
+  void listenNotification() => NotificationApi.onNotifications.stream.listen(onClickNotifications);
+  void onClickNotifications(String? payload) =>
+  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  addOrder()));
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
@@ -68,10 +79,15 @@ class _homePagessState extends State<homePagess> {
                         color: _color == true ? Colors.white : Colors.white),
                     onPressed: () {
                       setState(() {
-                        Navigator.pushNamed(context, 'addOrder',
-                            arguments: dlyPrices);
-                        // currenScreen = addOrder();
-                        // currentTab = 4;
+                        NotificationApi.showNotification(
+                          
+                          title: 'تم التسليم للمندوب',
+                          // body: 'ggggggggg',
+                          payload: 'sarah.abs',
+                        );
+                        // Navigator.pushNamed(context, 'addOrder',
+                        //     arguments: dlyPrices);
+                      
                       });
                     },
                   ),
