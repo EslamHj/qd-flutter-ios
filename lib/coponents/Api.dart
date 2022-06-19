@@ -18,4 +18,7 @@ class api {
    /// تحت الإجراء
   var Under_procedure  = "api/mobile/GetOrders";
   var Under_procedure_Id  = "api/mobile/GetOrder/" ;
+  /// البحث
+    var StatusesAndBranches = "api/mobile/GetStatusesAndBranches";
+
 }
