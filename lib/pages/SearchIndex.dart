@@ -22,6 +22,7 @@ class _searchIndexState extends State<searchIndex> {
   var _color = true;
   bool net = false;
   List orderJson = [];
+  int length_orderJson =0 ;
   bool visible_ = false;
   String code = "";
   String token = "";
@@ -41,8 +42,10 @@ class _searchIndexState extends State<searchIndex> {
   void initState() {
     super.initState();
     scrollController.addListener(() {
+        
       if (scrollController.position.maxScrollExtent ==
-          scrollController.offset && hasMore ==true) {
+              scrollController.offset &&
+          hasMore == true) {
         Under_procedure();
       }
     });
@@ -142,7 +145,8 @@ class _searchIndexState extends State<searchIndex> {
                               return Visibility(
                                 visible: hasMore,
                                 child: Padding(
-                                    padding: EdgeInsets.only(top: 10 ,bottom:20 ),
+                                    padding:
+                                        EdgeInsets.only(top: 10, bottom: 20),
                                     child: Center(
                                       child: CircularProgressIndicator(
                                         valueColor:
@@ -207,9 +211,9 @@ class _searchIndexState extends State<searchIndex> {
                         Container(
                           width: 130,
                           child: Text(
-                             orderJson[index]['note'].toString() == 'null'
-                              ? ''
-                              : orderJson[index]['note'].toString(),
+                            orderJson[index]['note'].toString() == 'null'
+                                ? ''
+                                : orderJson[index]['note'].toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.cairo(
@@ -284,9 +288,10 @@ class _searchIndexState extends State<searchIndex> {
                         Container(
                           width: _width / 4,
                           child: Text(
-                            orderJson[index]['recieverPhone2'].toString()== 'null'
-                              ? ''
-                              : orderJson[index]['recieverPhone2'].toString(),
+                            orderJson[index]['recieverPhone2'].toString() ==
+                                    'null'
+                                ? ''
+                                : orderJson[index]['recieverPhone2'].toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -361,6 +366,8 @@ class _searchIndexState extends State<searchIndex> {
           body['recieverPhone1'] +
           "&CityId=" +
           body['CityId'] +
+          "&StatusId=" +
+          body['StatusId'] +
           "&From=" +
           body['From'] +
           "&To=" +
@@ -375,9 +382,16 @@ class _searchIndexState extends State<searchIndex> {
       );
 
       var responsebody = jsonDecode(response.body);
+               
+              if(responsebody['data']['total'] < 7){
+                  hasMore = false;
+               
+              }
+
       setState(() {
         if (orderJson.length == responsebody['data']['total']) {
           hasMore = false;
+        
         } else {
           orderJson.addAll(responsebody['data']['results']);
           page++;
@@ -386,15 +400,18 @@ class _searchIndexState extends State<searchIndex> {
 
       if (response.statusCode == 200) {
         visible_ = false;
+        // hasMore = false;
         net = false;
       }
     } on SocketException {
       setState(() {
         visible_ = false;
+        hasMore = false;
         net = true;
       });
     } catch (ex) {
       visible_ = false;
+      hasMore = false;
     }
   }
 

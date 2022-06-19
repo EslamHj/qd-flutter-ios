@@ -27,7 +27,7 @@ class _movementsState extends State<movements> {
   String token = "";
   String name = "";
   var role = "";
-  bool visible_role = false ;
+  bool visible_role = false;
   int page = 1;
   @override
   void initState() {
@@ -41,12 +41,12 @@ class _movementsState extends State<movements> {
     });
 
     _color = _Storage.read("isDarkMode");
-    code = _Storage.read("code").toString() ;
-    name = _Storage.read("name").toString() ;
-    token = _Storage.read("token").toString() ;
-    role =_Storage.read("role").toString() ;
-    if( role == "2") {
-     visible_role = true ;
+    code = _Storage.read("code").toString();
+    name = _Storage.read("name").toString();
+    token = _Storage.read("token").toString();
+    role = _Storage.read("role").toString();
+    if (role == "2") {
+      visible_role = true;
     }
 
     Under_procedure();
@@ -111,11 +111,10 @@ class _movementsState extends State<movements> {
               )
             : Column(
                 children: [
-
                   Visibility(
                     visible: visible_role,
-                    child:  _cardCash(context),),
-              
+                    child: _cardCash(context),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Visibility(
@@ -395,6 +394,10 @@ class _movementsState extends State<movements> {
         },
       );
       var responsebody = jsonDecode(response.body);
+
+      if (responsebody['data']['total'] < 7) {
+        hasMore = false;
+      }
       setState(() {
         // orderJson = responsebody['data']['results']
         if (orderJson.length == responsebody['data']['total']) {
@@ -419,7 +422,12 @@ class _movementsState extends State<movements> {
   }
 
   Details_Movements(index) {
-    Navigator.pushNamed(context, 'details_movements',
-        arguments: orderJson[index]['id']);
+    if (_Storage.read("role").toString() == "2") {
+      Navigator.pushNamed(context, 'details_Suppliers',
+          arguments: orderJson[index]['id']);
+    } else {
+      Navigator.pushNamed(context, 'details_movements',
+          arguments: orderJson[index]['id']);
+    }
   }
 }

@@ -8,6 +8,7 @@ import 'package:pro_delivery/pages/Details_Movements.dart';
 import 'package:pro_delivery/pages/Details_Order.dart';
 import 'package:pro_delivery/pages/Login.dart';
 import 'package:pro_delivery/pages/SearchIndex.dart';
+import 'package:pro_delivery/pages/Suppliers/Details_Suppliers.dart';
 import 'package:pro_delivery/pages/Suppliers/homeSuppliers.dart';
 import 'package:pro_delivery/pages/homePages.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -75,6 +76,7 @@ class _MyAppState extends State<MyApp> {
         "deliveryPrices": (context) => deliveryPrices(),
         "details_order": (context) => details_order(),
         "details_movements": (context) => details_movements(),
+        "details_Suppliers": (context) => details_Suppliers(),
       },
       home: login_tokon(),
     );

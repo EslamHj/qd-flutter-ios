@@ -35,7 +35,7 @@ class _searchState extends State<search> {
   final _Storage = GetStorage();
 
     var _color = false;
-      bool visible_lodding = false;
+  bool visible_lodding = false;
   bool visible_body = false;
   bool visible_branch_lodding = false;
   bool visible_branch = true;
@@ -44,10 +44,14 @@ class _searchState extends State<search> {
   var cityID = "";
   var fromBranchID = "";
   var fromBranchName = "";
+  var statusesID = "";
+  var statusesName = "";
+
   var cityName = "";
     var token = "";
 
   List<dynamic> branche = [];
+  List<dynamic> statuses = [];
   List<dynamic> dlyPrices = [];
     List orderJson = [];
 
@@ -62,8 +66,8 @@ class _searchState extends State<search> {
     super.initState();
     _color = _Storage.read("isDarkMode");
           token = _Storage.read("token");
-                fromBranchID =   _Storage.read("fromBranchID").toString();
-      fromBranchName = _Storage.read("fromBranchName").toString();
+      //     fromBranchID =   _Storage.read("fromBranchID").toString();
+      // fromBranchName = _Storage.read("fromBranchName").toString();
         Branches();
       
   }
@@ -115,6 +119,138 @@ class _searchState extends State<search> {
                     ),
                   ],
                 ),
+
+                /////// ------------ DropdownSearch statuses ------------ ////////
+                  Visibility(
+                    visible: visible_branch,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "الحالات",
+                            style: GoogleFonts.cairo(
+                              textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: _color
+                                      ? Themes.dark_white
+                                      : Themes.light.primaryColor),
+                            ),
+                          ),
+                          Container(
+                            height: 52,
+                            margin: EdgeInsets.only(top: 8.0),
+                            padding: EdgeInsets.only(right: 14),
+                            decoration: BoxDecoration(
+                                color: _color
+                                    ? Themes.dark_primary
+                                    : Colors.grey[300],
+                                border: Border.all(
+                                    color: _color
+                                        ? Themes.dark_white
+                                        : Themes.light.primaryColor,
+                                    width: 1.0),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Row(children: [
+                              Expanded(
+                                child: DropdownSearch<String>(
+                                  popupBackgroundColor: _color
+                                      ? Themes.dark_primary
+                                      : Themes.light_primary,
+
+                                  emptyBuilder: (context, searchEntry) =>
+                                      Center(
+                                          child: Text('لايوجد',
+                                              style: TextStyle(
+                                                  color: Themes
+                                                      .light.primaryColor))),
+
+                                  // autoFocusSearchBox: true,
+
+                                  searchBoxDecoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Themes.light.primaryColor,
+                                      width: 2,
+                                    )),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Themes.light.primaryColor,
+                                      width: 2,
+                                    )),
+                                    hintTextDirection: ui.TextDirection.rtl,
+                                  ),
+                                  searchBoxStyle: GoogleFonts.cairo(
+                                      textStyle: TextStyle(
+                                          // decorationColor: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: _color
+                                              ? Themes.dark_white
+                                              : Themes.light_black)),
+
+                                  dropdownSearchTextAlignVertical:
+                                      TextAlignVertical.bottom,
+                                  dropdownSearchTextAlign: TextAlign.right,
+
+                                  dropdownSearchBaseStyle:
+                                      TextStyle(fontFamily: 'MeQuran2'),
+                                  showSearchBox: true,
+                                  mode: Mode.DIALOG,
+                                  dropdownSearchDecoration: InputDecoration(
+                                    hintStyle: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 0,
+                                    )),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 0,
+                                    )),
+                                  ),
+
+                                  // mode: Mode.DIALOG,
+                                  //to show search box
+                                  // showSearchBox: true,
+                                  showSelectedItem: true,
+                                  //list of dropdown items
+                                  //  dropdownBuilder: _style,
+                                  dropdownBuilder: _customDropDownAddress,
+                                  popupItemBuilder: _style1,
+                                  items: List<String>.from(
+                                      statuses.map((e) => e['name'])),
+                                  // label: "Country",
+                                  onChanged: (value) {
+                                    for (var i = 0; i < statuses.length; i++) {
+                                      if (statuses[i]['name'] == value) {
+                                        this.statusesID = statuses[i]['id'];
+                                        this.statusesName =
+                                            statuses[i]['name'];
+                                      }
+                                    }
+                                    setState(() {
+                               
+                                    });
+                                  },
+
+                                  //show selected item
+                                  selectedItem: this.fromBranchName,
+                                ),
+                              ),
+                            ]),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+
 
 /////// ------------ DropdownSearch branch ------------ ////////
 
@@ -728,7 +864,7 @@ if (picked != null && picked != to)
     try {
       visible_branch = false;
       visible_branch_lodding = true;
-      var urlBranches = Uri.parse(api().url + api().Branches);
+      var urlBranches = Uri.parse(api().url + api().StatusesAndBranches);
       var response = await http.get(
         urlBranches,
         headers: {
@@ -737,7 +873,9 @@ if (picked != null && picked != to)
       );
       var responsebody = jsonDecode(response.body);
       setState(() {
-        branche = responsebody['data'];
+        branche = responsebody['data']['branches'];
+        statuses = responsebody['data']['statuses'];
+
       });
 
       if (response.statusCode == 200) {
@@ -900,6 +1038,7 @@ if (picked != null && picked != to)
           "BarCode" : this.barCode.text.toString(),
           "recieverPhone1" : this.recieverPhone1.text.toString(),
           "CityId" : this.cityID ,
+           "StatusId" : this.statusesID ,
           "From" : DateFormat('yyyy-MM-dd').format(from) ,
           "To" : DateFormat('yyyy-MM-dd').format(to) ,
         };

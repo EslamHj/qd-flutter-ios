@@ -44,7 +44,7 @@ class _homePagessState extends State<homePagess> {
   List dlyPrices = [];
 
   bool visible_ = false;
-  var body = "" ;
+  var body = "";
 
   @override
   void initState() {
@@ -53,12 +53,12 @@ class _homePagessState extends State<homePagess> {
 
     NotificationApi.init();
     listenNotification();
-    
   }
 
-  void listenNotification() => NotificationApi.onNotifications.stream.listen(onClickNotifications);
-  void onClickNotifications(String? payload) =>
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  addOrder()));
+  void listenNotification() =>
+      NotificationApi.onNotifications.stream.listen(onClickNotifications);
+  void onClickNotifications(String? payload) => Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => addOrder()));
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
@@ -79,15 +79,13 @@ class _homePagessState extends State<homePagess> {
                         color: _color == true ? Colors.white : Colors.white),
                     onPressed: () {
                       setState(() {
-                        NotificationApi.showNotification(
-                          
-                          title: 'تم التسليم للمندوب',
-                          // body: 'ggggggggg',
-                          payload: 'sarah.abs',
-                        );
-                        // Navigator.pushNamed(context, 'addOrder',
-                        //     arguments: dlyPrices);
-                      
+                        // NotificationApi.showNotification(
+
+                        //   title: 'تم التسليم للمندوب',
+                        //   body: 'ggggggggg',
+                        //   payload: 'sarah.abs',
+                        // );
+                        Navigator.pushNamed(context, 'addOrder');
                       });
                     },
                   ),
@@ -252,7 +250,7 @@ class _homePagessState extends State<homePagess> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image.asset(
-             api().urlIcon,
+              api().urlIcon,
               height: 40,
               width: 40,
               // fit: BoxFit.cover,
@@ -284,5 +282,4 @@ class _homePagessState extends State<homePagess> {
       ],
     );
   }
-
 }

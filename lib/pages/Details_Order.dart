@@ -26,6 +26,7 @@ class _details_orderState extends State<details_order> {
   var IdOrder = "";
   List<dynamic> branche = [];
   List<dynamic> dlyPrices = [];
+  bool hintV = false;
 
   var customerPhone1 = TextEditingController();
   var customerPhone2 = TextEditingController();
@@ -139,7 +140,7 @@ class _details_orderState extends State<details_order> {
                             color: _color,
                             controller: customerPhone1,
                             title: "رقم المرسل",
-                            hint: "",
+                              hint: hintV == false ? "" : "يجب الملء",
                           ),
                         ),
                         SizedBox(
@@ -176,7 +177,7 @@ class _details_orderState extends State<details_order> {
                             color: _color,
                             controller: recieverPhone1,
                             title: "رقم المستلم",
-                            hint: "",
+                              hint: hintV == false ? "" : "يجب الملء",
                           ),
                         ),
                         SizedBox(
@@ -213,7 +214,7 @@ class _details_orderState extends State<details_order> {
                             color: _color,
                             controller: packagePrice,
                             title: "سعر الطرد",
-                            hint: "",
+                              hint: hintV == false ? "" : "يجب الملء",
                           ),
                         ),
                         SizedBox(
@@ -833,49 +834,69 @@ class _details_orderState extends State<details_order> {
 
   Future<void> Edit() async {
     try {
-      visible_lodding = true;
-      visible_body = false;
-      visible_city = false;
-      visible_branch = false;
+      if (customerPhone1.text.isNotEmpty &&
+          packagePrice.text.isNotEmpty &&
+          recieverPhone1.text.isNotEmpty) {
+        hintV = false;
+        visible_lodding = true;
+        visible_body = false;
+        visible_city = false;
+        visible_branch = false;
 
-      var _body = {
-        'customerPhone1': customerPhone1.text.toString(),
-        'customerPhone2': customerPhone2.text.toString(),
-        'storeName': storeName.text.toString(),
-        'recieverPhone1': recieverPhone1.text.toString(),
-        'recieverPhone2': recieverPhone2.text.toString(),
-        'address': address.text.toString(),
-        'cityID': this.cityID.toString(),
-        'cityName': this.cityName.toString(),
-        'fromBranchID': this.fromBranchID.toString(),
-        'fromBranchName': this.fromBranchName.toString(),
-        'packagePrice': packagePrice.text.toString(),
-        'packageNumber': packageNumber.text.toString() == ""
-            ? 1
-            : packageNumber.text.toString(),
-        'note': note.text.toString(),
-        'orderDescription': orderDescription.text.toString(),
-      };
+        var _body = {
+          'customerPhone1': customerPhone1.text.toString(),
+          'customerPhone2': customerPhone2.text.toString(),
+          'storeName': storeName.text.toString(),
+          'recieverPhone1': recieverPhone1.text.toString(),
+          'recieverPhone2': recieverPhone2.text.toString(),
+          'address': address.text.toString(),
+          'cityID': this.cityID.toString(),
+          'cityName': this.cityName.toString(),
+          'fromBranchID': this.fromBranchID.toString(),
+          'fromBranchName': this.fromBranchName.toString(),
+          'packagePrice': packagePrice.text.toString(),
+          'packageNumber': packageNumber.text.toString() == ""
+              ? 1
+              : packageNumber.text.toString(),
+          'note': note.text.toString(),
+          'orderDescription': orderDescription.text.toString(),
+        };
 
-      var urlAdd = Uri.parse(api().url + api().EditWebOrder + IdOrder);
-      var response = await http.put(
-        urlAdd,
-        body: jsonEncode(_body),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Accept": "application/json",
-          "content-type": "application/json"
-        },
-      );
-      if (response.statusCode == 200) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => homePagess()),
+        var urlAdd = Uri.parse(api().url + api().EditWebOrder + IdOrder);
+        var response = await http.put(
+          urlAdd,
+          body: jsonEncode(_body),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Accept": "application/json",
+            "content-type": "application/json"
+          },
         );
-        visible_lodding = false;
-        visible_body = true;
-        visible_city = true;
-        visible_branch = true;
+        if (response.statusCode == 200) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => homePagess()),
+          );
+          visible_lodding = false;
+          visible_body = true;
+          visible_city = true;
+          visible_branch = true;
+        }
+      } else {
+        hintV = true;
+
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Themes.showSnackBarColor,
+            content: Directionality(
+              textDirection: ui.TextDirection.rtl,
+              child: Text(
+                "يجب الملء",
+                style: GoogleFonts.cairo(
+                    textStyle:
+                        TextStyle(fontSize: 14, color: Themes.light_white)),
+              ),
+            )));
       }
     } on SocketException {
       setState(() {

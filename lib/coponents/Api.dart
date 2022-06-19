@@ -21,4 +21,8 @@ class api {
   /// البحث
     var StatusesAndBranches = "api/mobile/GetStatusesAndBranches";
 
+    //// تعديل المندوبين
+     var EditOrder = "api/mobile/EditOrder/";
+   
+
 }
