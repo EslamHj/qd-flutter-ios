@@ -10,7 +10,7 @@ class MyInput extends StatelessWidget {
 
    final String title ;
    final String hint ;
-   final List<TextInputFormatter> inputFormatters ;
+   final List<TextInputFormatter>? inputFormatters ;
    final bool color ;
    final bool readOnly ;
    final TextEditingController ? controller ;
@@ -22,9 +22,10 @@ class MyInput extends StatelessWidget {
   required this.hint,
   this.controller,
   this.widget,
+  this.inputFormatters,
+
   required this.color ,
   required this.readOnly ,
-  required this.inputFormatters,
   
   }) : super(key: key);
 

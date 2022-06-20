@@ -116,10 +116,7 @@ class _details_orderState extends State<details_order> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
-                          ],
+                        
                           readOnly: false,
                           color: _color,
                           controller: storeName,
@@ -240,10 +237,7 @@ class _details_orderState extends State<details_order> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
-                      ],
+                     
                       readOnly: false,
                       color: _color,
                       controller: address,
@@ -255,10 +249,7 @@ class _details_orderState extends State<details_order> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
-                          ],
+                        
                           readOnly: false,
                           color: _color,
                           controller: orderDescription,
@@ -268,10 +259,7 @@ class _details_orderState extends State<details_order> {
                   Visibility(
                       visible: visible_body,
                       child: MyInput(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
-                          ],
+                       
                           readOnly: false,
                           color: _color,
                           controller: note,

@@ -22,7 +22,7 @@ class _searchIndexState extends State<searchIndex> {
   var _color = true;
   bool net = false;
   List orderJson = [];
-  int length_orderJson =0 ;
+  int length_orderJson = 0;
   bool visible_ = false;
   String code = "";
   String token = "";
@@ -42,7 +42,6 @@ class _searchIndexState extends State<searchIndex> {
   void initState() {
     super.initState();
     scrollController.addListener(() {
-        
       if (scrollController.position.maxScrollExtent ==
               scrollController.offset &&
           hasMore == true) {
@@ -382,16 +381,14 @@ class _searchIndexState extends State<searchIndex> {
       );
 
       var responsebody = jsonDecode(response.body);
-               
-              if(responsebody['data']['total'] < 7){
-                  hasMore = false;
-               
-              }
+
+      if (responsebody['data']['total'] < 7) {
+        hasMore = false;
+      }
 
       setState(() {
         if (orderJson.length == responsebody['data']['total']) {
           hasMore = false;
-        
         } else {
           orderJson.addAll(responsebody['data']['results']);
           page++;

@@ -27,8 +27,7 @@ class _details_SuppliersState extends State<details_Suppliers> {
   var _color = false;
   var detailsOrder = {};
   String IdOrder = "";
-  var activities = [];
-  List<dynamic> statuses = [];
+  var statuses = [];
   var statusesID = "";
   var statusesName = "";
   String fromBranchName = "";
@@ -56,9 +55,8 @@ class _details_SuppliersState extends State<details_Suppliers> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     IdOrder = ModalRoute.of(context)!.settings.arguments as String;
-    token = _Storage.read("token");
+    token = _Storage.read("token").toString();
     details_movements();
-    Branches();
   }
 
   @override
@@ -99,10 +97,7 @@ class _details_SuppliersState extends State<details_Suppliers> {
                   Visibility(
                     visible: visible_body,
                     child: MyInput(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              RegExp("[a-z A-Z á-ú Á-Ú 0-9]")),
-                        ],
+                     
                         readOnly: false,
                         controller: note,
                         widget: null,
@@ -494,98 +489,6 @@ class _details_SuppliersState extends State<details_Suppliers> {
                           hint: "")),
 
                   SizedBox(
-                    height: 15,
-                  ),
-
-                  Visibility(
-                    visible: visible_body,
-                    child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Themes.light.primaryColor, width: 0.3),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: SizedBox(width: _width)),
-                  ),
-
-                  SizedBox(
-                    height: 15,
-                  ),
-
-                  ////////////////////// الحالات////////////////////
-
-                  Visibility(
-                    visible: visible_body,
-                    child: Container(
-                      height: 270,
-                      width: double.infinity,
-                      child: ListView.builder(
-                          itemCount: activities.length,
-                          itemBuilder: (context, i) {
-                            return Container(
-                              height: 45,
-                              margin: EdgeInsets.only(top: 8.0, bottom: 13),
-                              padding: EdgeInsets.symmetric(horizontal: 14),
-                              decoration: BoxDecoration(
-                                color: Themes.light.primaryColor,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            // alignment: Alignment.topRight,
-                                            margin: EdgeInsets.only(bottom: 4),
-                                            child: Text(
-                                                activities[i]['status']
-                                                    .toString(),
-                                                style: GoogleFonts.cairo(
-                                                    textStyle: TextStyle(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Get.isDarkMode
-                                                            ? Themes.dark_white
-                                                            : Themes
-                                                                .light_white))),
-                                          ),
-                                          // Container(
-                                          //   alignment: Alignment.topRight,
-                                          //   child: Text("ملاحظه",
-                                          //       style: GoogleFonts.cairo(
-                                          //           textStyle: TextStyle(
-                                          //               fontSize: 10,
-                                          //               fontWeight: FontWeight.w600,
-                                          //               color: Get.isDarkMode
-                                          //                   ? Themes.dark_white
-                                          //                   : Themes.light_white))),
-                                          // ),
-                                        ]),
-                                    Text(
-                                        DateFormat("yyyy-MM-dd'T'HH:mm")
-                                            .parse(
-                                                activities[i]['activityDate'])
-                                            .toString()
-                                            .replaceAll(RegExp(':00.000'), ''),
-                                        style: GoogleFonts.cairo(
-                                            textStyle: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w600,
-                                                color: Get.isDarkMode
-                                                    ? Themes.dark_white
-                                                    : Themes.light_white)))
-                                  ]),
-                            );
-                          }),
-                    ),
-                  ),
-
-                  SizedBox(
                     height: 30,
                   ),
                 ],
@@ -658,7 +561,7 @@ class _details_SuppliersState extends State<details_Suppliers> {
 
   Future<void> details_movements() async {
     try {
-      var urlOrder = Uri.parse(api().url + api().Under_procedure_Id + IdOrder);
+      var urlOrder = Uri.parse(api().url + api().SupplierOrder + IdOrder);
       var response = await http.get(
         urlOrder,
         headers: {
@@ -669,7 +572,7 @@ class _details_SuppliersState extends State<details_Suppliers> {
       var responsebody = jsonDecode(response.body);
       setState(() {
         detailsOrder = responsebody['data']['order'];
-        activities = responsebody['data']['activities'];
+         statuses = responsebody['data']['statuses'];
       });
 
       if (response.statusCode == 200) {
@@ -720,29 +623,6 @@ class _details_SuppliersState extends State<details_Suppliers> {
     }
   }
 
-  ///////////////////////////api Branches ///////////////////////////////////////////////
-
-  Future<void> Branches() async {
-    try {
-      var urlBranches = Uri.parse(api().url + api().StatusesAndBranches);
-      var response = await http.get(
-        urlBranches,
-        headers: {
-          "Authorization": "Bearer $token",
-        },
-      );
-      var responsebody = jsonDecode(response.body);
-      setState(() {
-        statuses = responsebody['data']['statuses'];
-      });
-
-      if (response.statusCode == 200) {
-        visible_lodding = false;
-      }
-    } on SocketException {
-    } catch (ex) {}
-  }
-
   ///////////////////////////api put ///////////////////////////////////////////////
 
   Future<void> Edit() async {
@@ -753,7 +633,8 @@ class _details_SuppliersState extends State<details_Suppliers> {
       var _body = {
         "note": note.text.toString(),
         "statusId": this.statusesID,
-        "date": DateTime.now().toString()
+
+
       };
 
       var urlAdd = Uri.parse(api().url + api().EditOrder + IdOrder);

@@ -23,6 +23,9 @@ class api {
 
     //// تعديل المندوبين
      var EditOrder = "api/mobile/EditOrder/";
-   
+     var SupplierOrder = "api/mobile/GetSupplierOrder/";
+
+     //// المحفظة 
+     var Wallet = "api/mobile/GetWalletActivities";
 
 }
