@@ -1,6 +1,10 @@
 class api {
-  var url = "http://demo.qdlibya.com/";
+
+  var url = "https://demo.qdlibya.com/";
+  var URLFrontend = "https://qdl-master.herokuapp.com/" ;
   var urlIcon ="assets/Qdly.png";
+
+
   var login = "api/mobile/Login?";
   // /// شاشة  اسعار التوصيل /////
   var Branches = "api/mobile/GetMainBranches";
@@ -27,5 +31,11 @@ class api {
 
      //// المحفظة 
      var Wallet = "api/mobile/GetWalletActivities";
+
+     ///////انشاء حساب 
+     var Register = "api/mobile/Register?uri=";
+      ////  تغير كلمة المرور
+     
+     var ChangePasswordEmail = "api/webusers/ChangePasswordEmail/";
 
 }
