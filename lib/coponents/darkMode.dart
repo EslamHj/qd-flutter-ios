@@ -12,18 +12,21 @@ class Themes {
   static final showSnackBarColor = Color.fromARGB(255, 139, 36, 83) ;
   //dark color
   static final dark_white = Colors.white;
-    static final dark_primary2 = Color(0xFF424242);
+  static final dark_primary2 = Color(0xFF424242);
   static final dark_primary = Color.fromARGB(255, 48, 47, 47);
   static final dark_grey = Colors.grey;
 
   
   
 
-  //dark light
+  // light
   static final light_white = Colors.white;
   static final light_grey = Colors.grey;
   static final light_black = Colors.black;
-    static final light_primary = Colors.grey[350];
+  static final light_primary = Colors.grey[350];
+  // static final discount = Color(0xFFf44236);
+  static final discount = Color.fromARGB(255, 206, 60, 50);
+  static final add = Color(0xFF4cb050);
 
   static final light = ThemeData(
     textTheme:TextTheme(subtitle1: TextStyle(color:_kprimaryColor)),

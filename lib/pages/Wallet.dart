@@ -53,7 +53,62 @@ class _walletState extends State<wallet> {
     return Scaffold(
         backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
         body: SafeArea(
-            child: Column(
+            child: net == true
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Visibility(
+                      visible: visible_,
+                      child: Container(
+                        // margin: EdgeInsets.only(top: 25),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Themes.light.primaryColor),
+                        )),
+                      )),
+                  // Visibility(
+                  //   visible: !visible_,
+                  //   child: Center(
+                  //     child: Image.asset(
+                  //       'assets/net.png',
+                  //       width: 200,
+                  //     ),
+                  //   ),
+                  // ),
+                  Visibility(
+                    visible: !visible_,
+                    child: Center(
+                      child: Text(
+                        "خطأ في الاتصال بالانترنت",
+                        style: GoogleFonts.cairo(
+                            textStyle: TextStyle(
+                                fontSize: 16,
+                                color: Themes.light.primaryColor,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !visible_,
+                    child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            Wallet();
+                            // net = false;
+                            visible_ = true;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.refresh,
+                          size: 40,
+                          color: Themes.light.primaryColor,
+                        )),
+                  )
+                ],
+              )
+            :  Column(
           children: [
            
             Padding(
@@ -343,7 +398,7 @@ class _walletState extends State<wallet> {
                       width: _width / 2 - 30,
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                          color: Themes.light.primaryColor,
+                          color: walletJson[index]['type'].toString() == "1" ? Themes.add : Themes.discount,
                           borderRadius: BorderRadius.circular(10)),
                       child: Text(
                         walletJson[index]['type'].toString() == "1"
@@ -401,12 +456,12 @@ class _walletState extends State<wallet> {
       if (response.statusCode == 200) {
         visible_ = false;
         cardV =true ;
-        // net = false;
+        net = false;
       }
     } on SocketException {
       setState(() {
-        // visible_ = false;
-        // net = true;
+        visible_ = false;
+        net = true;
       });
     } catch (ex) {}
   }

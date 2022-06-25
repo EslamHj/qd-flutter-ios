@@ -265,7 +265,7 @@ class _loginState extends State<login> {
                           "إنشاء حساب",
                           style: GoogleFonts.cairo(
                             textStyle: TextStyle(
-                              color: Themes.light.primaryColor,
+                              color: _color ?  Themes.dark_grey : Themes.light.primaryColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

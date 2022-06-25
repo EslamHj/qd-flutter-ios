@@ -53,24 +53,26 @@ class _branchesState extends State<branches> {
                               Themes.light.primaryColor),
                         )),
                       )),
+                  // Visibility(
+                  //   visible: !visible_lodding_net,
+                  //   child: Center(
+                  //     child: Image.asset(
+                  //       'assets/net.png',
+                  //       width: 200,
+                  //     ),
+                  //   ),
+                  // ),
                   Visibility(
                     visible: !visible_lodding_net,
                     child: Center(
-                      child: Image.asset(
-                        'assets/net.png',
-                        width: 200,
+                      child: Text(
+                        "خطأ في الاتصال بالانترنت",
+                        style: GoogleFonts.cairo(
+                            textStyle: TextStyle(
+                                fontSize: 16,
+                                color: Themes.light.primaryColor,
+                                fontWeight: FontWeight.bold)),
                       ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: !visible_lodding_net,
-                    child: Text(
-                      "خطأ في الاتصال بالانترنت",
-                      style: GoogleFonts.cairo(
-                          textStyle: TextStyle(
-                              fontSize: 16,
-                              color: Themes.light.primaryColor,
-                              fontWeight: FontWeight.bold)),
                     ),
                   ),
                   Visibility(

@@ -53,6 +53,7 @@ class _createAccountState extends State<createAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
       body: SingleChildScrollView(
           child: Directionality(
         textDirection: TextDirection.rtl,
@@ -159,6 +160,7 @@ class _createAccountState extends State<createAccount> {
                                 )),
                                 hintTextDirection: TextDirection.rtl,
                                 hintText: "ابحث عن المكتب"),
+
                             searchBoxStyle: GoogleFonts.cairo(
                                 textStyle: TextStyle(
 
@@ -181,7 +183,9 @@ class _createAccountState extends State<createAccount> {
                               hintStyle: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.black),
+                                  color: _color
+                                      ? Themes.dark_white
+                                      : Themes.light_black),
                               // hintText: "المكتب",
                               // prefix: Icon(
 
@@ -538,65 +542,73 @@ class _createAccountState extends State<createAccount> {
                 Container(
                   margin: EdgeInsets.only(left: 0, right: 10, top: 15),
                   // padding: EdgeInsets.only(left: 20, right: 20),
-                  child: new Checkbox(
-                      value: _value,
-                      activeColor: Themes.light.primaryColor,
-                      onChanged: (val) {
-                        setState(() {
-                          if (val == true) {
-                            _value = true;
-                          } else {
-                            _value = false;
-                          }
-                        });
-                      }),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => terms()),
-                    );
-                  },
-                  child: Container(
-                      margin: EdgeInsets.only(left: 0, right: 0, top: 15),
-                      // alignment: Alignment.bottomRight,
 
-                      child: Row(
-                        children: [
-                          Text(
-                            "أوافق علي",
-                            style: GoogleFonts.cairo(
-                                textStyle: TextStyle(
-                                    fontSize: 14,
-                                    color: _color
-                                        ? Themes.light_white
-                                        : Themes.light_black)),
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Text(
+                  child: Theme(
+                    data: ThemeData(
+                      unselectedWidgetColor: _color
+                          ? Themes.dark_white
+                          : Themes.light.primaryColor, // Your color
+                    ),
+                    child: Checkbox(
+                        value: _value,
+                        activeColor: Themes.light.primaryColor,
+                        onChanged: (val) {
+                          setState(() {
+                            if (val == true) {
+                              _value = true;
+                            } else {
+                              _value = false;
+                            }
+                          });
+                        }),
+                  ),
+                ),
+                Container(
+                    margin: EdgeInsets.only(left: 0, right: 0, top: 15),
+                    // alignment: Alignment.bottomRight,
+
+                    child: Row(
+                      children: [
+                        Text(
+                          "أوافق علي",
+                          style: GoogleFonts.cairo(
+                              textStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: _color
+                                      ? Themes.light_white
+                                      : Themes.light_black)),
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => terms()),
+                            );
+                          },
+                          child: Text(
                             "شروط الخدمة",
                             style: GoogleFonts.cairo(
                                 textStyle: TextStyle(
                               fontSize: 14,
                               color: _color
-                                  ? Themes.light_white
+                                  ? Themes.light_grey
                                   : Themes.light.primaryColor,
                               decoration: TextDecoration.underline,
                             )),
                           ),
-                        ],
-                      )),
-                )
+                        ),
+                      ],
+                    )),
               ],
             ),
 
             Visibility(
                 visible: visible_,
                 child: Container(
-                  margin: EdgeInsets.only(top: 20 , bottom: 30),
+                  margin: EdgeInsets.only(top: 20, bottom: 30),
                   child: Center(
                       child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -655,7 +667,7 @@ class _createAccountState extends State<createAccount> {
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: _color
-                        ? Themes.dark_white
+                        ? Themes.light.primaryColor
                         : Themes.light.primaryColor))));
   }
 

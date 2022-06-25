@@ -13,17 +13,19 @@ class terms extends StatefulWidget {
 }
 
 class _termsState extends State<terms> {
-  // final _Storage = GetStorage();
-  // var _color = true;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _color = _Storage.read("isDarkMode");
-  // }
+  final _Storage = GetStorage();
+  var _color = true;
+  @override
+  void initState() {
+    super.initState();
+    _color = _Storage.read("isDarkMode");
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+            backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
+
       appBar: _appBar(),
       body: SingleChildScrollView(
         child: Directionality(
@@ -38,7 +40,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.light_grey
                               : Themes.light.primaryColor)),
                 ),
@@ -51,7 +53,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.dark_white
                               : Themes.light_black)),
                 ),
@@ -64,7 +66,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.dark_white
                               : Themes.light_black)),
                 ),
@@ -77,7 +79,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.dark_white
                               : Themes.light_black)),
                 ),
@@ -90,7 +92,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.dark_white
                               : Themes.light_black)),
                 ),
@@ -103,7 +105,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.dark_white
                               : Themes.light_black)),
                 ),
@@ -116,7 +118,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.dark_white
                               : Themes.light_black)),
                 ),
@@ -129,7 +131,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.dark_white
                               : Themes.light_black)),
                 ),
@@ -142,7 +144,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.dark_white
                               : Themes.light_black)),
                 ),
@@ -156,7 +158,7 @@ class _termsState extends State<terms> {
                       textStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Get.isDarkMode
+                          color: _color
                               ? Themes.dark_white
                               : Themes.light_black)),
                 ),

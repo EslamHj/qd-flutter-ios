@@ -75,8 +75,8 @@ class _searchState extends State<search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-              backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
-
+      backgroundColor: _color ? Themes.dark_primary : Themes.light_primary,
+      appBar: _appBar(),
       body: Directionality(
           textDirection: ui.TextDirection.rtl,
           child: Container(
@@ -858,6 +858,25 @@ if (picked != null && picked != to)
      
   });}
 
+  _appBar() {
+    return AppBar(
+      backgroundColor: Themes.light.primaryColor,
+      actions: <Widget>[
+        Container(
+            margin: EdgeInsets.all(5),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Image.asset(
+                api().urlIcon,
+                height: 50,
+                width: 47,
+                fit: BoxFit.cover,
+              ),
+            )),
+      ],
+    );
+  }
+
 ///////////////////////////api Branches ///////////////////////////////////////////////
 
   Future<void> Branches() async {
@@ -894,67 +913,7 @@ if (picked != null && picked != to)
     }
   }
 
-  ///////////////////////////api BranchesAndCity ///////////////////////////////////////////////
-
-  // Future<void> BranchesAndCity() async {
-  //   try {
-  //     var urlBranches = Uri.parse(api().url + api().Branches);
-  //     var response = await http.get(
-  //       urlBranches,
-  //       headers: {
-  //         "Authorization": "Bearer $token",
-  //       },
-  //     );
-  //     var responsebody = jsonDecode(response.body);
-
-  //     setState(() {
-  //       branche = responsebody['data'];
-  //     });
-
-  //     if (response.statusCode == 200) {
-  //       // fromBranchName = branche[0]['name'];
-  //       // fromBranchID = branche[0]['id'];
-
-  //       var urlDeliveryPrices = Uri.parse(
-  //           api().url + api().GetCitiesAndBranches + branche[0]['id']);
-
-  //       var response_dly = await http.get(
-  //         urlDeliveryPrices,
-  //         headers: {
-  //           "Authorization": "Bearer $token",
-  //         },
-  //       );
-
-  //       var responsebody_dly = jsonDecode(response_dly.body);
-  //       if (response.statusCode == 200) {
-  //         setState(() {
-  //           dlyPrices = responsebody_dly['data']['cities'];
-  //           branche = responsebody_dly['data']['branches'];
-  //           // this.cityID = dlyPrices[0]['id'];
-  //           // this.cityName = dlyPrices[0]['name'];
-
-  //           visible_branch = true;
-  //           visible_branch_lodding = false;
-  //           visible_city = true;
-  //           visible_city_lodding = false;
-  //         });
-  //       }
-  //     }
-  //   } on SocketException {
-  //     setState(() {
-  //       visible_branch = true;
-  //       visible_branch_lodding = false;
-  //       visible_city = true;
-  //       visible_city_lodding = false;
-  //     });
-  //   } catch (ex) {
-  //     visible_branch = true;
-  //     visible_branch_lodding = false;
-  //     visible_city = true;
-  //     visible_city_lodding = false;
-  //   }
-  // }
-
+  
 
 ///////////////////////////api deliveryPrices ///////////////////////////////////////////////
 

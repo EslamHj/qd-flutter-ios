@@ -264,8 +264,7 @@ class _homePagessState extends State<homePagess> {
           ),
           onPressed: () {
             setState(() {
-              currenScreen = search();
-              currentTab = 5;
+              Navigator.pushNamed(context, 'search');
             });
           },
         ),
